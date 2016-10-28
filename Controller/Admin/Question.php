@@ -36,6 +36,23 @@ final class Question extends AbstractController
     }
 
     /**
+     * Saves configuration
+     * 
+     * @return string
+     */
+    public function tweakAction()
+    {
+        if ($this->request->hasPost('order')) {
+            $orders = $this->request->getPost('order');
+
+            if ($this->getModuleService('questionService')->updateOrders($orders)) {
+                $this->flashBag->set('success', 'Settings have been updated successfully');
+                return '1';
+            }
+        }
+    }
+
+    /**
      * Renders adding form
      * 
      * @param string $id Category id

@@ -51,6 +51,10 @@ return array(
     '/%s/module/quiz/question/save' => array(
         'controller' => 'Admin:Question@saveAction'
     ),
+    
+    '/%s/module/quiz/question/tweak' => array(
+        'controller' => 'Admin:Question@tweakAction'
+    ),
 
     '/%s/module/quiz/question/delete/(:var)' => array(
         'controller' => 'Admin:Question@deleteAction'
