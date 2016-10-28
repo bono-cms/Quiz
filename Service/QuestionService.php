@@ -50,6 +50,23 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
     }
 
     /**
+     * Update orders by their associated ids
+     * 
+     * @param array $pairs
+     * @return boolean
+     */
+    public function updateOrders(array $pairs)
+    {
+        foreach ($pairs as $id => $order) {
+            if (!$this->questionMapper->updateOrderById($id, $order)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Returns prepared pagination instance
      * 
      * @return \Krystal\Paginate\Paginator

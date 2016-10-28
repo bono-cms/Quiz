@@ -14,6 +14,14 @@ namespace Quiz\Service;
 interface QuestionServiceInterface
 {
     /**
+     * Update orders by their associated ids
+     * 
+     * @param array $pairs
+     * @return boolean
+     */
+    public function updateOrders(array $pairs);
+
+    /**
      * Returns prepared pagination instance
      * 
      * @return \Krystal\Paginate\Paginator
