@@ -89,7 +89,7 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
      */
     public function deleteById($id)
     {
-        return $this->categoryMapper->deleteById($id);
+        return $this->categoryMapper->deleteById($id) && $this->questionMapper->deleteAllByCategoryId($id);
     }
 
     /**
