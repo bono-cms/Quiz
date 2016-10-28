@@ -13,6 +13,7 @@ namespace Quiz\Service;
 
 use Cms\Service\AbstractManager;
 use Quiz\Storage\CategoryMapperInterface;
+use Quiz\Storage\QuestionMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 
@@ -26,14 +27,23 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
     private $categoryMapper;
 
     /**
+     * Any compliant answer mapper
+     * 
+     * @var \Quiz\Storage\QuestionMapperInterface
+     */
+    private $questionMapper;
+
+    /**
      * State initialization
      * 
      * @param \Quiz\Storage\CategoryMapperInterface $categoryMapper
+     * @param \Quiz\Storage\QuestionMapperInterface $questionMapper
      * @return void
      */
-    public function __construct(CategoryMapperInterface $categoryMapper)
+    public function __construct(CategoryMapperInterface $categoryMapper, QuestionMapperInterface $questionMapper)
     {
         $this->categoryMapper = $categoryMapper;
+        $this->questionMapper = $questionMapper;
     }
 
     /**

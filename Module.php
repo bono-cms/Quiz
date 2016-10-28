@@ -22,9 +22,12 @@ final class Module extends AbstractCmsModule
      */
     public function getServiceProviders()
     {
+        $questionMapper = $this->getMapper('\Quiz\Storage\MySQL\QuestionMapper');
+        $categoryMapper = $this->getMapper('\Quiz\Storage\MySQL\CategoryMapper');
+
         return array(
-            'questionService' => new QuestionService($this->getMapper('\Quiz\Storage\MySQL\QuestionMapper')),
-            'categoryService' => new CategoryService($this->getMapper('\Quiz\Storage\MySQL\CategoryMapper'))
+            'questionService' => new QuestionService($questionMapper),
+            'categoryService' => new CategoryService($categoryMapper, $questionMapper)
         );
     }
 }
