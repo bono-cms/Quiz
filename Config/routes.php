@@ -14,6 +14,10 @@ return array(
         'controller' => 'Admin:Browser@indexAction'
     ),
     
+    '/%s/module/quiz/category/view/(:var)/page/(:var)' => array(
+        'controller' => 'Admin:Browser@categoryAction'
+    ),
+    
     // Category
     '/%s/module/quiz/category/view/(:var)' => array(
         'controller' => 'Admin:Browser@categoryAction'
@@ -33,5 +37,22 @@ return array(
 
     '/%s/module/quiz/category/delete/(:var)' => array(
         'controller' => 'Admin:Category@deleteAction'
+    ),
+    
+    // Question
+    '/%s/module/quiz/question/add/(:var)' => array(
+        'controller' => 'Admin:Question@addAction'
+    ),
+    
+    '/%s/module/quiz/question/edit/(:var)' => array(
+        'controller' => 'Admin:Question@editAction'
+    ),
+    
+    '/%s/module/quiz/question/save' => array(
+        'controller' => 'Admin:Question@saveAction'
+    ),
+
+    '/%s/module/quiz/question/delete/(:var)' => array(
+        'controller' => 'Admin:Question@deleteAction'
     )
 );
