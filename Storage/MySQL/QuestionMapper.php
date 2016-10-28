@@ -69,6 +69,17 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
     }
 
     /**
+     * Deletes all questions associated with category id
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function deleteAllByCategoryId($id)
+    {
+        return $this->deleteByColumn('category_id', $id);
+    }
+
+    /**
      * Counts amount of questions by associated category id
      * 
      * @param string $id Category id

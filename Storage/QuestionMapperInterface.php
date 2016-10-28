@@ -46,6 +46,14 @@ interface QuestionMapperInterface
     public function deleteById($id);
 
     /**
+     * Deletes all questions associated with category id
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function deleteAllByCategoryId($id);
+
+    /**
      * Counts amount of questions by associated category id
      * 
      * @param string $id Category id
