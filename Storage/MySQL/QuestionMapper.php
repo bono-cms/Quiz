@@ -80,6 +80,7 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
 
         return $this->db->select()
                         ->count('id', $alias)
+                        ->from(self::getTableName())
                         ->whereEquals('category_id', $id)
                         ->query($alias);
     }
