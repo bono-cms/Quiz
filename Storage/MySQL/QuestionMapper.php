@@ -47,6 +47,18 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
     }
 
     /**
+     * Updates sorting order by id
+     * 
+     * @param string $id
+     * @param string $order
+     * @return boolean
+     */
+    public function updateOrderById($id, $order)
+    {
+        return $this->updateColumnByPk($id, 'order', $order);
+    }
+
+    /**
      * Fetches question data by its associated id
      * 
      * @param string $id

@@ -30,6 +30,15 @@ interface QuestionMapperInterface
     public function update(array $data);
 
     /**
+     * Updates sorting order by id
+     * 
+     * @param string $id
+     * @param string $order
+     * @return boolean
+     */
+    public function updateOrderById($id, $order);
+
+    /**
      * Fetches question data by its associated id
      * 
      * @param string $id
