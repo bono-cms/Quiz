@@ -13,6 +13,7 @@ namespace Quiz;
 
 use Cms\AbstractCmsModule;
 use Quiz\Service\CategoryService;
+use Quiz\Service\QuestionService;
 
 final class Module extends AbstractCmsModule
 {
@@ -22,6 +23,7 @@ final class Module extends AbstractCmsModule
     public function getServiceProviders()
     {
         return array(
+            'questionService' => new QuestionService($this->getMapper('\Quiz\Storage\MySQL\QuestionMapper')),
             'categoryService' => new CategoryService($this->getMapper('\Quiz\Storage\MySQL\CategoryMapper'))
         );
     }
