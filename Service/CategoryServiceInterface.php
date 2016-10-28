@@ -14,6 +14,13 @@ namespace Quiz\Service;
 interface CategoryServiceInterface
 {
     /**
+     * Fetches category list
+     * 
+     * @return array
+     */
+    public function fetchList();
+
+    /**
      * Fetch all categories
      * 
      * @param boolean $sort Whether to use sorting by order attribute or not

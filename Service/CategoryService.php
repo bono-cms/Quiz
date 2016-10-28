@@ -14,6 +14,7 @@ namespace Quiz\Service;
 use Cms\Service\AbstractManager;
 use Quiz\Storage\CategoryMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Stdlib\ArrayUtils;
 
 final class CategoryService extends AbstractManager implements CategoryServiceInterface
 {
@@ -46,6 +47,16 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
                ->setOrder($row['order'], VirtualEntity::FILTER_INT);
 
         return $entity;
+    }
+
+    /**
+     * Fetches category list
+     * 
+     * @return array
+     */
+    public function fetchList()
+    {
+        return ArrayUtils::arrayList($this->categoryMapper->fetchAll(false), 'id', 'name');
     }
 
     /**
