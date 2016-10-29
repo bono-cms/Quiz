@@ -29,7 +29,7 @@ final class Browser extends AbstractController
                    ->addOne('Quiz');
 
         $paginator = $this->getModuleService('questionService')->getPaginator();
-        $paginator->setUrl($this->createUrl('Quiz:Admin:Browser@categoryAction', array($id, $page), 0));
+        $paginator->setUrl($this->createUrl('Quiz:Admin:Browser@categoryAction', array($id), 0));
 
         return $this->view->render('browser', array(
             'categoryId' => $id,
