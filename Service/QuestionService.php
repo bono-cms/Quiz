@@ -101,6 +101,17 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
     }
 
     /**
+     * Fetches question title by its associated id
+     * 
+     * @param string $id Question id
+     * @return string
+     */
+    public function fetchQuestionById($id)
+    {
+        return $this->questionMapper->fetchQuestionById($id);
+    }
+
+    /**
      * Deletes a question by its associate di
      * 
      * @param string $id

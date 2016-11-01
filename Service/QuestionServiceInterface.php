@@ -47,6 +47,14 @@ interface QuestionServiceInterface
     public function fetchById($id);
 
     /**
+     * Fetches question title by its associated id
+     * 
+     * @param string $id Question id
+     * @return string
+     */
+    public function fetchQuestionById($id);
+
+    /**
      * Deletes a question by its associate di
      * 
      * @param string $id

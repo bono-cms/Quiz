@@ -59,6 +59,17 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
     }
 
     /**
+     * Fetches question title by its associated id
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchQuestionById($id)
+    {
+        return $this->findColumnByPk($id, 'question');
+    }
+
+    /**
      * Fetches question data by its associated id
      * 
      * @param string $id

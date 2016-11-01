@@ -39,6 +39,14 @@ interface QuestionMapperInterface
     public function updateOrderById($id, $order);
 
     /**
+     * Fetches question title by its associated id
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchQuestionById($id);
+
+    /**
      * Fetches question data by its associated id
      * 
      * @param string $id
