@@ -64,6 +64,7 @@ use Krystal\Form\HtmlHelper;
                                 <?php echo Element::number(sprintf('order[%s]', $question->getId()), $question->getOrder(), array('class' => 'form-control', 'min' => '0')); ?>
                             </td>
                             <td class="text-center">
+                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View answers'); ?>" data-button="details" href="<?php echo $this->url('Quiz:Admin:Answer@listAction', $question->getId()); ?>"><i class="glyphicon glyphicon-fullscreen"></i></a>
                                 <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this question'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Question@editAction', $question->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
                                 <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this question'); ?>" data-button="delete" href="#" data-url="<?php echo $this->url('Quiz:Admin:Question@deleteAction', $question->getId()); ?>"><i class="glyphicon glyphicon-remove"></i></a>
                             </td>
