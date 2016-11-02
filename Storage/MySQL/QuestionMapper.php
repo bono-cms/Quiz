@@ -120,6 +120,22 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
     }
 
     /**
+     * Fetches question ids by associated category id
+     * 
+     * @param string $id Category id
+     * @return array
+     */
+    public function fetchQuiestionIdsByCategoryId($id)
+    {
+        return $this->db->select('id')
+                        ->from(self::getTableName())
+                        ->whereEquals('category_id', $id)
+                        ->orderBy('id')
+                        ->desc()
+                        ->queryAll('id');
+    }
+
+    /**
      * Fetches all answer entities associated with category id
      * 
      * @param string $id Category id

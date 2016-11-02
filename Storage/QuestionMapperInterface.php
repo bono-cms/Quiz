@@ -79,6 +79,14 @@ interface QuestionMapperInterface
     public function countAllByCategoryId($id);
 
     /**
+     * Fetches question ids by associated category id
+     * 
+     * @param string $id Category id
+     * @return array
+     */
+    public function fetchQuiestionIdsByCategoryId($id);
+
+    /**
      * Fetches all answer entities associated with category id
      * 
      * @param string $id Category id
