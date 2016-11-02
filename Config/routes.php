@@ -58,5 +58,26 @@ return array(
 
     '/%s/module/quiz/question/delete/(:var)' => array(
         'controller' => 'Admin:Question@deleteAction'
+    ),
+    
+    // Answers
+    '/%s/module/quiz/question/answers/(:var)' => array(
+        'controller' => 'Admin:Answer@listAction'
+    ),
+    
+    '/%s/module/quiz/answer/add/(:var)' => array(
+        'controller' => 'Admin:Answer@addAction'
+    ),
+    
+    '/%s/module/quiz/answer/edit/(:var)' => array(
+        'controller' => 'Admin:Answer@editAction'
+    ),
+    
+    '/%s/module/quiz/answer/save' => array(
+        'controller' => 'Admin:Answer@saveAction'
+    ),
+    
+    '/%s/module/quiz/answer/delete/(:var)' => array(
+        'controller' => 'Admin:Answer@deleteAction'
     )
 );
