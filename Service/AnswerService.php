@@ -45,7 +45,8 @@ final class AnswerService extends AbstractManager implements AnswerServiceInterf
                ->setQuestionId($row['question_id'])
                ->setAnswer($row['answer'], VirtualEntity::FILTER_TAGS)
                ->setOrder($row['order'], VirtualEntity::FILTER_INT)
-               ->setCorrect($row['correct']);
+               ->setCorrect($row['correct'])
+               ->setSignature(uniqid());
 
         return $entity;
     }
