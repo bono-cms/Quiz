@@ -48,11 +48,11 @@ final class Answer extends AbstractController
      */
     private function createForm(VirtualEntity $answer, $id, $title)
     {
-        $question = $this->getModuleService('questionService')->fetchQuestionById($id);
+        $question = (string) $this->getModuleService('questionService')->fetchQuestionById($id);
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Quiz', 'Quiz:Admin:Browser@indexAction')
-                                       ->addOne($this->translator->translate('Answers for "%s"', (string) $question))
+                                       ->addOne($this->translator->translate('Answers for "%s"', $question), $this->createUrl('Quiz:Admin:Answer@listAction', array($id)))
                                        ->addOne($title);
 
         return $this->view->render('answer.form', array(
@@ -92,16 +92,6 @@ final class Answer extends AbstractController
     }
 
     /**
-     * Save changes
-     * 
-     * @return string
-     */
-    public function tweakAction()
-    {
-        
-    }
-
-    /**
      * Save answer
      * 
      * @return string
@@ -128,6 +118,6 @@ final class Answer extends AbstractController
      */
     public function deleteAction($id)
     {
-        
+        return $this->invokeRemoval('answerService', $id);
     }
 }
