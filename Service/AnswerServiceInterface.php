@@ -14,6 +14,14 @@ namespace Quiz\Service;
 Interface AnswerServiceInterface
 {
     /**
+     * Checks whether there only one or several correct answers
+     * 
+     * @param array $entities
+     * @return boolean
+     */
+    public function hasManyCorrectAnswers(array $entities);
+
+    /**
      * Returns last answer id
      * 
      * @return integer

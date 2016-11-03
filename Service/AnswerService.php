@@ -52,6 +52,26 @@ final class AnswerService extends AbstractManager implements AnswerServiceInterf
     }
 
     /**
+     * Checks whether there only one or several correct answers
+     * 
+     * @param array $entities
+     * @return boolean
+     */
+    public function hasManyCorrectAnswers(array $entities)
+    {
+        $count = 0;
+
+        foreach ($entities as $entity) {
+            // If the answer is correct
+            if ($entity->getCorrect()) {
+                $count++;
+            }
+        }
+
+        return $count > 1;
+    }
+
+    /**
      * Returns last answer id
      * 
      * @return integer
