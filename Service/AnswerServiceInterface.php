@@ -11,7 +11,7 @@
 
 namespace Quiz\Service;
 
-Interface AnswerServiceInterface
+interface AnswerServiceInterface
 {
     /**
      * Checks whether there only one or several correct answers
