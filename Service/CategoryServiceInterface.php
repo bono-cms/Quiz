@@ -43,7 +43,15 @@ interface CategoryServiceInterface
      * @return \Krystal\Stdlib\VirtualEntity
      */
     public function fetchById($id);
-    
+
+    /**
+     * Fetch category name by its associated id
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchNameById($id);
+
     /**
      * Returns last category id
      * 

@@ -104,6 +104,17 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
     }
 
     /**
+     * Fetch category name by its associated id
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchNameById($id)
+    {
+        return $this->categoryMapper->fetchNameById($id);
+    }
+
+    /**
      * Returns last category id
      * 
      * @return integer
