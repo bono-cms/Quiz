@@ -26,6 +26,24 @@ final class AnswerMapper extends AbstractMapper implements AnswerMapperInterface
     }
 
     /**
+     * Checks whether answer is correct
+     * 
+     * @param string $questionId
+     * @param string $answerId
+     * @return boolean
+     */
+    public function getCorrect($questionId, $answerId)
+    {
+        $column = 'correct';
+
+        return $this->db->select($column)
+                        ->from(self::getTableName())
+                        ->whereEquals('question_id', $questionId)
+                        ->andWhereEquals('id', $answerId)
+                        ->query($column);
+    }
+
+    /**
      * Fetch all answers
      * 
      * @param string $id Question id

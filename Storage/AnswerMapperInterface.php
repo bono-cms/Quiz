@@ -14,6 +14,15 @@ namespace Quiz\Storage;
 interface AnswerMapperInterface
 {
     /**
+     * Checks whether answer is correct
+     * 
+     * @param string $questionId
+     * @param string $answerId
+     * @return boolean
+     */
+    public function getCorrect($questionId, $answerId);
+
+    /**
      * Fetch all answers
      * 
      * @param string $id Question id

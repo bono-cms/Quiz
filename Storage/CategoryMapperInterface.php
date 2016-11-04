@@ -38,6 +38,14 @@ interface CategoryMapperInterface
     public function fetchById($id);
 
     /**
+     * Fetch category name by its associated id
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchNameById($id);
+
+    /**
      * Inserts a category
      * 
      * @param array $data
