@@ -52,6 +52,18 @@ final class AnswerService extends AbstractManager implements AnswerServiceInterf
     }
 
     /**
+     * Checks whether answer is correct
+     * 
+     * @param string $questionId
+     * @param string $answerId
+     * @return boolean
+     */
+    public function isCorrect($questionId, $answerId)
+    {
+        return $this->answerMapper->getCorrect($questionId, $answerId) == '1';
+    }
+
+    /**
      * Checks whether there only one or several correct answers
      * 
      * @param array $entities

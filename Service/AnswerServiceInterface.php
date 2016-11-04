@@ -14,6 +14,15 @@ namespace Quiz\Service;
 interface AnswerServiceInterface
 {
     /**
+     * Checks whether answer is correct
+     * 
+     * @param string $questionId
+     * @param string $answerId
+     * @return boolean
+     */
+    public function isCorrect($questionId, $answerId);
+
+    /**
      * Checks whether there only one or several correct answers
      * 
      * @param array $entities
