@@ -10,6 +10,11 @@
  */
 
 return array(
+    
+    '/quiz' => array(
+        'controller' => 'Quiz@indexAction'
+    ),
+    
     '/%s/module/quiz' => array(
         'controller' => 'Admin:Browser@indexAction'
     ),
