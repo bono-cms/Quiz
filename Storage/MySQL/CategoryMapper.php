@@ -77,7 +77,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchNameById($id)
     {
-        return $this->fetchColumnByPk($id, 'name');
+        return $this->findColumnByPk($id, 'name');
     }
 
     /**
