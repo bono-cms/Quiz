@@ -29,6 +29,10 @@ final class Question extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Quiz', 'Quiz:Admin:Browser@indexAction')
                                        ->addOne($title);
 
+        // Load WYSIWYG editor in view
+        $this->view->getPluginBag()
+                   ->load($this->getWysiwygPluginName());
+
         return $this->view->render('question.form', array(
             'question' => $question,
             'categories' => $this->getModuleService('categoryService')->fetchList()
