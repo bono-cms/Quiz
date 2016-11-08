@@ -44,7 +44,8 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
         $entity->setId($question['id'], VirtualEntity::FILTER_INT)
                ->setCategoryId($question['category_id'], VirtualEntity::FILTER_INT)
                ->setQuestion($question['question'], VirtualEntity::FILTER_HTML)
-               ->setOrder($question['order'], VirtualEntity::FILTER_INT);
+               ->setOrder($question['order'], VirtualEntity::FILTER_INT)
+               ->setDescription($question['description'], VirtualEntity::FILTER_SAFE_TAGS);
 
         return $entity;
     }

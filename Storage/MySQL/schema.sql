@@ -15,7 +15,8 @@ CREATE TABLE `bono_module_quiz_questions` (
   `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `category_id` INT NOT NULL,
   `question` varchar(255) NOT NULL COMMENT 'Question',
-  `order` INT NOT NULL COMMENT 'Sorting order (for non-random mode)'
+  `order` INT NOT NULL COMMENT 'Sorting order (for non-random mode)',
+  `description` TEXT NOT NULL COMMENT 'Optional description for the question'
   
 ) DEFAULT CHARSET = UTF8;
 
