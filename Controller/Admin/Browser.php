@@ -12,9 +12,26 @@
 namespace Quiz\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
+use Krystal\Form\Gadget\LastCategoryKeeper;
 
 final class Browser extends AbstractController
 {
+    /**
+     * Returns category keeper service
+     * 
+     * @return \Krystal\Form\Gadget\LastCategoryKeeper
+     */
+    private function getCategoryIdKeeper()
+    {
+        static $keeper = null;
+
+        if (is_null($keeper)) {
+            $keeper = new LastCategoryKeeper($this->sessionBag, 'last_quiz_category_id');
+        }
+
+        return $keeper;
+    }
+
     /**
      * Creates the grid
      * 
@@ -48,6 +65,9 @@ final class Browser extends AbstractController
      */
     public function categoryAction($id, $page = 1)
     {
+        // Remember category id
+        $this->getCategoryIdKeeper()->persistLastCategoryId($id);
+
         return $this->createGrid($id, $page);
     }
 
@@ -59,7 +79,12 @@ final class Browser extends AbstractController
      */
     public function indexAction()
     {
-        $id = $this->getModuleService('categoryService')->getLastId();
+        if ($this->getCategoryIdKeeper()->hasLastCategoryId()) {
+            $id = $this->getCategoryIdKeeper()->getLastCategoryId();
+        } else {
+            $id = $this->getModuleService('categoryService')->getLastId();
+        }
+
         return $this->createGrid($id, 1);
     }
 }
