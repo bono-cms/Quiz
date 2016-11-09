@@ -16,6 +16,7 @@ use Quiz\Service\AnswerService;
 use Quiz\Service\CategoryService;
 use Quiz\Service\QuestionService;
 use Quiz\Service\QuizTracker;
+use Quiz\Service\HistoryService;
 
 final class Module extends AbstractCmsModule
 {
@@ -27,8 +28,10 @@ final class Module extends AbstractCmsModule
         $questionMapper = $this->getMapper('\Quiz\Storage\MySQL\QuestionMapper');
         $categoryMapper = $this->getMapper('\Quiz\Storage\MySQL\CategoryMapper');
         $answerMapper = $this->getMapper('\Quiz\Storage\MySQL\AnswerMapper');
+        $historyMapper = $this->getMapper('\Quiz\Storage\MySQL\HistoryMapper');
 
         return array(
+            'historyService' => new HistoryService($historyMapper),
             'quizTracker' => new QuizTracker($this->getServiceLocator()->get('sessionBag')),
             'answerService' => new AnswerService($answerMapper),
             'questionService' => new QuestionService($questionMapper),

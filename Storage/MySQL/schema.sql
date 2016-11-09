@@ -30,3 +30,13 @@ CREATE TABLE `bono_module_quiz_answers` (
   `correct` varchar(1) NOT NULL COMMENT 'Whether the answer is corrent. Possible values are 0 and 1'
   
 ) DEFAULT CHARSET = UTF8;
+
+DROP TABLE IF EXISTS `bono_module_quiz_history`;
+CREATE TABLE `bono_module_quiz_history` (
+  
+  `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `category_id` INT NOT NULL,
+  `name` varchar(30),
+  `points` INT NOT NULL
+  
+) DEFAULT CHARSET = UTF8;
