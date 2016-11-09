@@ -35,8 +35,9 @@ DROP TABLE IF EXISTS `bono_module_quiz_history`;
 CREATE TABLE `bono_module_quiz_history` (
   
   `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `category_id` INT NOT NULL,
+  `category` varchar(30) NOT NULL,
   `name` varchar(30),
-  `points` INT NOT NULL
+  `points` INT NOT NULL,
+  `timestamp` INT(10) NOT NULL 
   
 ) DEFAULT CHARSET = UTF8;

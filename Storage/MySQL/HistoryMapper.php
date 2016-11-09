@@ -22,7 +22,7 @@ final class HistoryMapper extends AbstractMapper implements HistoryMapperInterfa
      */
     public static function getTableName()
     {
-        return self::getWithTablePrefix('bono_module_quiz_history');
+        return self::getWithPrefix('bono_module_quiz_history');
     }
 
     /**
