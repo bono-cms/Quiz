@@ -33,21 +33,6 @@ final class Quiz extends AbstractController
     }
 
     /**
-     * Renders first welcome page
-     * 
-     * @return string
-     */
-    private function welcomeAction()
-    {
-        return $this->view->render('welcome', array(
-            'categories' => $this->getModuleService('categoryService')->fetchList(),
-            'page' => new \Krystal\Stdlib\VirtualEntity(),
-            'currentUrl' => '',
-            'locale' => '',
-        ));
-    }
-
-    /**
      * Runs the initial test
      * 
      * @return string
@@ -60,6 +45,8 @@ final class Quiz extends AbstractController
         $this->view->setLayout('__layout__')
                    ->setModule('Quiz')
                    ->setTheme('site');
+
+        $page = new \Krystal\Stdlib\VirtualEntity();
 
         $quizTracker = $this->getModuleService('quizTracker');
 
@@ -78,8 +65,11 @@ final class Quiz extends AbstractController
                 ));
 
             } else {
-                // In case that was the first GET request
-                return $this->welcomeAction();
+                // In case that was the first GET request, render welcome page
+                return $this->view->render('welcome', array(
+                    'categories' => $this->getModuleService('categoryService')->fetchList(),
+                    'page' => $page
+                ));
             }
 
         } else {
@@ -117,17 +107,14 @@ final class Quiz extends AbstractController
             return $this->view->render('result', array(
                 'meta' => $quizTracker->getMeta(),
                 'points' => $quizTracker->getCorrectAnsweredCount(),
-                'page' => new \Krystal\Stdlib\VirtualEntity(),
+                'page' => $page,
             ));
         }
 
         $data = $this->createPair($id);
 
         return $this->view->render('quiz', array_merge($data, array(
-            'page' => new \Krystal\Stdlib\VirtualEntity(),
-            'currentUrl' => '',
-            'locale' => '',
-            
+            'page' => $page,
             'hasManyCorrectAnswers' => $this->getModuleService('answerService')->hasManyCorrectAnswers($data['answers']),
             'initialCount' => $quizTracker->getInitialCount(),
             'currentQuestionCount' => $quizTracker->getCurrentQuestionCount()
