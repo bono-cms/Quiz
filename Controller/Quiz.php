@@ -102,6 +102,12 @@ final class Quiz extends AbstractController
 
         // If $id is false, then there's no more questions to be shown
         if ($id === false) {
+            // Keep the track
+            $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
+                'timestamp' => time(),
+                'points' => $quizTracker->getCorrectAnsweredCount()
+            )));
+
             return $this->view->render('result', array(
                 'meta' => $quizTracker->getMeta(),
                 'points' => $quizTracker->getCorrectAnsweredCount(),
