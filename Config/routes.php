@@ -18,6 +18,18 @@ return array(
     '/%s/module/quiz' => array(
         'controller' => 'Admin:Browser@indexAction'
     ),
+
+    '/%s/module/quiz/history' => array(
+        'controller' => 'Admin:History@indexAction'
+    ),
+
+    '/%s/module/quiz/history/filter/(:var)' => array(
+        'controller' => 'Admin:History@filterAction'
+    ),
+
+    '/%s/module/quiz/history/page/(:var)' => array(
+        'controller' => 'Admin:History@indexAction'
+    ),
     
     '/%s/module/quiz/category/view/(:var)/page/(:var)' => array(
         'controller' => 'Admin:Browser@categoryAction'
