@@ -29,6 +29,8 @@ use Krystal\Form\HtmlHelper;
          <?php endif; ?>
       </ul>
     </div>
+    
+    <a target="_blank" href="<?php echo $this->url('Quiz:Quiz@indexAction'); ?>" class="btn btn-info"><i class="fa fa-folder-open"></i> <?php $this->show('Open on site'); ?></a>
 </div>
 
 <?php $this->loadPartial('items-per-page', array('caption' => 'Questions')); ?>
