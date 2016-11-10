@@ -13,5 +13,27 @@ namespace Quiz\Service;
 
 interface HistoryServiceInterface
 {
-    
+    /**
+     * Returns all records
+     * 
+     * @param integer $page
+     * @param integer $itemsPerPage
+     * @return array
+     */
+    public function fetchAll($page, $itemsPerPage);
+
+    /**
+     * Returns prepared paginator instance
+     * 
+     * @return \Krystal\Paginate\Paginator
+     */
+    public function getPaginator();
+
+    /**
+     * Tracks the history
+     * 
+     * @param array $data
+     * @return boolean
+     */
+    public function track(array $data);
 }

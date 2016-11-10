@@ -12,8 +12,11 @@
 namespace Quiz\Service;
 
 use Quiz\Storage\HistoryMapperInterface;
+use Cms\Service\AbstractManager;
+use Krystal\Stdlib\VirtualEntity;
+use Krystal\Db\Filter\FilterableServiceInterface;
 
-final class HistoryService implements HistoryServiceInterface
+final class HistoryService extends AbstractManager implements HistoryServiceInterface, FilterableServiceInterface
 {
     /**
      * History mapper
@@ -31,5 +34,68 @@ final class HistoryService implements HistoryServiceInterface
     public function __construct(HistoryMapperInterface $historyMapper)
     {
         $this->historyMapper = $historyMapper;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function toEntity(array $row)
+    {
+        $entity = new VirtualEntity();
+        $entity->setId($row['id'])
+               ->setName($row['name'])
+               ->setCategory($row['category'])
+               ->setPoints($row['points'])
+               ->setDate($row['timestamp']);
+
+        return $entity;
+    }
+
+    /**
+     * Filters the raw input
+     * 
+     * @param array|\ArrayAccess $input Raw input data
+     * @param integer $page Current page number
+     * @param integer $itemsPerPage Items per page to be displayed
+     * @param string $sortingColumn Column name to be sorted
+     * @param string $desc Whether to sort in DESC order
+     * @return array
+     */
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc)
+    {
+        return $this->prepareResults($this->historyMapper->filter($input, $page, $itemsPerPage, $sortingColumn, $desc));
+    }
+
+    /**
+     * Returns all records
+     * 
+     * @param integer $page
+     * @param integer $itemsPerPage
+     * @return array
+     */
+    public function fetchAll($page, $itemsPerPage)
+    {
+        return $this->prepareResults($this->historyMapper->fetchAll($page, $itemsPerPage));
+    }
+
+    /**
+     * Returns prepared paginator instance
+     * 
+     * @return \Krystal\Paginate\Paginator
+     */
+    public function getPaginator()
+    {
+        return $this->historyMapper->getPaginator();
+    }
+
+    /**
+     * Tracks the history
+     * 
+     * @param array $data
+     * @return boolean
+     */
+    public function track(array $data)
+    {
+        return $this->historyMapper->persist($data);
     }
 }
