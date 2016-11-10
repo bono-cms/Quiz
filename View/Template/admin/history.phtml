@@ -1,0 +1,91 @@
+<?php defined('KRYSTAL') or die; ?>
+<?php
+
+use Krystal\Form\Element;
+use Krystal\Form\HtmlHelper;
+
+?>
+
+<?php $this->loadPartial('items-per-page', array('caption' => 'History')); ?>
+
+<form action="<?php echo $this->url('Quiz:Admin:History@filterAction', null); ?>" novalidate>
+	<div class="table-responsive">
+		<table class="table table-hover table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="text-center">
+                        <?php if (!empty($records)): ?>
+						<input type="checkbox" />
+                        <?php endif; ?>
+					</th>
+					<th class="text-center">
+                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('id'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('id'); ?>">
+                            <i class="<?php echo $filter->isSortedByDesc('id') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> #
+                        </a>
+                    </th>
+					<th class="text-center">
+                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('name'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('name'); ?>">
+                            <i class="<?php echo $filter->isSortedByDesc('name') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Name'); ?>
+                        </a>
+                    </th>
+					<th class="text-center">
+                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('category'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('category'); ?>">
+                            <i class="<?php echo $filter->isSortedByDesc('category') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Category'); ?>
+                        </a>
+                    </th>
+					<th class="text-center">
+                        <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('points'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('points'); ?>">
+                            <i class="<?php echo $filter->isSortedByDesc('points') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> <?php $this->show('Points'); ?></th>
+                        </a>
+					<th class="text-center"><?php $this->show('Date'); ?></th>
+				</tr>
+                
+                <tr class="filter">
+                    <th></th>
+                    <th><?php echo Element::number($filter->getElementName('id'), $filter->get('id'), array('class' => 'form-control col-md-1', 'min' => '1')); ?></th>
+                    <th><?php echo Element::text($filter->getElementName('name'), $filter->get('name'), array('class' => 'form-control')); ?></th>
+                    <th><?php echo Element::text($filter->getElementName('category'), $filter->get('category'), array('class' => 'form-control')); ?></th>
+                    <th><?php echo Element::number($filter->getElementName('points'), $filter->get('points'), array('class' => 'form-control col-md-1', 'min' => '1')); ?></th>
+                    <th></th>
+                </tr>
+			</thead>
+			
+			<?php if (!empty($records)): ?>
+			<tbody>
+				<?php foreach ($records as $record): ?>
+				<tr>
+					<td class="text-center">
+						<input type="checkbox" name="toDelete[<?php echo $record->getId(); ?>]" />
+					</td>
+					<td class="text-center text-muted"><?php echo $record->getId(); ?></td>
+					<td class="text-center"><?php echo $record->getName(); ?></td>
+					<td class="text-center"><?php echo $record->getCategory(); ?></td>
+					<td class="text-center"><?php echo $record->getPoints(); ?></td>
+					<td class="text-center"><?php echo $record->getDate(); ?></td>
+				</tr>
+				<?php endforeach; ?>
+				
+			</tbody>
+			<?php endif; ?>
+		</table>
+		
+        <?php if (!empty($records)): ?>
+        <div>
+            <?php if ($filter->isApplied()): ?>
+            <a href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+            <?php endif; ?>
+            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
+            <br />
+        </div>
+        <?php endif; ?>
+        
+		<?php if (empty($records)): ?>
+		<div class="center-block">
+			<h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No records'); ?></h2>
+		</div>
+		<?php endif; ?>
+		
+	</div>
+</form>
+
+<?php $this->loadPartial('paginator'); ?>
