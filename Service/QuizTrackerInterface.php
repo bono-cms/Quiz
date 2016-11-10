@@ -29,6 +29,20 @@ interface QuizTrackerInterface
     public function start(array $identificators);
 
     /**
+     * Indicates that the quiz must be stopped
+     * 
+     * @return void
+     */
+    public function stop();
+
+    /**
+     * Checks whether stopping has been indicated before
+     * 
+     * @return boolean
+     */
+    public function isStopped();
+
+    /**
      * Appends correct question id
      * 
      * @param string $questionId

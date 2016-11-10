@@ -35,6 +35,7 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     const PARAM_STORAGE_TIMESTAMP_START = 'quiz_timestamp_start';
     const PARAM_STORAGE_META_DATA = 'quiz_meta';
     const PARAM_STORAGE_CORRECT_IDS = 'quiz_correct_ids';
+    const PARAM_STORAGE_STOPPED = 'quiz_stopped';
 
     /**
      * State initialization
@@ -72,6 +73,26 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
         ));
 
         return $this;
+    }
+
+    /**
+     * Indicates that the quiz must be stopped
+     * 
+     * @return void
+     */
+    public function stop()
+    {
+        $this->sessionBag->set(self::PARAM_STORAGE_STOPPED, true);
+    }
+
+    /**
+     * Checks whether stopping has been indicated before
+     * 
+     * @return boolean
+     */
+    public function isStopped()
+    {
+        return $this->sessionBag->has(self::PARAM_STORAGE_STOPPED);
     }
 
     /**
