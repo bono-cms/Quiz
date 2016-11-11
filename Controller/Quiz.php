@@ -78,7 +78,7 @@ final class Quiz extends AbstractController
                 $questionId = $this->request->getPost('question');
 
                 // Keep track of corectness
-                foreach ($this->request->getPost('answerIds') as $answerId) {
+                foreach ($this->request->getPost('answerIds', array()) as $answerId) {
                     $correct = $this->getModuleService('answerService')->isCorrect($questionId, $answerId);
 
                     if ($correct) {
