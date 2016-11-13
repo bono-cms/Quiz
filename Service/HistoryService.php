@@ -46,7 +46,7 @@ final class HistoryService extends AbstractManager implements HistoryServiceInte
                ->setName($row['name'])
                ->setCategory($row['category'])
                ->setPoints($row['points'])
-               ->setDate($row['timestamp']);
+               ->setDate(date('Y-m-d H:i:s', $row['timestamp']));
 
         return $entity;
     }
