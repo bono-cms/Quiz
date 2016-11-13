@@ -25,7 +25,11 @@
     <div class="form-group">
       <div class="col-lg-10">
         <button type="reset" class="btn btn-default"><i class="glyphicon glyphicon-ban-circle"></i> <?php $this->show('Cancel'); ?></button>&nbsp;
-        <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> <?php $this->show('Next'); ?></button>
+        <?php if ($lastQuestion): ?>
+        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> <?php $this->show('Finish'); ?></button>
+        <?php else: ?>
+        <button type="submit" class="btn btn-primary"><?php $this->show('Next'); ?> <i class="glyphicon glyphicon-chevron-right"></i></button>
+        <?php endif; ?>
       </div>
     </div>
   </fieldset>

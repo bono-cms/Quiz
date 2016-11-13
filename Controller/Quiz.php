@@ -178,7 +178,8 @@ final class Quiz extends AbstractController
             'page' => $page,
             'hasManyCorrectAnswers' => $this->getModuleService('answerService')->hasManyCorrectAnswers($data['answers']),
             'initialCount' => $quizTracker->getInitialCount(),
-            'currentQuestionCount' => $quizTracker->getCurrentQuestionCount()
+            'currentQuestionCount' => $quizTracker->getCurrentQuestionCount(),
+            'lastQuestion' => $quizTracker->getInitialCount() == $quizTracker->getCurrentQuestionCount()
         )));
     }
 }
