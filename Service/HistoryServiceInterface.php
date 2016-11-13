@@ -14,6 +14,14 @@ namespace Quiz\Service;
 interface HistoryServiceInterface
 {
     /**
+     * Delete history items by their associated ids
+     * 
+     * @param array $ids
+     * @return boolean
+     */
+    public function deleteByIds(array $ids);
+
+    /**
      * Returns all records
      * 
      * @param integer $page

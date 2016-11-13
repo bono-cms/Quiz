@@ -14,6 +14,14 @@ namespace Quiz\Storage;
 interface HistoryMapperInterface
 {
     /**
+     * Deletes an item by its id
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function deleteById($id);
+
+    /**
      * Filters the raw input
      * 
      * @param array|\ArrayAccess $input Raw input data

@@ -27,6 +27,17 @@ final class HistoryMapper extends AbstractMapper implements HistoryMapperInterfa
     }
 
     /**
+     * Deletes an item by its id
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->deleteByPk($id);
+    }
+
+    /**
      * Filters the raw input
      * 
      * @param array|\ArrayAccess $input Raw input data

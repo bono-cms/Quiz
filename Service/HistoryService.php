@@ -52,6 +52,23 @@ final class HistoryService extends AbstractManager implements HistoryServiceInte
     }
 
     /**
+     * Delete history items by their associated ids
+     * 
+     * @param array $ids
+     * @return boolean
+     */
+    public function deleteByIds(array $ids)
+    {
+        foreach ($ids as $id) {
+            if (!$this->historyMapper->deleteById($id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Filters the raw input
      * 
      * @param array|\ArrayAccess $input Raw input data
