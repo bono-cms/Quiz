@@ -44,6 +44,16 @@ final class History extends AbstractController
     }
 
     /**
+     * Deletes a history item or a collection of them
+     * 
+     * @return string
+     */
+    public function deleteAction()
+    {
+        return $this->invokeRemoval('historyService');
+    }
+
+    /**
      * Applies a filter
      * 
      * @return string

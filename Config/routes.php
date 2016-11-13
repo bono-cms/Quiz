@@ -23,6 +23,10 @@ return array(
         'controller' => 'Admin:History@indexAction'
     ),
 
+    '/%s/module/quiz/history/delete' => array(
+        'controller' => 'Admin:History@deleteAction'
+    ),
+    
     '/%s/module/quiz/history/filter/(:var)' => array(
         'controller' => 'Admin:History@filterAction'
     ),

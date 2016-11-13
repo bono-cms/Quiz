@@ -6,6 +6,8 @@ use Krystal\Form\HtmlHelper;
 
 ?>
 
+<a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Quiz:Admin:History@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+
 <?php $this->loadPartial('items-per-page', array('caption' => 'History')); ?>
 
 <form action="<?php echo $this->url('Quiz:Admin:History@filterAction', null); ?>" novalidate>
