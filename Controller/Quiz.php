@@ -12,6 +12,7 @@
 namespace Quiz\Controller;
 
 use Site\Controller\AbstractController;
+use Krystal\Validate\Pattern;
 
 final class Quiz extends AbstractController
 {
@@ -30,6 +31,44 @@ final class Quiz extends AbstractController
             'question' => $question,
             'answers' => $answers
         );
+    }
+
+    /**
+     * Creates form validator for welcome page
+     * 
+     * @param array $input
+     * @return \Krystal\Validate\ValidatorChain
+     */
+    private function createWelcomePageValidator(array $input)
+    {
+        return $this->createValidator(array(
+            'input' => array(
+                'source' => $input,
+                'definition' => array(
+                    'name' => new Pattern\Name(),
+                )
+            )
+        ));
+    }
+
+    /**
+     * Creates question form validator
+     * 
+     * @param array $input
+     * @return \Krystal\Validate\ValidatorChain
+     */
+    private function createQuestionFormValidator(array $input)
+    {
+        $input['collection'] = $input;
+
+        return $this->createValidator(array(
+            'input' => array(
+                'source' => $input,
+                'definition' => array(
+                    'collection' => new Pattern\Collection()
+                )
+            )
+        ));
     }
 
     /**
@@ -52,17 +91,25 @@ final class Quiz extends AbstractController
 
         // Do pre-processing if not started yet
         if (!$quizTracker->isStarted()) {
+
             // If the welcoming form was submitted, then grab and save its value and start tracking
             if ($this->request->hasPost('category')) {
-                // Initial loading from request
-                $categoryId = $this->request->getPost('category');
-                $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId);
+                $formValidator = $this->createWelcomePageValidator($this->request->getPost());
 
-                $quizTracker->start($ids);
-                $quizTracker->saveMeta(array(
-                    'name' => $this->request->getPost('name'),
-                    'category' => $this->getModuleService('categoryService')->fetchNameById($categoryId)
-                ));
+                if ($formValidator->isValid()) {
+                    // Initial loading from request
+                    $categoryId = $this->request->getPost('category');
+                    $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId);
+
+                    $quizTracker->start($ids);
+                    $quizTracker->saveMeta(array(
+                        'name' => $this->request->getPost('name'),
+                        'category' => $this->getModuleService('categoryService')->fetchNameById($categoryId)
+                    ));
+
+                } else {
+                    return $formValidator->getErrors();
+                }
 
             } else {
                 // In case that was the first GET request, render welcome page
@@ -77,14 +124,28 @@ final class Quiz extends AbstractController
             if ($this->request->isPost()) {
                 $questionId = $this->request->getPost('question');
 
-                // Keep track of corectness
-                foreach ($this->request->getPost('answerIds', array()) as $answerId) {
-                    $correct = $this->getModuleService('answerService')->isCorrect($questionId, $answerId);
+                // Answer ids
+                $ids = $this->request->getPost('answerIds', array());
 
-                    if ($correct) {
-                        $quizTracker->appendCorrectQuestionId($questionId);
+                $formValidator = $this->createQuestionFormValidator($ids);
+
+                // Make sure that at least one answer is picked
+                if ($formValidator->isValid()) {
+                    // Keep track of corectness
+                    foreach ($ids as $answerId) {
+                        $correct = $this->getModuleService('answerService')->isCorrect($questionId, $answerId);
+
+                        if ($correct) {
+                            $quizTracker->appendCorrectQuestionId($questionId);
+                        }
                     }
+
+                } else {
+                    return $formValidator->getErrors();
                 }
+
+            } else {
+                // @TODO Do nothing or render the same question
             }
         }
 
