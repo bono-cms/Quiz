@@ -13,6 +13,7 @@ namespace Quiz\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Quiz\Storage\QuestionMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class QuestionMapper extends AbstractMapper implements QuestionMapperInterface
 {
@@ -130,8 +131,7 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
         return $this->db->select('id')
                         ->from(self::getTableName())
                         ->whereEquals('category_id', $id)
-                        ->orderBy('id')
-                        ->desc()
+                        ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'))
                         ->queryAll('id');
     }
 
