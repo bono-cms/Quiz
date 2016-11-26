@@ -43,6 +43,14 @@ interface QuizTrackerInterface
     public function isStopped();
 
     /**
+     * Returns points
+     * 
+     * @param integer $mark Whether to return as a mark or not
+     * @return integer
+     */
+    public function getPoints($mark);
+
+    /**
      * Appends correct question id
      * 
      * @param string $questionId
@@ -50,13 +58,6 @@ interface QuizTrackerInterface
      * @return void
      */
     public function appendCorrectQuestionId($questionId);
-
-    /**
-     * Returns an amount of correctly answered questions
-     * 
-     * @return integer
-     */
-    public function getCorrectAnsweredCount();
 
     /**
      * Saves meta data

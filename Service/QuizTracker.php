@@ -96,6 +96,56 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     }
 
     /**
+     * Returns points
+     * 
+     * @param integer $mark Whether to return as a mark or not
+     * @return integer
+     */
+    public function getPoints($mark)
+    {
+        if ($mark === true) {
+            return $this->createMark();
+        } else {
+            return $this->getCorrectAnsweredCount();
+        }
+    }
+
+    /**
+     * Creates a mark
+     * 
+     * @return integer
+     */
+    private function createMark()
+    {
+        // Counter of correct answers
+        $correctCount = $this->getCorrectAnsweredCount();
+        $totalCount = $this->getInitialCount();
+
+        // If no correct answers provided, then the mark is always zero
+        if ($correctCount == 0 || $totalCount == 0) {
+            return 0;
+        }
+
+        return (int) $correctCount * 100 / $totalCount;
+    }
+
+    /**
+     * Returns an amount of correctly answered questions
+     * 
+     * @return integer
+     */
+    private function getCorrectAnsweredCount()
+    {
+        $collection = $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
+
+        if (is_array($collection)) {
+            return count($collection);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
      * Appends correct question id
      * 
      * @param string $questionId
@@ -117,22 +167,6 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
 
         // Update the storage with altered collection
         $this->sessionBag->set(self::PARAM_STORAGE_CORRECT_IDS, $collection);
-    }
-
-    /**
-     * Returns an amount of correctly answered questions
-     * 
-     * @return integer
-     */
-    public function getCorrectAnsweredCount()
-    {
-        $collection = $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
-
-        if (is_array($collection)) {
-            return count($collection);
-        } else {
-            return 0;
-        }
     }
 
     /**
