@@ -153,12 +153,14 @@ final class Quiz extends AbstractController
 
         // If $id is false, then there's no more questions to be shown
         if ($id === false) {
+            $points = $quizTracker->getPoints(true);
+
             // Do save track only in case the stopping has been indicated
             if (!$quizTracker->isStopped()) {
                 // Keep the track
                 $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
                     'timestamp' => time(),
-                    'points' => $quizTracker->getCorrectAnsweredCount()
+                    'points' => $points
                 )));
             }
 
@@ -167,7 +169,7 @@ final class Quiz extends AbstractController
 
             return $this->view->render('result', array(
                 'meta' => $quizTracker->getMeta(),
-                'points' => $quizTracker->getCorrectAnsweredCount(),
+                'points' => $points,
                 'page' => $page,
             ));
         }
