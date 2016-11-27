@@ -29,7 +29,11 @@ use Krystal\Form\Element;
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Corectness'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::select('answer[correct]', $this->translateArray(array('1' => 'This answer is correсt', '0' => 'This answer is incorreсt')), $answer->getCorrect(), array('class' => 'form-control')); ?>
+                    <?php echo Element::select('answer[correct]', $this->translateArray(
+                        array(
+                            '0' => 'This answer is incorreсt',
+                            '1' => 'This answer is correсt'
+                        )), $answer->getCorrect(), array('class' => 'form-control')); ?>
                 </div>
             </div>
         </div>
