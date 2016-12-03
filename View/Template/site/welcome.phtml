@@ -1,4 +1,5 @@
-<form class="form-horizontal" method="POST">
+
+<form class="form-horizontal" method="POST" action="<?php echo $this->url('Site:Quiz:Quiz@indexAction'); ?>">
   <fieldset>
     
     <legend>Welcome to Quiz</legend>
@@ -14,8 +15,8 @@
       <label for="inputCategory" class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
       <div class="col-lg-10">
         <select class="form-control" name="category" id="inputCategory">
-          <?php foreach($categories as $id => $category): ?>
-          <option value="<?php echo $id?>"><?php echo $category?></option>
+          <?php foreach ($categories as $id => $category): ?>
+          <option value="<?php echo $id; ?>"><?php echo $category?></option>
           <?php endforeach; ?>
         </select>
       </div>

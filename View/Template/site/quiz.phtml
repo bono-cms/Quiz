@@ -1,10 +1,9 @@
-<h2 class="page-header"></h2>
 
-<form class="form-horizontal" method="POST">
+<form class="form-horizontal" method="POST" action="<?php echo $this->url('Quiz:Quiz@indexAction'); ?>">
   <fieldset>
     <legend><?php echo $question->getQuestion(); ?></legend>
     
-    <p class="text-muted"><?php echo $this->translate('Question %s of %s', $currentQuestionCount, $initialCount)?></p>
+    <p class="text-muted"><?php echo $this->translate('Question %s of %s', $currentQuestionCount, $initialCount); ?></p>
     
     <article><?php echo $question->getDescription(); ?></article>
     
