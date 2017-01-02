@@ -13,6 +13,7 @@ namespace Quiz\Controller;
 
 use Site\Controller\AbstractController;
 use Krystal\Validate\Pattern;
+use Krystal\Stdlib\VirtualEntity;
 
 final class Quiz extends AbstractController
 {
@@ -72,6 +73,45 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Outputs and handlers welcome page
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $page
+     * @return mixed
+     */
+    private function welcomeAction(VirtualEntity $page)
+    {
+        $quizTracker = $this->getModuleService('quizTracker');
+
+        // If the welcoming form was submitted, then grab and save its value and start tracking
+        if ($this->request->hasPost('category')) {
+            $formValidator = $this->createWelcomePageValidator($this->request->getPost());
+
+            if ($formValidator->isValid()) {
+                // Initial loading from request
+                $categoryId = $this->request->getPost('category');
+                $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId);
+
+                $quizTracker->start($ids);
+                $quizTracker->saveMeta(array(
+                    'name' => $this->request->getPost('name'),
+                    'category' => $this->getModuleService('categoryService')->fetchNameById($categoryId)
+                ));
+
+                return true;
+            } else {
+                return $formValidator->getErrors();
+            }
+
+        } else {
+            // In case that was the first GET request, render welcome page
+            return $this->view->render('welcome', array(
+                'categories' => $this->getModuleService('categoryService')->fetchList(),
+                'page' => $page
+            ));
+        }
+    }
+
+    /**
      * Runs the initial test
      * 
      * @return string
@@ -91,32 +131,10 @@ final class Quiz extends AbstractController
 
         // Do pre-processing if not started yet
         if (!$quizTracker->isStarted()) {
+            $welcome = $this->welcomeAction($page);
 
-            // If the welcoming form was submitted, then grab and save its value and start tracking
-            if ($this->request->hasPost('category')) {
-                $formValidator = $this->createWelcomePageValidator($this->request->getPost());
-
-                if ($formValidator->isValid()) {
-                    // Initial loading from request
-                    $categoryId = $this->request->getPost('category');
-                    $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId);
-
-                    $quizTracker->start($ids);
-                    $quizTracker->saveMeta(array(
-                        'name' => $this->request->getPost('name'),
-                        'category' => $this->getModuleService('categoryService')->fetchNameById($categoryId)
-                    ));
-
-                } else {
-                    return $formValidator->getErrors();
-                }
-
-            } else {
-                // In case that was the first GET request, render welcome page
-                return $this->view->render('welcome', array(
-                    'categories' => $this->getModuleService('categoryService')->fetchList(),
-                    'page' => $page
-                ));
+            if ($welcome !== true) {
+                return $welcome;
             }
 
         } else {
