@@ -15,6 +15,10 @@ return array(
         'controller' => 'Quiz@indexAction'
     ),
     
+    '/quiz/abort' => array(
+        'controller' => 'Quiz@abortAction'
+    ),
+    
     '/%s/module/quiz' => array(
         'controller' => 'Admin:Browser@indexAction'
     ),

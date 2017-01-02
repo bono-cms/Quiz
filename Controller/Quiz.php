@@ -197,6 +197,19 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Aborts the quiz
+     * 
+     * @return void
+     */
+    public function abortAction()
+    {
+        $quizTracker = $this->getModuleService('quizTracker');
+        $quizTracker->clear();
+
+        return $this->redirectToRoute('Quiz:Quiz@indexAction');
+    }
+
+    /**
      * Runs the initial test
      * 
      * @return string
