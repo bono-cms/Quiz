@@ -149,7 +149,6 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
      * Appends correct question id
      * 
      * @param string $questionId
-     * @param string $answerId
      * @return void
      */
     public function appendCorrectQuestionId($questionId)
