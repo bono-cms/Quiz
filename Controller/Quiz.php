@@ -112,6 +112,37 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Stops the quiz
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $page
+     * @return string
+     */
+    private function stopAction(VirtualEntity $page)
+    {
+        $quizTracker = $this->getModuleService('quizTracker');
+
+        $points = $quizTracker->getPoints(true);
+
+        // Do save track only in case the stopping has been indicated
+        if (!$quizTracker->isStopped()) {
+            // Keep the track
+            $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
+                'timestamp' => time(),
+                'points' => $points
+            )));
+        }
+
+        // Indicate stopping
+        $quizTracker->stop();
+
+        return $this->view->render('result', array(
+            'meta' => $quizTracker->getMeta(),
+            'points' => $points,
+            'page' => $page
+        ));
+    }
+
+    /**
      * Runs the initial test
      * 
      * @return string
@@ -171,25 +202,7 @@ final class Quiz extends AbstractController
 
         // If $id is false, then there's no more questions to be shown
         if ($id === false) {
-            $points = $quizTracker->getPoints(true);
-
-            // Do save track only in case the stopping has been indicated
-            if (!$quizTracker->isStopped()) {
-                // Keep the track
-                $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
-                    'timestamp' => time(),
-                    'points' => $points
-                )));
-            }
-
-            // Indicate stopping
-            $quizTracker->stop();
-
-            return $this->view->render('result', array(
-                'meta' => $quizTracker->getMeta(),
-                'points' => $points,
-                'page' => $page,
-            ));
+            return $this->stopAction($page);
         }
 
         $data = $this->createPair($id);
