@@ -176,6 +176,27 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Renders quiz page
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $page
+     * @param string $id Question id
+     * @return string
+     */
+    private function quizAction(VirtualEntity $page, $id)
+    {
+        $quizTracker = $this->getModuleService('quizTracker');
+        $data = $this->createPair($id);
+
+        return $this->view->render('quiz', array_merge($data, array(
+            'page' => $page,
+            'hasManyCorrectAnswers' => $this->getModuleService('answerService')->hasManyCorrectAnswers($data['answers']),
+            'initialCount' => $quizTracker->getInitialCount(),
+            'currentQuestionCount' => $quizTracker->getCurrentQuestionCount(),
+            'lastQuestion' => $quizTracker->getInitialCount() == $quizTracker->getCurrentQuestionCount()
+        )));
+    }
+
+    /**
      * Runs the initial test
      * 
      * @return string
@@ -222,14 +243,6 @@ final class Quiz extends AbstractController
             return $this->stopAction($page);
         }
 
-        $data = $this->createPair($id);
-
-        return $this->view->render('quiz', array_merge($data, array(
-            'page' => $page,
-            'hasManyCorrectAnswers' => $this->getModuleService('answerService')->hasManyCorrectAnswers($data['answers']),
-            'initialCount' => $quizTracker->getInitialCount(),
-            'currentQuestionCount' => $quizTracker->getCurrentQuestionCount(),
-            'lastQuestion' => $quizTracker->getInitialCount() == $quizTracker->getCurrentQuestionCount()
-        )));
+        return $this->quizAction($page, $id);
     }
 }
