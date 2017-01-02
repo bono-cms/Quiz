@@ -14,6 +14,13 @@ namespace Quiz\Service;
 interface QuizTrackerInterface
 {
     /**
+     * Clears the storage
+     * 
+     * @return void
+     */
+    public function clear();
+
+    /**
      * Checks whether tracking is started
      * 
      * @return boolean

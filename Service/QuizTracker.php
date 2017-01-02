@@ -49,6 +49,23 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     }
 
     /**
+     * Clears the storage
+     * 
+     * @return void
+     */
+    public function clear()
+    {
+        return $this->sessionBag->removeMany(array(
+            self::PARAM_STORAGE_KEY,
+            self::PARAM_STORAGE_INITIAL_COUNT,
+            self::PARAM_STORAGE_TIMESTAMP_START,
+            self::PARAM_STORAGE_META_DATA,
+            self::PARAM_STORAGE_CORRECT_IDS,
+            self::PARAM_STORAGE_STOPPED
+        ));
+    }
+
+    /**
      * Checks whether tracking is started
      * 
      * @return boolean
