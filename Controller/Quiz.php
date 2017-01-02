@@ -143,6 +143,39 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Answers to particular question id
+     * 
+     * @return mixed
+     */
+    private function answerAction()
+    {
+        $quizTracker = $this->getModuleService('quizTracker');
+
+        $questionId = $this->request->getPost('question');
+
+        // Answer ids
+        $ids = $this->request->getPost('answerIds', array());
+
+        $formValidator = $this->createQuestionFormValidator($ids);
+
+        // Make sure that at least one answer is picked
+        if ($formValidator->isValid()) {
+            // Keep track of corectness
+            foreach ($ids as $answerId) {
+                $correct = $this->getModuleService('answerService')->isCorrect($questionId, $answerId);
+
+                if ($correct) {
+                    $quizTracker->appendCorrectQuestionId($questionId);
+                }
+            }
+
+            return true;
+        } else {
+            return $formValidator->getErrors();
+        }
+    }
+
+    /**
      * Runs the initial test
      * 
      * @return string
@@ -171,26 +204,10 @@ final class Quiz extends AbstractController
         } else {
             // Answer page
             if ($this->request->isPost()) {
-                $questionId = $this->request->getPost('question');
+                $answer = $this->answerAction();
 
-                // Answer ids
-                $ids = $this->request->getPost('answerIds', array());
-
-                $formValidator = $this->createQuestionFormValidator($ids);
-
-                // Make sure that at least one answer is picked
-                if ($formValidator->isValid()) {
-                    // Keep track of corectness
-                    foreach ($ids as $answerId) {
-                        $correct = $this->getModuleService('answerService')->isCorrect($questionId, $answerId);
-
-                        if ($correct) {
-                            $quizTracker->appendCorrectQuestionId($questionId);
-                        }
-                    }
-
-                } else {
-                    return $formValidator->getErrors();
+                if ($answer !== true) {
+                    return $answer;
                 }
 
             } else {
