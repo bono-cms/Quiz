@@ -35,26 +35,6 @@ final class Quiz extends AbstractController
     }
 
     /**
-     * Creates question form validator
-     * 
-     * @param array $input
-     * @return \Krystal\Validate\ValidatorChain
-     */
-    private function createQuestionFormValidator(array $input)
-    {
-        $input['collection'] = $input;
-
-        return $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'collection' => new Pattern\Collection()
-                )
-            )
-        ));
-    }
-
-    /**
      * Outputs and handlers welcome page
      * 
      * @param \Krystal\Stdlib\VirtualEntity $page
@@ -144,8 +124,16 @@ final class Quiz extends AbstractController
 
         // Answer ids
         $ids = $this->request->getPost('answerIds', array());
+        $input['collection'] = $ids;
 
-        $formValidator = $this->createQuestionFormValidator($ids);
+        $formValidator = $this->createValidator(array(
+            'input' => array(
+                'source' => $input,
+                'definition' => array(
+                    'collection' => new Pattern\Collection()
+                )
+            )
+        ));
 
         // Make sure that at least one answer is picked
         if ($formValidator->isValid()) {
