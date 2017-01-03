@@ -35,24 +35,6 @@ final class Quiz extends AbstractController
     }
 
     /**
-     * Creates form validator for welcome page
-     * 
-     * @param array $input
-     * @return \Krystal\Validate\ValidatorChain
-     */
-    private function createWelcomePageValidator(array $input)
-    {
-        return $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name(),
-                )
-            )
-        ));
-    }
-
-    /**
      * Creates question form validator
      * 
      * @param array $input
@@ -84,7 +66,14 @@ final class Quiz extends AbstractController
 
         // If the welcoming form was submitted, then grab and save its value and start tracking
         if ($this->request->hasPost('category')) {
-            $formValidator = $this->createWelcomePageValidator($this->request->getPost());
+            $formValidator = $this->createValidator(array(
+                'input' => array(
+                    'source' => $this->request->getPost(),
+                    'definition' => array(
+                        'name' => new Pattern\Name()
+                    )
+                )
+            ));
 
             if ($formValidator->isValid()) {
                 // Initial loading from request
