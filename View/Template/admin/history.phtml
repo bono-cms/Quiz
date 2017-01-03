@@ -15,12 +15,12 @@ use Krystal\Form\HtmlHelper;
 		<table class="table table-hover table-bordered table-striped">
 			<thead>
 				<tr>
-					<th class="text-center col-lg-1 col-md-1">
+					<th class="text-center">
                         <?php if (!empty($records)): ?>
 						<input type="checkbox" />
                         <?php endif; ?>
 					</th>
-					<th class="text-center">
+					<th class="text-center col-lg-1 col-md-1">
                         <a <?php echo HtmlHelper::addClassOnDemand($filter->isSortedBy('id'), 'text-info'); ?> href="<?php echo $filter->getColumnSortingUrl('id'); ?>">
                             <i class="<?php echo $filter->isSortedByDesc('id') ? 'glyphicon glyphicon-arrow-down': 'glyphicon glyphicon-arrow-up'; ?>"></i> #
                         </a>
