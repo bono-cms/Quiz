@@ -39,6 +39,7 @@ final class History extends AbstractController
         return $this->view->render('history', array(
             'paginator' => $paginator,
             'records' => $records,
+            'categories' => $this->getModuleService('categoryService')->fetchList(),
             'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Quiz:Admin:History@filterAction', array(null))),
         ));
     }
