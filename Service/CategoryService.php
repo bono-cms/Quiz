@@ -132,8 +132,7 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
      */
     public function add(array $input)
     {
-        $data = $input['category'];
-        return $this->categoryMapper->insert($data);
+        return $this->categoryMapper->insert($input);
     }
 
     /**
@@ -144,7 +143,6 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
      */
     public function update(array $input)
     {
-        $data = $input['category'];
-        return $this->categoryMapper->update($data);
+        return $this->categoryMapper->update($input);
     }
 }
