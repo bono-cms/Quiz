@@ -84,6 +84,7 @@ interface QuizTrackerInterface
     /**
      * Returns taken time
      * 
+     * @throws \LogicException if tried to get taken time when quiz isn't finished
      * @return string
      */
     public function getTakenTime();

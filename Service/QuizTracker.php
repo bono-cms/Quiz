@@ -13,6 +13,8 @@ namespace Quiz\Service;
 
 use Cms\Service\AbstractManager;
 use Krystal\Session\SessionBagInterface;
+use Krystal\Date\TimeHelper;
+use LogicException;
 
 final class QuizTracker extends AbstractManager implements QuizTrackerInterface
 {
@@ -175,7 +177,7 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
             $this->sessionBag->set(self::PARAM_STORAGE_CORRECT_IDS, array());
         }
 
-        // Get the currect collection
+        // Get the current collection
         $collection = $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
 
         // Append a new item
@@ -209,11 +211,16 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     /**
      * Returns taken time
      * 
+     * @throws \LogicException if tried to get taken time when quiz isn't finished
      * @return string
      */
     public function getTakenTime()
     {
-        return time() - $this->sessionBag->get(self::PARAM_STORAGE_TIMESTAMP_START);
+        if ($this->isStopped()) {
+            return TimeHelper::getTakenTime($this->sessionBag->get(self::PARAM_STORAGE_TIMESTAMP_START), time());
+        } else {
+            throw new LogicException('Can not get taken time if the quiz is not finished');
+        }
     }
 
     /**
@@ -246,11 +253,11 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     {
         $collection = $this->sessionBag->get(self::PARAM_STORAGE_KEY);
 
-        // The collection is empty, the immediatelly stop returning false
+        // The collection is empty, the immediately stop returning false
         if (empty($collection)) {
             return false;
         } else {
-            // Save first item in collection and them immediatelly remove it
+            // Save first item in collection and them immediately remove it
             $id = array_shift($collection);
 
             // Update the collection

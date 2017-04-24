@@ -106,6 +106,7 @@ final class Quiz extends AbstractController
 
         return $this->view->render('result', array(
             'meta' => $quizTracker->getMeta(),
+            'takenTime' => $quizTracker->getTakenTime(),
             'points' => $points,
             'page' => $page
         ));
@@ -137,7 +138,7 @@ final class Quiz extends AbstractController
 
         // Make sure that at least one answer is picked
         if ($formValidator->isValid()) {
-            // Keep track of corectness
+            // Keep track of correctness
             foreach ($ids as $answerId) {
                 $correct = $this->getModuleService('answerService')->isCorrect($questionId, $answerId);
 
