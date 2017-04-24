@@ -28,7 +28,7 @@ use Krystal\Form\HtmlHelper;
                     <tr class="<?php echo $entity->getId() == $answer->getId() ? 'info' : null; ?>">
 
                         <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
-                        <td class="text-center"><?php echo $entity->getAnswer(); ?></td>
+                        <td><?php echo $entity->getAnswer(); ?></td>
                         <td class="text-center"><?php echo $this->translate($entity->getCorrect() ? 'Yes' : 'No'); ?></td>
                         <td class="text-center"><?php echo $entity->getOrder(); ?></td>
                         <td class="text-center">
