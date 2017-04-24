@@ -90,10 +90,6 @@ return array(
         'controller' => 'Admin:Answer@listAction'
     ),
     
-    '/%s/module/quiz/answer/add/(:var)' => array(
-        'controller' => 'Admin:Answer@addAction'
-    ),
-    
     '/%s/module/quiz/answer/edit/(:var)' => array(
         'controller' => 'Admin:Answer@editAction'
     ),

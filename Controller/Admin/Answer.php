@@ -18,6 +18,29 @@ use Krystal\Validate\Pattern;
 final class Answer extends AbstractController
 {
     /**
+     * Creates a grid
+     * 
+     * @param string $id
+     * @param \Krystal\Stdlib\VirtualEntity $answer
+     * @return string
+     */
+    private function createGrid($id, VirtualEntity $answer)
+    {
+        $question = $this->getModuleService('questionService')->fetchQuestionById($id);
+
+        // Append breadcrumbs
+        $this->view->getBreadcrumbBag()->addOne('Quiz', 'Quiz:Admin:Browser@indexAction')
+                                       ->addOne($this->translator->translate('Answers for "%s"', (string)$question));
+
+        return $this->view->render('answers', array(
+            'answers' => $this->getModuleService('answerService')->fetchAll($id, false),
+            'question' => $question,
+            'answer' => $answer,
+            'id' => $id
+        ));
+    }
+
+    /**
      * Renders default
      * 
      * @param string $id Question id
@@ -25,53 +48,10 @@ final class Answer extends AbstractController
      */
     public function listAction($id)
     {
-        $question = $this->getModuleService('questionService')->fetchQuestionById($id);
-
-        // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('Quiz', 'Quiz:Admin:Browser@indexAction')
-                                       ->addOne($this->translator->translate('Answers for "%s"', $question));
-
-        return $this->view->render('answers', array(
-            'answers' => $this->getModuleService('answerService')->fetchAll($id, false),
-            'question' => $question,
-            'id' => $id
-        ));
-    }
-
-    /**
-     * Create form
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $answer
-     * @param string $id Question id
-     * @param string $title
-     * @return string
-     */
-    private function createForm(VirtualEntity $answer, $id, $title)
-    {
-        $question = (string) $this->getModuleService('questionService')->fetchQuestionById($id);
-
-        // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('Quiz', 'Quiz:Admin:Browser@indexAction')
-                                       ->addOne($this->translator->translate('Answers for "%s"', $question), $this->createUrl('Quiz:Admin:Answer@listAction', array($id)))
-                                       ->addOne($title);
-
-        return $this->view->render('answer.form', array(
-            'answer' => $answer
-        ));
-    }
-
-    /**
-     * Renders adding form
-     * 
-     * @param string $id Question id
-     * @return string
-     */
-    public function addAction($id)
-    {
         $answer = new VirtualEntity();
         $answer->setQuestionId($id);
-
-        return $this->createForm($answer, $id, 'Add new answer');
+        
+        return $this->createGrid($id, $answer);
     }
 
     /**
@@ -82,10 +62,10 @@ final class Answer extends AbstractController
      */
     public function editAction($id)
     {
-        $answer = $this->getModuleService('answerService')->fetchById($id);        
+        $answer = $this->getModuleService('answerService')->fetchById($id);
 
         if ($answer !== false) {
-            return $this->createForm($answer, $answer->getQuestionId(), 'Edit the answer');
+            return $this->createGrid($answer->getQuestionId(), $answer);
         } else {
             return false;
         }

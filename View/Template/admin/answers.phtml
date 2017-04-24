@@ -6,47 +6,97 @@ use Krystal\Form\HtmlHelper;
 
 ?>
 
-<a href="<?php echo $this->url('Quiz:Admin:Answer@addAction', $id); ?>" class="btn btn-success"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></a>
-
-<br />
-
-<?php $this->loadPartial('items-per-page', array('caption' => 'Answers')); ?>
-
 <form>
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered table-striped table-condensed">
-            <thead>
-                <tr>
-                    <th class="text-center"><?php $this->show('#'); ?></th>
-                    <th class="text-center"><?php $this->show('Answer'); ?></th>
-                    <th class="text-center"><?php $this->show('Correct'); ?></th>
-                    <th class="text-center col-lg-2"><?php $this->show('Order'); ?></th>
-                    <th class="text-center"><?php $this->show('Actions'); ?></th>
-                </tr>
-            </thead>
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="page-header"><i class="glyphicon glyphicon-th-list"></i> <?php echo $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?php echo count($answers); ?>)</small></h2>
 
-            <?php if (!empty($answers)): ?>
-            <tbody>
-                <?php foreach ($answers as $answer): ?>
-                <tr>
-                    <td class="text-center text-muted"><?php echo $answer->getId(); ?></td>
-                    <td class="text-center"><?php echo $answer->getAnswer(); ?></td>
-                    <td class="text-center"><?php echo $this->translate($answer->getCorrect() ? 'Yes' : 'No'); ?></td>
-                    <td class="text-center"><?php echo $answer->getOrder(); ?></td>
-                    <td class="text-center">
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this question'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Answer@editAction', $answer->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this question'); ?>" data-button="delete" href="#" data-url="<?php echo $this->url('Quiz:Admin:Answer@deleteAction', $answer->getId()); ?>"><i class="glyphicon glyphicon-remove"></i></a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th class="text-center"><?php $this->show('#'); ?></th>
+                        <th class="text-center"><?php $this->show('Answer'); ?></th>
+                        <th class="text-center"><?php $this->show('Correct'); ?></th>
+                        <th class="text-center col-lg-2"><?php $this->show('Order'); ?></th>
+                        <th class="text-center"><?php $this->show('Actions'); ?></th>
+                    </tr>
+                </thead>
+
+                <?php if (!empty($answers)): ?>
+                <tbody>
+                    <?php foreach ($answers as $entity): ?>
+                    <tr class="<?php echo $entity->getId() == $answer->getId() ? 'info' : null; ?>">
+
+                        <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
+                        <td class="text-center"><?php echo $entity->getAnswer(); ?></td>
+                        <td class="text-center"><?php echo $this->translate($entity->getCorrect() ? 'Yes' : 'No'); ?></td>
+                        <td class="text-center"><?php echo $entity->getOrder(); ?></td>
+                        <td class="text-center">
+                            <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this question'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Answer@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this question'); ?>" data-button="delete" href="#" data-url="<?php echo $this->url('Quiz:Admin:Answer@deleteAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <?php endif; ?>
+            </table>
+
+            <?php if (empty($answers)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No answers'); ?></h2>
+            </div>
             <?php endif; ?>
-        </table>
-        
-        <?php if (empty($answers)): ?>
-        <div class="center-block">
-            <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No answers'); ?></h2>
         </div>
-        <?php endif; ?>
+
+        <div class="col-lg-6">
+            <h2 class="page-header"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show(!$answer->getId() ? 'Add new answer' : 'Edit the answer'); ?></h2>
+
+            <form data-group="answer">
+                <div class="well">
+                    <?php echo Element::hidden('answer[id]', $answer->getId()); ?>
+                    <?php echo Element::hidden('answer[question_id]', $answer->getQuestionId()); ?>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php $this->show('Answer'); ?></label>
+                        <div class="col-lg-10">
+                            <?php echo Element::text('answer[answer]', $answer->getAnswer(), array('class' => 'form-control', 'placeholder' => $this->translate('Type the answer'))); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Sort order'); ?></label>
+                            <div class="col-lg-10">
+                                <?php echo Element::text('answer[order]', $answer->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order. By default comes last'))); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"><?php $this->show('Corectness'); ?></label>
+                            <div class="col-lg-10">
+                                <?php echo Element::select('answer[correct]', $this->translateArray(
+                                    array(
+                                        '0' => 'This answer is incorreсt',
+                                        '1' => 'This answer is correсt'
+                                    )), $answer->getCorrect(), array('class' => 'form-control')); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if (!$answer->getId()): ?>
+                <button data-button="add" data-back-url="<?php echo $this->url('Quiz:Admin:Answer@editAction', null); ?>" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+                <button data-button="add-create" data-back-url="<?php echo $this->url('Quiz:Admin:Answer@listAction', $answer->getCategoryId()); ?>" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+
+                <?php else: ?>
+                <button data-button="save" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+                <button data-button="save-create" data-back-url="<?php echo $this->url('Quiz:Admin:Answer@listAction', $answer->getQuestionId()); ?>" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+
+                <?php endif; ?>
+                <button data-button="cancel" data-url="<?php echo $this->url('Quiz:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+            </form>
+        </div>
     </div>
 </form>
