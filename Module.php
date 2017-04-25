@@ -31,6 +31,7 @@ final class Module extends AbstractCmsModule
         $historyMapper = $this->getMapper('\Quiz\Storage\MySQL\HistoryMapper');
 
         return array(
+            'configManager' => $this->createConfigService(),
             'historyService' => new HistoryService($historyMapper),
             'quizTracker' => new QuizTracker($this->getServiceLocator()->get('sessionBag')),
             'answerService' => new AnswerService($answerMapper),

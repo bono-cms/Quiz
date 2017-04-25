@@ -13,6 +13,7 @@ use Krystal\Form\HtmlHelper;
       </button>
       <ul class="dropdown-menu">
          <li><a href="<?php echo $this->url('Quiz:Admin:Question@addAction', $categoryId); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new question'); ?></a></li>
+         <li><a href="<?php echo $this->url('Quiz:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Configuration'); ?></a></li>
          <li><a href="<?php echo $this->url('Quiz:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add new category'); ?></a></li>
          <li><a href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>"><i class="fa fa-history"></i> <?php $this->show('History'); ?></a></li>
          <li class="divider"></li>

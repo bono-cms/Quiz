@@ -100,5 +100,15 @@ return array(
     
     '/%s/module/quiz/answer/delete/(:var)' => array(
         'controller' => 'Admin:Answer@deleteAction'
+    ),
+
+    // Configuration
+    '/%s/module/quiz/config' => array(
+        'controller' => 'Admin:Config@indexAction'
+    ),
+
+    '/%s/module/quiz/config/save' => array(
+        'controller' => 'Admin:Config@saveAction',
+        'disallow' => array('guest')
     )
 );
