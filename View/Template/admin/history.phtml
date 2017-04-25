@@ -47,7 +47,7 @@ use Krystal\Form\HtmlHelper;
                     <th><?php echo Element::number($filter->getElementName('id'), $filter->get('id'), array('class' => 'form-control col-md-1', 'min' => '1')); ?></th>
                     <th><?php echo Element::text($filter->getElementName('name'), $filter->get('name'), array('class' => 'form-control')); ?></th>
                     <th>
-                        <?php echo Element::select($filter->getElementName('category'), $categories, $filter->get('category'), array('class' => 'form-control')); ?>
+                        <?php echo Element::select($filter->getElementName('category'), array_merge(array('' => ''), $categories), $filter->get('category'), array('class' => 'form-control')); ?>
                     </th>
                     <th><?php echo Element::number($filter->getElementName('points'), $filter->get('points'), array('class' => 'form-control col-md-1', 'min' => '1')); ?></th>
                     <th></th>
