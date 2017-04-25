@@ -120,7 +120,6 @@ final class Quiz extends AbstractController
     private function answerAction()
     {
         $quizTracker = $this->getModuleService('quizTracker');
-
         $questionId = $this->request->getPost('question');
 
         // Answer ids

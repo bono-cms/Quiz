@@ -35,9 +35,9 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     const PARAM_STORAGE_KEY = 'quiz_track';
     const PARAM_STORAGE_INITIAL_COUNT = 'quiz_track_initial_count';
     const PARAM_STORAGE_TIMESTAMP_START = 'quiz_timestamp_start';
+    const PARAM_STORAGE_TIMESTAMP_END = 'quiz_stopped';
     const PARAM_STORAGE_META_DATA = 'quiz_meta';
     const PARAM_STORAGE_CORRECT_IDS = 'quiz_correct_ids';
-    const PARAM_STORAGE_STOPPED = 'quiz_stopped';
 
     /**
      * State initialization
@@ -101,7 +101,10 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
      */
     public function stop()
     {
-        $this->sessionBag->set(self::PARAM_STORAGE_STOPPED, true);
+        // Don't stop twice
+        if (!$this->isStopped()) {
+            $this->sessionBag->set(self::PARAM_STORAGE_TIMESTAMP_END, time());
+        }
     }
 
     /**
@@ -111,7 +114,7 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
      */
     public function isStopped()
     {
-        return $this->sessionBag->has(self::PARAM_STORAGE_STOPPED);
+        return $this->sessionBag->has(self::PARAM_STORAGE_TIMESTAMP_END);
     }
 
     /**
@@ -156,6 +159,7 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     private function getCorrectAnsweredCount()
     {
         $collection = $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
+        $collection = array_unique($collection);
 
         if (is_array($collection)) {
             return count($collection);
@@ -217,7 +221,10 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     public function getTakenTime()
     {
         if ($this->isStopped()) {
-            return TimeHelper::getTakenTime($this->sessionBag->get(self::PARAM_STORAGE_TIMESTAMP_START), time());
+            return TimeHelper::getTakenTime(
+                $this->sessionBag->get(self::PARAM_STORAGE_TIMESTAMP_START), 
+                $this->sessionBag->get(self::PARAM_STORAGE_TIMESTAMP_END)
+            );
         } else {
             throw new LogicException('Can not get taken time if the quiz is not finished');
         }
