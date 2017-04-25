@@ -97,6 +97,7 @@ use Krystal\Form\HtmlHelper;
                                 <th class="text-center"><?php $this->show('#'); ?></th>
                                 <th class="text-center"><?php $this->show('Name'); ?></th>
                                 <th class="text-center"><?php $this->show('Amount of questions'); ?></th>
+                                <th class="text-center"><?php $this->show('Sort order'); ?></th>
                                 <th class="text-center"><?php $this->show('Actions'); ?></th>
                             </tr>
                         </thead>
@@ -110,6 +111,7 @@ use Krystal\Form\HtmlHelper;
                                     <a href="<?php echo $this->url('Quiz:Admin:Browser@categoryAction', $category->getId(), 1); ?>"><?php echo $category->getName(); ?></a>
                                 </td>
                                 <td class="text-center"><?php echo $category->getQuestionsCount(); ?></td>
+                                <td class="text-center"><?php echo $category->getOrder(); ?></td>
                                 <td class="text-center">
                                     <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this category'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Category@editAction', $category->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
                                     <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this category'); ?>" data-button="delete" data-url="<?php echo $this->url('Quiz:Admin:Category@deleteAction', $category->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
