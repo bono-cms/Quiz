@@ -22,8 +22,7 @@ final class ConfigManager extends ConfigModuleService
     public function getEntity()
     {
         $entity = new VirtualEntity;
-        $entity->setEnabledModeration($this->get('enable_moderation', true), VirtualEntity::FILTER_BOOL)
-               ->setPerPageCount($this->get('per_page_count', 5), VirtualEntity::FILTER_INT);
+        $entity->setSortingMethod($this->get('order_type', '1'), VirtualEntity::FILTER_INT);
 
         return $entity;
     }
