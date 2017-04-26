@@ -16,17 +16,22 @@ use Krystal\Form\HtmlHelper;
          <li><a href="<?php echo $this->url('Quiz:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Configuration'); ?></a></li>
          <li><a href="<?php echo $this->url('Quiz:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add new category'); ?></a></li>
          <li><a href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>"><i class="fa fa-history"></i> <?php $this->show('History'); ?></a></li>
+
          <li class="divider"></li>
          <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
-         
+
          <?php if(!empty($questions)): ?>
+         <?php if ($config->sortByOrder()): ?>
          <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('Quiz:Admin:Question@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
+         <?php endif; ?>
          <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Quiz:Admin:Question@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-         
+
          <?php else: ?>
+         <?php if ($config->sortByOrder()): ?>
          <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
+         <?php endif; ?>
          <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-         
+
          <?php endif; ?>
       </ul>
     </div>
@@ -50,7 +55,11 @@ use Krystal\Form\HtmlHelper;
                             </th>
                             <th class="text-center"><?php $this->show('#'); ?></th>
                             <th class="text-center"><?php $this->show('Question'); ?></th>
+
+                            <?php if ($config->sortByOrder()): ?>
                             <th class="text-center"><?php $this->show('Order'); ?></th>
+                            <?php endif; ?>
+
                             <th class="text-center"><?php $this->show('Actions'); ?></th>
                         </tr>
                     </thead>
@@ -64,9 +73,11 @@ use Krystal\Form\HtmlHelper;
                             </td>
                             <td class="text-center text-muted"><?php echo $question->getId(); ?></td>
                             <td class="text-center"><?php echo $question->getQuestion(); ?></td>
+                            <?php if ($config->sortByOrder()): ?>
                             <td class="text-center col-lg-2">
                                 <?php echo Element::number(sprintf('order[%s]', $question->getId()), $question->getOrder(), array('class' => 'form-control', 'min' => '0')); ?>
                             </td>
+                            <?php endif; ?>
                             <td class="text-center">
                                 <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View answers'); ?>" data-button="details" href="<?php echo $this->url('Quiz:Admin:Answer@listAction', $question->getId()); ?>"><i class="glyphicon glyphicon-fullscreen"></i></a>
                                 <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this question'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Question@editAction', $question->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>

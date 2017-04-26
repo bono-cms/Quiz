@@ -52,7 +52,8 @@ final class Browser extends AbstractController
             'categoryId' => $id,
             'questions' => $this->getModuleService('questionService')->fetchAllByCategoryId($id, $page, $this->getSharedPerPageCount()),
             'categories' => $this->getModuleService('categoryService')->fetchAll(false),
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'config' => $this->getModuleService('configManager')->getEntity()
         ));
     }
 
