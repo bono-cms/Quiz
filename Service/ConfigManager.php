@@ -21,7 +21,7 @@ final class ConfigManager extends ConfigModuleService
     public function getEntity()
     {
         $entity = new ConfigEntity;
-        $entity->setSortingMethod($this->get('order_type', '1'), ConfigEntity::FILTER_INT);
+        $entity->setSortingMethod($this->get('order_type', 'order'), ConfigEntity::FILTER_TAGS);
 
         return $entity;
     }

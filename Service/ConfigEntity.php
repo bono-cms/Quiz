@@ -15,8 +15,8 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class ConfigEntity extends VirtualEntity
 {
-    const PARAM_SORT_TYPE_ORDER = 1;
-    const PARAM_SORT_TYPE_RANDOM = 2;
+    const PARAM_SORT_TYPE_ORDER = 'order';
+    const PARAM_SORT_TYPE_RANDOM = 'rand';
 
     /**
      * Returns sorting types

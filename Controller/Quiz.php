@@ -43,6 +43,7 @@ final class Quiz extends AbstractController
     private function welcomeAction(VirtualEntity $page)
     {
         $quizTracker = $this->getModuleService('quizTracker');
+        $config = $this->getModuleService('configManager')->getEntity();
 
         // If the welcoming form was submitted, then grab and save its value and start tracking
         if ($this->request->hasPost('category')) {
@@ -58,7 +59,7 @@ final class Quiz extends AbstractController
             if ($formValidator->isValid()) {
                 // Initial loading from request
                 $categoryId = $this->request->getPost('category');
-                $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId);
+                $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId, $config->getSortingMethod());
 
                 $quizTracker->start($ids);
                 $quizTracker->saveMeta(array(
