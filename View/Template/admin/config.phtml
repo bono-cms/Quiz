@@ -3,11 +3,6 @@ use Krystal\Form\Element;
 
 defined('KRYSTAL') or die;
 
-$sortTypes = array(
-    1 => 'Sort by sorting number',
-    2 => 'Sort randomly'
-);
-
 ?>
 
 <form data-group="config">
@@ -16,7 +11,7 @@ $sortTypes = array(
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Answer sorting method'); ?></label>
                 <div class="col-lg-10">
-                    <?php echo Element::select('config[order_type]', $this->translator->translateArray($sortTypes), $config->getSortingMethod(), array('class' => 'form-control')); ?>
+                    <?php echo Element::select('config[order_type]', $this->translator->translateArray($config->getSortingTypes()), $config->getSortingMethod(), array('class' => 'form-control')); ?>
                 </div>
             </div>
         </div>

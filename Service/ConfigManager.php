@@ -12,7 +12,6 @@
 namespace Quiz\Service;
 
 use Krystal\Config\ConfigModuleService;
-use Krystal\Stdlib\VirtualEntity;
 
 final class ConfigManager extends ConfigModuleService
 {
@@ -21,8 +20,8 @@ final class ConfigManager extends ConfigModuleService
      */
     public function getEntity()
     {
-        $entity = new VirtualEntity;
-        $entity->setSortingMethod($this->get('order_type', '1'), VirtualEntity::FILTER_INT);
+        $entity = new ConfigEntity;
+        $entity->setSortingMethod($this->get('order_type', '1'), ConfigEntity::FILTER_INT);
 
         return $entity;
     }
