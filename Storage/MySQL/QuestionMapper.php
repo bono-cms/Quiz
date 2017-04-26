@@ -14,6 +14,7 @@ namespace Quiz\Storage\MySQL;
 use Cms\Storage\MySQL\AbstractMapper;
 use Quiz\Storage\QuestionMapperInterface;
 use Krystal\Db\Sql\RawSqlFragment;
+use UnexpectedValueException;
 
 final class QuestionMapper extends AbstractMapper implements QuestionMapperInterface
 {
@@ -124,15 +125,38 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
      * Fetches question ids by associated category id
      * 
      * @param string $id Category id
+     * @param string $sortingColumn
+     * @throws \UnexpectedValueException if $sortingColumn isn't one of these: order, id, rand
      * @return array
      */
-    public function fetchQuiestionIdsByCategoryId($id)
+    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn)
     {
-        return $this->db->select('id')
+        $db = $this->db->select('id')
                         ->from(self::getTableName())
-                        ->whereEquals('category_id', $id)
-                        ->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'))
-                        ->queryAll('id');
+                        ->whereEquals('category_id', $id);
+
+        switch ($sortingColumn) {
+            case 'order':
+                $db->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
+            break;
+
+            case 'id':
+                $db->orderBy('id')
+                   ->desc();
+            break;
+
+            case 'rand':
+                $db->orderBy()
+                   ->rand();
+            break;
+
+            default:
+                throw new UnexpectedValueException(sprintf(
+                    'Sorting column must be "order", "id", or "rand". Received "%s"', $sortingColumn
+                ));
+        }
+
+        return $db->queryAll('id');
     }
 
     /**

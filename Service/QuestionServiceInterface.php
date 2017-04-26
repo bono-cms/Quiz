@@ -39,6 +39,15 @@ interface QuestionServiceInterface
     public function fetchAllByCategoryId($id, $page, $itemsPerPage);
 
     /**
+     * Fetches question ids by associated category id
+     * 
+     * @param string $id Category id
+     * @param string $sortingColumn
+     * @return array
+     */
+    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn);
+
+    /**
      * Fetches question entity by its associate id
      * 
      * @param string $id

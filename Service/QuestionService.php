@@ -94,11 +94,12 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
      * Fetches question ids by associated category id
      * 
      * @param string $id Category id
+     * @param string $sortingColumn
      * @return array
      */
-    public function fetchQuiestionIdsByCategoryId($id)
+    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn)
     {
-        return $this->questionMapper->fetchQuiestionIdsByCategoryId($id);
+        return $this->questionMapper->fetchQuiestionIdsByCategoryId($id, $sortingColumn);
     }
 
     /**

@@ -82,9 +82,11 @@ interface QuestionMapperInterface
      * Fetches question ids by associated category id
      * 
      * @param string $id Category id
+     * @param string $sortingColumn
+     * @throws \UnexpectedValueException if $sortingColumn isn't one of these: order, id, rand
      * @return array
      */
-    public function fetchQuiestionIdsByCategoryId($id);
+    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn);
 
     /**
      * Fetches all answer entities associated with category id
