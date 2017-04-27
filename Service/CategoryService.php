@@ -67,7 +67,7 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
      */
     public function fetchList()
     {
-        return ArrayUtils::arrayList($this->categoryMapper->fetchAll(false), 'id', 'name');
+        return ArrayUtils::arrayList($this->categoryMapper->fetchAll(true), 'id', 'name');
     }
 
     /**
