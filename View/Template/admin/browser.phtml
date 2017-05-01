@@ -72,7 +72,7 @@ use Krystal\Form\HtmlHelper;
                                 <input type="checkbox" name="toDelete[<?php echo $question->getId(); ?>]" />
                             </td>
                             <td class="text-center text-muted"><?php echo $question->getId(); ?></td>
-                            <td class="text-center"><?php echo $question->getQuestion(); ?></td>
+                            <td><?php echo $question->getQuestion(); ?></td>
                             <?php if ($config->sortByOrder()): ?>
                             <td class="text-center col-lg-2">
                                 <?php echo Element::number(sprintf('order[%s]', $question->getId()), $question->getOrder(), array('class' => 'form-control', 'min' => '0')); ?>
@@ -119,7 +119,7 @@ use Krystal\Form\HtmlHelper;
                             <?php foreach ($categories as $category): ?>
                             <tr class="<?php echo HtmlHelper::addOnDemand(isset($categoryId) && $categoryId == $category->getId(), 'info'); ?>">
                                 <td class="text-center text-muted"><?php echo $category->getId(); ?></td>
-                                <td class="text-center">
+                                <td>
                                     <a href="<?php echo $this->url('Quiz:Admin:Browser@categoryAction', $category->getId(), 1); ?>"><?php echo $category->getName(); ?></a>
                                 </td>
                                 <td class="text-center"><?php echo $category->getQuestionsCount(); ?></td>
