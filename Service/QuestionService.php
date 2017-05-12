@@ -154,6 +154,8 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
     public function add(array $input)
     {
         $data = $input['question'];
+        $data['order'] = (int) $data['order'];
+
         return $this->questionMapper->insert($data);
     }
 
@@ -166,6 +168,8 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
     public function update(array $input)
     {
         $data = $input['question'];
+        $data['order'] = (int) $data['order'];
+
         return $this->questionMapper->update($data);
     }
 }

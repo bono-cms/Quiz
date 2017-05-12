@@ -102,6 +102,8 @@ final class AnswerService extends AbstractManager implements AnswerServiceInterf
     public function add(array $input)
     {
         $data = $input['answer'];
+        $data['order'] = (int) $data['order'];
+
         return $this->answerMapper->insert($data);
     }
 
@@ -114,6 +116,8 @@ final class AnswerService extends AbstractManager implements AnswerServiceInterf
     public function update(array $input)
     {
         $data = $input['answer'];
+        $data['order'] = (int) $data['order'];
+
         return $this->answerMapper->update($data);
     }
 
