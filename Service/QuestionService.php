@@ -136,6 +136,23 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
     }
 
     /**
+     * Delete by a collection of questions by their IDs
+     * 
+     * @param array $ids
+     * @return boolean
+     */
+    public function deleteByIds(array $ids)
+    {
+        foreach ($ids as $id) {
+            if (!$this->deleteById($id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Returns last question id
      * 
      * @return string

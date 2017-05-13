@@ -72,6 +72,14 @@ interface QuestionServiceInterface
     public function deleteById($id);
 
     /**
+     * Delete by a collection of questions by their IDs
+     * 
+     * @param array $ids
+     * @return boolean
+     */
+    public function deleteByIds(array $ids);
+
+    /**
      * Returns last question id
      * 
      * @return string
