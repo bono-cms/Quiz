@@ -51,7 +51,20 @@ final class History extends AbstractController
      */
     public function deleteAction()
     {
-        return $this->invokeRemoval('historyService');
+        $service = $this->getModuleService('historyService');
+
+        // Batch removal
+        if ($this->request->hasPost('toDelete')) {
+            $ids = array_keys($this->request->getPost('toDelete'));
+
+            $service->deleteByIds($ids);
+            $this->flashBag->set('success', 'Selected elements have been removed successfully');
+
+        } else {
+            $this->flashBag->set('warning', 'You should select at least one element to remove');
+        }
+
+        return '1';
     }
 
     /**
