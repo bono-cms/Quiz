@@ -76,9 +76,10 @@ final class HistoryService extends AbstractManager implements HistoryServiceInte
      * @param integer $itemsPerPage Items per page to be displayed
      * @param string $sortingColumn Column name to be sorted
      * @param string $desc Whether to sort in DESC order
+     * @param array $params Extra parameters
      * @return array
      */
-    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc)
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $params = array())
     {
         return $this->prepareResults($this->historyMapper->filter($input, $page, $itemsPerPage, $sortingColumn, $desc));
     }
