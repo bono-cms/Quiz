@@ -1,17 +1,22 @@
+<?php
+
+use Krystal\Form\Element;
+
+?>
 
 <form class="form-horizontal" method="POST" action="<?php echo $this->url('Quiz:Quiz@indexAction'); ?>">
   <fieldset>
     <legend><?php echo $question->getQuestion(); ?></legend>
-    
+    <?= Element::hidden('csrf-token', $csrfToken); ?>
+
     <p class="text-muted"><?php echo $this->translate('Question %s of %s', $currentQuestionCount, $initialCount); ?></p>
-    
+
     <article><?php echo $question->getDescription(); ?></article>
-    
+
     <div class="form-group">
       <div class="col-lg-10">
-        
         <input type="hidden" name="question" value="<?php echo $question->getId(); ?>" />
-        
+
         <?php foreach ($answers as $answer): ?>
         <div class="radio">
           <label for="<?php echo $answer->getSignature(); ?>">
@@ -19,7 +24,6 @@
           </label>
         </div>
         <?php endforeach; ?>
-        
       </div>
     </div>
     
