@@ -18,6 +18,18 @@ use Krystal\Stdlib\VirtualEntity;
 final class Quiz extends AbstractController
 {
     /**
+     * {@inheritDoc}
+     */
+    protected function bootstrap($action)
+    {
+        parent::bootstrap($action);
+
+        $this->view->addVariables(array(
+            'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
+        ));
+    }
+
+    /**
      * Creates a pair
      * 
      * @param string $id
@@ -76,8 +88,7 @@ final class Quiz extends AbstractController
             // In case that was the first GET request, render welcome page
             return $this->view->render('welcome', array(
                 'categories' => $this->getModuleService('categoryService')->fetchList(),
-                'page' => $page,
-                'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
+                'page' => $page
             ));
         }
     }
@@ -202,7 +213,7 @@ final class Quiz extends AbstractController
                    ->setModule('Quiz')
                    ->setTheme('site');
 
-        $page = new \Krystal\Stdlib\VirtualEntity();
+        $page = new VirtualEntity();
 
         $quizTracker = $this->getModuleService('quizTracker');
 
