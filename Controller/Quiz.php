@@ -76,7 +76,8 @@ final class Quiz extends AbstractController
             // In case that was the first GET request, render welcome page
             return $this->view->render('welcome', array(
                 'categories' => $this->getModuleService('categoryService')->fetchList(),
-                'page' => $page
+                'page' => $page,
+                'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
             ));
         }
     }
