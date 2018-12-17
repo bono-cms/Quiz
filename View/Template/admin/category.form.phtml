@@ -1,9 +1,10 @@
-<?php defined('KRYSTAL') or die; ?>
 <?php
 
 use Krystal\Form\Element;
+defined('KRYSTAL') or die;
 
 ?>
+
 <form data-group="category">
     <div class="well">
         <?php echo Element::hidden('category[id]', $category->getId()); ?>
@@ -29,13 +30,12 @@ use Krystal\Form\Element;
         </div>
     </div>
 
-    <?php if (!$category->getId()): ?>
-    <button data-button="add" data-back-url="<?php echo $this->url('Quiz:Admin:Category@editAction', null); ?>" data-url="<?php echo $this->url('Quiz:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-    
-    <?php else: ?>
-    <button data-button="save" data-url="<?php echo $this->url('Quiz:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+    <?php $this->loadPartial('actions', array(
+        'new' => !$category->getId(),
+        'add' => 'Quiz:Admin:Category@addAction',
+        'edit' => 'Quiz:Admin:Category@editAction',
+        'save' => 'Quiz:Admin:Category@saveAction',
+        'cancel' => 'Quiz:Admin:Browser@indexAction'
+    )); ?>
 
-    <?php endif; ?>
-    <button data-button="cancel" data-url="<?php echo $this->url('Quiz:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
-    
 </form>

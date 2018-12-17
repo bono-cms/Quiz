@@ -1,6 +1,6 @@
 <?php
-use Krystal\Form\Element;
 
+use Krystal\Form\Element;
 defined('KRYSTAL') or die;
 
 ?>
@@ -19,5 +19,4 @@ defined('KRYSTAL') or die;
 	
 	<button data-button="save" data-url="<?php echo $this->url('Quiz:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
     <button data-button="cancel" data-url="<?php echo $this->url('Quiz:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Cancel'); ?></button>
-	
 </form>

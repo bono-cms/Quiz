@@ -1,8 +1,8 @@
-<?php defined('KRYSTAL') or die; ?>
 <?php
 
 use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
+defined('KRYSTAL') or die;
 
 ?>
 
@@ -86,16 +86,14 @@ use Krystal\Form\HtmlHelper;
                     </div>
                 </div>
 
-                <?php if (!$answer->getId()): ?>
-                <button data-button="add" data-back-url="<?php echo $this->url('Quiz:Admin:Answer@editAction', null); ?>" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-                <button data-button="add-create" data-back-url="<?php echo $this->url('Quiz:Admin:Answer@listAction', $answer->getCategoryId()); ?>" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+                <?php $this->loadPartial('actions', array(
+                    'new' => !$answer->getId(),
+                    'add' => array('Quiz:Admin:Answer@listAction', $answer->getQuestionId()),
+                    'edit' => 'Quiz:Admin:Answer@editAction',
+                    'save' => 'Quiz:Admin:Answer@saveAction',
+                    'cancel' => !$answer->getId() ? 'Quiz:Admin:Browser@indexAction' : 'Quiz:Admin:Answer@listAction', $answer->getQuestionId()
+                )); ?>
 
-                <?php else: ?>
-                <button data-button="save" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-                <button data-button="save-create" data-back-url="<?php echo $this->url('Quiz:Admin:Answer@listAction', $answer->getQuestionId()); ?>" data-url="<?php echo $this->url('Quiz:Admin:Answer@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
-
-                <?php endif; ?>
-                <button data-button="cancel" data-url="<?php echo $this->url(!$answer->getId() ? 'Quiz:Admin:Browser@indexAction' : 'Quiz:Admin:Answer@listAction', $answer->getQuestionId()); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
             </form>
         </div>
     </div>
