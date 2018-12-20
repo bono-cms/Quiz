@@ -1,7 +1,9 @@
 <?php
 
+use Krystal\Grid\Grid;
 use Krystal\Form\Element;
-use Krystal\Form\HtmlHelper;
+use Cms\View\Icon;
+
 defined('KRYSTAL') or die;
 
 ?>
@@ -11,35 +13,54 @@ defined('KRYSTAL') or die;
         <div class="col-lg-6">
             <h2 class="page-header"><i class="glyphicon glyphicon-th-list"></i> <?php echo $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?php echo count($answers); ?>)</small></h2>
 
-            <table class="table table-hover table-bordered table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th class="text-center"><?php $this->show('#'); ?></th>
-                        <th class="text-center"><?php $this->show('Answer'); ?></th>
-                        <th class="text-center"><?php $this->show('Correct'); ?></th>
-                        <th class="text-center col-lg-2"><?php $this->show('Order'); ?></th>
-                        <th class="text-center"><?php $this->show('Actions'); ?></th>
-                    </tr>
-                </thead>
+            <?= Grid::render($answers, array(
+                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                'rowAttributes' => array(
+                    'class' => function($row) use ($answer){
+                        return $row->getId() == $answer->getId() ? 'info' : null;
+                    }
+                ),
 
-                <?php if (!empty($answers)): ?>
-                <tbody>
-                    <?php foreach ($answers as $entity): ?>
-                    <tr class="<?php echo $entity->getId() == $answer->getId() ? 'info' : null; ?>">
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
 
-                        <td class="text-center text-muted"><?php echo $entity->getId(); ?></td>
-                        <td><?php echo $entity->getAnswer(); ?></td>
-                        <td class="text-center"><?php echo $this->translate($entity->getCorrect() ? 'Yes' : 'No'); ?></td>
-                        <td class="text-center"><?php echo $entity->getOrder(); ?></td>
-                        <td class="text-center">
-                            <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this question'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Answer@editAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this question'); ?>" data-button="delete" href="#" data-url="<?php echo $this->url('Quiz:Admin:Answer@deleteAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-remove"></i></a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <?php endif; ?>
-            </table>
+                    array(
+                        'column' => 'answer'
+                    ),
+
+                    array(
+                        'column' => 'correct',
+                        'translateable' => true,
+                        'value' => function($entity){
+                            return $entity->getCorrect() ? 'Yes' : 'No';
+                        }
+                    ),
+
+                    array(
+                        'column' => 'order'
+                    )
+                ),
+
+                'actions' => array(
+                    'edit' => function($row){
+                        return Icon::edit(
+                            $this->url('Quiz:Admin:Answer@editAction', $row['id']),
+                            $this->translate('Edit this question')
+                        );
+                    },
+
+                    'remove' => function($row){
+                        return Icon::remove(
+                            $this->url('Quiz:Admin:Answer@deleteAction', $row['id']),
+                            $this->translate('Remove this question')
+                        );
+                    }
+                )
+
+            ), $this->translator); ?>
 
             <?php if (empty($answers)): ?>
             <div class="center-block">
@@ -91,7 +112,7 @@ defined('KRYSTAL') or die;
                     'add' => array('Quiz:Admin:Answer@listAction', $answer->getQuestionId()),
                     'edit' => 'Quiz:Admin:Answer@editAction',
                     'save' => 'Quiz:Admin:Answer@saveAction',
-                    'cancel' => !$answer->getId() ? 'Quiz:Admin:Browser@indexAction' : 'Quiz:Admin:Answer@listAction', $answer->getQuestionId()
+                    'cancel' => !$answer->getId() ? 'Quiz:Admin:Browser@indexAction' : array('Quiz:Admin:Answer@listAction', $answer->getQuestionId())
                 )); ?>
 
             </form>

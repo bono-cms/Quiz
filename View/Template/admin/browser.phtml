@@ -1,7 +1,9 @@
 <?php
 
+use Krystal\Grid\Grid;
 use Krystal\Form\Element;
-use Krystal\Form\HtmlHelper;
+use Cms\View\Icon;
+
 defined('KRYSTAL') or die;
 
 ?>
@@ -35,59 +37,62 @@ defined('KRYSTAL') or die;
          <?php endif; ?>
       </ul>
     </div>
-    
+
     <a target="_blank" href="<?php echo $this->url('Quiz:Quiz@indexAction'); ?>" class="btn btn-info"><i class="fa fa-folder-open"></i> <?php $this->show('Open on site'); ?></a>
 </div>
-
 
 <form>
     <div class="row">
         <div class="col-lg-6">
             <?php $this->loadPartial('items-per-page', array('caption' => 'Questions')); ?>
             <div class="table-responsive">
-                <table class="table table-hover table-bordered table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                <?php if (!empty($questions)): ?>
-                                <input type="checkbox" />
-                                <?php endif; ?>
-                            </th>
-                            <th class="text-center"><?php $this->show('#'); ?></th>
-                            <th class="text-center"><?php $this->show('Question'); ?></th>
+                <?= Grid::render($questions, array(
+                    'batch' => true,
+                    'pk' => 'id',
+                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                    'columns' => array(
+                        array(
+                            'column' => 'id',
+                            'label' => '#'
+                        ),
 
-                            <?php if ($config->sortByOrder()): ?>
-                            <th class="text-center"><?php $this->show('Order'); ?></th>
-                            <?php endif; ?>
+                        array(
+                            'column' => 'question'
+                        ),
 
-                            <th class="text-center"><?php $this->show('Actions'); ?></th>
-                        </tr>
-                    </thead>
-                    
-                    <?php if (!empty($questions)): ?>
-                    <tbody>
-                        <?php foreach ($questions as $question): ?>
-                        <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="toDelete[<?php echo $question->getId(); ?>]" />
-                            </td>
-                            <td class="text-center text-muted"><?php echo $question->getId(); ?></td>
-                            <td><?php echo $question->getQuestion(); ?></td>
-                            <?php if ($config->sortByOrder()): ?>
-                            <td class="text-center col-lg-2">
-                                <?php echo Element::number(sprintf('order[%s]', $question->getId()), $question->getOrder(), array('class' => 'form-control', 'min' => '0')); ?>
-                            </td>
-                            <?php endif; ?>
-                            <td class="text-center">
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View answers'); ?>" data-button="details" href="<?php echo $this->url('Quiz:Admin:Answer@listAction', $question->getId()); ?>"><i class="glyphicon glyphicon-fullscreen"></i></a>
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this question'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Question@editAction', $question->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this question'); ?>" data-button="delete" href="#" data-url="<?php echo $this->url('Quiz:Admin:Question@deleteAction', $question->getId()); ?>"><i class="glyphicon glyphicon-remove"></i></a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                    <?php endif; ?>
-                </table>
+                        array(
+                            'column' => 'order',
+                            'hidden' => !$config->sortByOrder(),
+                            'value' => function($question){
+                                return Element::number(sprintf('order[%s]', $question->getId()), $question->getOrder(), array('class' => 'form-control', 'min' => '0'));
+                            }
+                        )
+                    ),
+
+                    'actions' => array(
+                        'details' => function($question){
+                            return Icon::details(
+                                $this->url('Quiz:Admin:Answer@listAction', $question->getId()),
+                                $this->translate('View answers')
+                            );
+                        },
+
+                        'edit' => function($question){
+                            return Icon::edit(
+                                $this->url('Quiz:Admin:Question@editAction', $question->getId()),
+                                $this->translate('Edit this question')
+                            );
+                        },
+
+                        'remove' => function($question){
+                            return Icon::remove(
+                                $this->url('Advice:Admin:Advice@deleteAction', $question->getId()),
+                                $this->translate('Remove this question')
+                            );
+                        }
+                    )
+
+                ), $this->translator); ?>
                 
                 <?php if (empty($questions)): ?>
                 <div class="center-block">
@@ -102,38 +107,57 @@ defined('KRYSTAL') or die;
         <div class="col-lg-6">
             <div class="table-responsive">
                 <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
+
                 <div class="table-responsive">
-                    <table class="table table-hover table-bordered table-striped table-condensed">
-                        <thead>
-                            <tr>
-                                <th class="text-center"><?php $this->show('#'); ?></th>
-                                <th class="text-center"><?php $this->show('Name'); ?></th>
-                                <th class="text-center"><?php $this->show('Amount of questions'); ?></th>
-                                <th class="text-center"><?php $this->show('Sort order'); ?></th>
-                                <th class="text-center"><?php $this->show('Actions'); ?></th>
-                            </tr>
-                        </thead>
-                        
-                        <?php if (!empty($categories)): ?>
-                        <tbody>
-                            <?php foreach ($categories as $category): ?>
-                            <tr class="<?php echo HtmlHelper::addOnDemand(isset($categoryId) && $categoryId == $category->getId(), 'info'); ?>">
-                                <td class="text-center text-muted"><?php echo $category->getId(); ?></td>
-                                <td>
-                                    <a href="<?php echo $this->url('Quiz:Admin:Browser@categoryAction', $category->getId(), 1); ?>"><?php echo $category->getName(); ?></a>
-                                </td>
-                                <td class="text-center"><?php echo $category->getQuestionsCount(); ?></td>
-                                <td class="text-center"><?php echo $category->getOrder(); ?></td>
-                                <td class="text-center">
-                                    <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this category'); ?>" data-button="edit" href="<?php echo $this->url('Quiz:Admin:Category@editAction', $category->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this category'); ?>" data-button="delete" data-url="<?php echo $this->url('Quiz:Admin:Category@deleteAction', $category->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                        <?php endif; ?>
-                    </table>
-                    
+                    <?= Grid::render($categories, array(
+                        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                        'rowAttributes' => array(
+                            'class' => function($category) use ($categoryId){
+                                return $categoryId == $category->getId() ? 'info' : null;
+                            }
+                        ),
+
+                        'columns' => array(
+                            array(
+                                'column' => 'id',
+                                'label' => '#'
+                            ),
+
+                            array(
+                                'column' => 'name',
+                                'value' => function($category){
+                                    return Element::link($category->getName(), $this->url('Quiz:Admin:Browser@categoryAction', $category->getId(), 1));
+                                }
+                            ),
+
+                            array(
+                                'column' => 'questions_count',
+                                'label' => 'Amount of questions'
+                            ),
+
+                            array(
+                                'column' => 'order'
+                            )
+                        ),
+
+                        'actions' => array(
+                            'edit' => function($category){
+                                return Icon::edit(
+                                    $this->url('Quiz:Admin:Category@editAction', $category->getId()),
+                                    $this->translate('Edit this category')
+                                );
+                            },
+
+                            'remove' => function($category){
+                                return Icon::remove(
+                                    $this->url('Quiz:Admin:Category@deleteAction', $category->getId()),
+                                    $this->translate('Remove this category')
+                                );
+                            }
+                        )
+
+                    ), $this->translator); ?>
+
                     <?php if (empty($categories)): ?>
                     <div class="center-block">
                         <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>

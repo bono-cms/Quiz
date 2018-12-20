@@ -12,7 +12,6 @@
 namespace Quiz\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
-use Krystal\Db\Filter\QueryContainer;
 
 final class History extends AbstractController
 {
@@ -39,8 +38,10 @@ final class History extends AbstractController
         return $this->view->render('history', array(
             'paginator' => $paginator,
             'records' => $records,
-            'categories' => $this->getModuleService('categoryService')->fetchList(),
-            'filter' => new QueryContainer($this->request->getQuery(), $this->createUrl('Quiz:Admin:History@filterAction', array(null))),
+            'categories' => $this->getModuleService('categoryService')->fetchList(true),
+            'filterApplied' => $this->request->getQuery('filter', false),
+            'query' => $this->request->getQuery(),
+            'route' => $this->createUrl('Quiz:Admin:History@filterAction', array(null))
         ));
     }
 
@@ -54,8 +55,8 @@ final class History extends AbstractController
         $service = $this->getModuleService('historyService');
 
         // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
+        if ($this->request->hasPost('batch')) {
+            $ids = array_keys($this->request->getPost('batch'));
 
             $service->deleteByIds($ids);
             $this->flashBag->set('success', 'Selected elements have been removed successfully');
