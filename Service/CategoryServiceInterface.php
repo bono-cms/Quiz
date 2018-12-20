@@ -16,9 +16,10 @@ interface CategoryServiceInterface
     /**
      * Fetches category list
      * 
+     * @param boolean $values Whether to fetch only values
      * @return array
      */
-    public function fetchList();
+    public function fetchList($values = false);
 
     /**
      * Fetch all categories
