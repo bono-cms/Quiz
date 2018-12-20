@@ -63,11 +63,18 @@ final class CategoryService extends AbstractManager implements CategoryServiceIn
     /**
      * Fetches category list
      * 
+     * @param boolean $values Whether to fetch only values
      * @return array
      */
-    public function fetchList()
+    public function fetchList($values = false)
     {
-        return ArrayUtils::arrayList($this->categoryMapper->fetchAll(true), 'id', 'name');
+        $rows = ArrayUtils::arrayList($this->categoryMapper->fetchAll(true), 'id', 'name');
+
+        if ($values == true) {
+            $rows = ArrayUtils::valuefy($rows);
+        }
+
+        return $rows;
     }
 
     /**
