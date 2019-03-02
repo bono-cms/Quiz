@@ -1,7 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Grid\Grid;
+use Krystal\Widget\GridWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -14,7 +14,7 @@ defined('KRYSTAL') or die;
 
 <form action="<?php echo $route; ?>" novalidate>
     <div class="table-responsive">
-        <?= Grid::render($records, array(
+        <?= $this->widget(new GridWidget($records, array(
             // A column to be considered as a primary key
             'pk' => 'id',
             'batch' => true,
@@ -44,7 +44,7 @@ defined('KRYSTAL') or die;
                 )
             )
 
-        ), $this->translator, $route, $query); ?>
+        ), $route)); ?>
 
         <?php if (!empty($records)): ?>
         <div>

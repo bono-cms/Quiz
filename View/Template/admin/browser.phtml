@@ -1,6 +1,6 @@
 <?php
 
-use Krystal\Grid\Grid;
+use Krystal\Widget\GridWidget;
 use Krystal\Form\Element;
 use Cms\View\Icon;
 
@@ -46,7 +46,7 @@ defined('KRYSTAL') or die;
         <div class="col-lg-6">
             <?php $this->loadPartial('items-per-page', array('caption' => 'Questions')); ?>
             <div class="table-responsive">
-                <?= Grid::render($questions, array(
+                <?= $this->widget(new GridWidget($questions, array(
                     'batch' => true,
                     'pk' => 'id',
                     'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
@@ -91,9 +91,8 @@ defined('KRYSTAL') or die;
                             );
                         }
                     )
+                ))); ?>
 
-                ), $this->translator); ?>
-                
                 <?php if (empty($questions)): ?>
                 <div class="center-block">
                     <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No questions'); ?></h2>
@@ -109,7 +108,7 @@ defined('KRYSTAL') or die;
                 <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
                 <div class="table-responsive">
-                    <?= Grid::render($categories, array(
+                    <?= $this->widget(new GridWidget($categories, array(
                         'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                         'rowAttributes' => array(
                             'class' => function($category) use ($categoryId){
@@ -155,8 +154,7 @@ defined('KRYSTAL') or die;
                                 );
                             }
                         )
-
-                    ), $this->translator); ?>
+                    ))); ?>
 
                     <?php if (empty($categories)): ?>
                     <div class="center-block">

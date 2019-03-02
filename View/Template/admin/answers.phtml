@@ -1,6 +1,6 @@
 <?php
 
-use Krystal\Grid\Grid;
+use Krystal\Widget\GridWidget;
 use Krystal\Form\Element;
 use Cms\View\Icon;
 
@@ -13,7 +13,7 @@ defined('KRYSTAL') or die;
         <div class="col-lg-6">
             <h2 class="page-header"><i class="glyphicon glyphicon-th-list"></i> <?php echo $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?php echo count($answers); ?>)</small></h2>
 
-            <?= Grid::render($answers, array(
+            <?= $this->widget(new GridWidget($answers, array(
                 'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                 'rowAttributes' => array(
                     'class' => function($row) use ($answer){
@@ -59,8 +59,7 @@ defined('KRYSTAL') or die;
                         );
                     }
                 )
-
-            ), $this->translator); ?>
+            ))); ?>
 
             <?php if (empty($answers)): ?>
             <div class="center-block">
@@ -114,7 +113,6 @@ defined('KRYSTAL') or die;
                     'save' => 'Quiz:Admin:Answer@saveAction',
                     'cancel' => !$answer->getId() ? 'Quiz:Admin:Browser@indexAction' : array('Quiz:Admin:Answer@listAction', $answer->getQuestionId())
                 )); ?>
-
             </form>
         </div>
     </div>
