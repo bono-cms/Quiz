@@ -8,61 +8,62 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Quiz:Admin:History@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+<div class="card">
+    <a href="#" class="btn btn-danger" data-button="remove-selected" data-url="<?php echo $this->url('Quiz:Admin:History@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
 
-<?php $this->loadPartial('items-per-page', array('caption' => 'History')); ?>
+    <?php $this->loadPartial('items-per-page', array('caption' => 'History')); ?>
 
-<form action="<?php echo $route; ?>" novalidate>
-    <div class="table-responsive">
-        <?= $this->widget(new GridViewWidget($records, array(
-            // A column to be considered as a primary key
-            'pk' => 'id',
-            'batch' => true,
-            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-            'columns' => array(
-                array(
-                    'column' => 'id',
-                    'label' => '#'
-                ),
+    <form action="<?php echo $route; ?>" novalidate autocomplete="off">
+        <div class="table-responsive">
+            <?= $this->widget(new GridViewWidget($records, array(
+                // A column to be considered as a primary key
+                'pk' => 'id',
+                'batch' => true,
+                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
 
-                array(
-                    'column' => 'name',
-                    'type' => 'text',
-                    'filter' => true
-                ),
+                    array(
+                        'column' => 'name',
+                        'type' => 'text',
+                        'filter' => true
+                    ),
 
-                array(
-                    'column' => 'category',
-                    'type' => 'select',
-                    'filter' => $categories
-                ),
+                    array(
+                        'column' => 'category',
+                        'type' => 'select',
+                        'filter' => $categories
+                    ),
 
-                array(
-                    'column' => 'points',
-                    'type' => 'text',
-                    'filter' => true
+                    array(
+                        'column' => 'points',
+                        'type' => 'text',
+                        'filter' => true
+                    )
                 )
-            )
 
-        ), $route)); ?>
+            ), $route)); ?>
 
-        <?php if (!empty($records)): ?>
-        <div>
-            <?php if ($filterApplied): ?>
-            <a href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+            <?php if (!empty($records)): ?>
+            <div>
+                <?php if ($filterApplied): ?>
+                <a href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
+                <br />
+            </div>
             <?php endif; ?>
-            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-filter"></i> <?php $this->show('Filter'); ?></button>
-            <br />
+
+            <?php if (empty($records)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No records'); ?></h2>
+            </div>
+            <?php endif; ?>
         </div>
-        <?php endif; ?>
+    </form>
 
-		<?php if (empty($records)): ?>
-		<div class="center-block">
-			<h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No records'); ?></h2>
-		</div>
-		<?php endif; ?>
-
-	</div>
-</form>
-
-<?php $this->loadPartial('paginator'); ?>
+    <?php $this->loadPartial('paginator'); ?>
+</div>

@@ -4,43 +4,42 @@ use Krystal\Form\Element;
 defined('KRYSTAL') or die;
 
 ?>
-<form data-group="question">
-    <div class="well">
-        <?php echo Element::hidden('question[id]', $question->getId()); ?>
-        
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Question'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::text('question[question]', $question->getQuestion(), array('class' => 'form-control', 'placeholder' => $this->translate('Target question'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                </div>
+
+<form class="card" data-group="question" autocomplete="off">
+    <?php echo Element::hidden('question[id]', $question->getId()); ?>
+
+    <div class="form-group">
+        <label class="col-lg-10 control-label"><?php $this->show('Question'); ?></label>
+        <div class="col-lg-10">
+            <div class="input-group">
+                <?php echo Element::text('question[question]', $question->getQuestion(), array('class' => 'form-control', 'placeholder' => $this->translate('Target question'))); ?>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
             </div>
         </div>
-        
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
-            <div class="col-lg-10">
-                <?php echo Element::select('question[category_id]', $categories, $question->getCategoryId(), array('class' => 'form-control')); ?>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-10 control-label"><?php $this->show('Category'); ?></label>
+        <div class="col-lg-10">
+            <?php echo Element::select('question[category_id]', $categories, $question->getCategoryId(), array('class' => 'form-control')); ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-10 control-label"><?php $this->show('Order'); ?></label>
+        <div class="col-lg-10">
+            <div class="input-group">
+                <?php echo Element::number('question[order]', $question->getOrder(), array('min' => '0', 'class' => 'form-control', 'placeholder' => $this->translate('Order of this question to be displayed in a category'))); ?>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
             </div>
         </div>
-        
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
-            <div class="col-lg-10">
-                <div class="input-group">
-                    <?php echo Element::number('question[order]', $question->getOrder(), array('min' => '0', 'class' => 'form-control', 'placeholder' => $this->translate('Order of this question to be displayed in a category'))); ?>
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                </div>
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-10 control-label"><?php $this->show('Description'); ?></label>
+        <div class="col-lg-10">
+            <?php echo Element::textarea('question[description]', $question->getDescription(), array('data-wysiwyg' => 'true')); ?>
         </div>
-        
-		<div class="form-group">
-			<label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
-			<div class="col-lg-10">
-                <?php echo Element::textarea('question[description]', $question->getDescription(), array('data-wysiwyg' => 'true')); ?>
-			</div>
-		</div>
     </div>
 
     <?php $this->loadPartial('actions', array(

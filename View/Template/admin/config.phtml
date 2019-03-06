@@ -5,18 +5,16 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<form data-group="config">
-    <div class="tab-pane fade in active" id="common" role="tabpanel">
-        <div class="well">
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('Answer sorting method'); ?></label>
-                <div class="col-lg-10">
-                    <?php echo Element::select('config[order_type]', $this->translator->translateArray($config->getSortingTypes()), $config->getSortingMethod(), array('class' => 'form-control')); ?>
-                </div>
-            </div>
+<form class="card" data-group="config" autocomplete="off">
+    <div class="form-group">
+        <label class="col-lg-10 control-label"><?php $this->show('Answer sorting method'); ?></label>
+        <div class="col-lg-10">
+            <?php echo Element::select('config[order_type]', $this->translator->translateArray($config->getSortingTypes()), $config->getSortingMethod(), array('class' => 'form-control')); ?>
         </div>
     </div>
-	
-	<button data-button="save" data-url="<?php echo $this->url('Quiz:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-    <button data-button="cancel" data-url="<?php echo $this->url('Quiz:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Cancel'); ?></button>
+
+    <div class="actions">
+        <button data-button="save" data-url="<?php echo $this->url('Quiz:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+        <button data-button="cancel" data-url="<?php echo $this->url('Quiz:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Cancel'); ?></button>
+    </div>
 </form>

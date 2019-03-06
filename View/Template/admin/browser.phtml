@@ -9,33 +9,34 @@ defined('KRYSTAL') or die;
 ?>
 
 <div class="btn-toolbar">
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?> <span class="caret"></span>
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?>
       </button>
-      <ul class="dropdown-menu">
-         <li><a href="<?php echo $this->url('Quiz:Admin:Question@addAction', $categoryId); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new question'); ?></a></li>
-         <li><a href="<?php echo $this->url('Quiz:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Configuration'); ?></a></li>
-         <li><a href="<?php echo $this->url('Quiz:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add new category'); ?></a></li>
-         <li><a href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>"><i class="fa fa-history"></i> <?php $this->show('History'); ?></a></li>
 
-         <li class="divider"></li>
-         <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
+      <div class="dropdown-menu">
+         <a class="dropdown-item" href="<?php echo $this->url('Quiz:Admin:Question@addAction', $categoryId); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new question'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Quiz:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Configuration'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Quiz:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add new category'); ?></a>
+         <a class="dropdown-item" href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>"><i class="fa fa-history"></i> <?php $this->show('History'); ?></a>
 
-         <?php if(!empty($questions)): ?>
+         <div class="dropdown-divider"></div>
+         <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
+
+         <?php if (!empty($questions)): ?>
          <?php if ($config->sortByOrder()): ?>
-         <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('Quiz:Admin:Question@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
+         <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?php echo $this->url('Quiz:Admin:Question@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
          <?php endif; ?>
-         <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Quiz:Admin:Question@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+         <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('Quiz:Admin:Question@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
 
          <?php else: ?>
          <?php if ($config->sortByOrder()): ?>
-         <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
+         <a class="dropdown-item"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
          <?php endif; ?>
-         <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+         <a class="dropdown-item"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
 
          <?php endif; ?>
-      </ul>
+      </div>
     </div>
 
     <a target="_blank" href="<?php echo $this->url('Quiz:Quiz@indexAction'); ?>" class="btn btn-info"><i class="fa fa-folder-open"></i> <?php $this->show('Open on site'); ?></a>
@@ -44,67 +45,73 @@ defined('KRYSTAL') or die;
 <form>
     <div class="row">
         <div class="col-lg-6">
-            <?php $this->loadPartial('items-per-page', array('caption' => 'Questions')); ?>
-            <div class="table-responsive">
-                <?= $this->widget(new GridViewWidget($questions, array(
-                    'batch' => true,
-                    'pk' => 'id',
-                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                    'columns' => array(
-                        array(
-                            'column' => 'id',
-                            'label' => '#'
+            <div class="card">
+                <?php $this->loadPartial('items-per-page', array('caption' => 'Questions')); ?>
+
+                <div class="table-responsive">
+                    <?= $this->widget(new GridViewWidget($questions, array(
+                        'batch' => true,
+                        'pk' => 'id',
+                        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                        'columns' => array(
+                            array(
+                                'column' => 'id',
+                                'label' => '#'
+                            ),
+
+                            array(
+                                'column' => 'question',
+                                'attributes' => array(
+                                    'class' => null
+                                )
+                            ),
+
+                            array(
+                                'column' => 'order',
+                                'hidden' => !$config->sortByOrder(),
+                                'value' => function($question){
+                                    return Element::number(sprintf('order[%s]', $question->getId()), $question->getOrder(), array('class' => 'form-control', 'min' => '0'));
+                                }
+                            )
                         ),
 
-                        array(
-                            'column' => 'question'
-                        ),
+                        'actions' => array(
+                            'details' => function($question){
+                                return Icon::details(
+                                    $this->url('Quiz:Admin:Answer@listAction', $question->getId()),
+                                    $this->translate('View answers')
+                                );
+                            },
 
-                        array(
-                            'column' => 'order',
-                            'hidden' => !$config->sortByOrder(),
-                            'value' => function($question){
-                                return Element::number(sprintf('order[%s]', $question->getId()), $question->getOrder(), array('class' => 'form-control', 'min' => '0'));
+                            'edit' => function($question){
+                                return Icon::edit(
+                                    $this->url('Quiz:Admin:Question@editAction', $question->getId()),
+                                    $this->translate('Edit this question')
+                                );
+                            },
+
+                            'remove' => function($question){
+                                return Icon::remove(
+                                    $this->url('Advice:Admin:Advice@deleteAction', $question->getId()),
+                                    $this->translate('Remove this question')
+                                );
                             }
                         )
-                    ),
+                    ))); ?>
 
-                    'actions' => array(
-                        'details' => function($question){
-                            return Icon::details(
-                                $this->url('Quiz:Admin:Answer@listAction', $question->getId()),
-                                $this->translate('View answers')
-                            );
-                        },
+                    <?php if (empty($questions)): ?>
+                    <div class="center-block">
+                        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No questions'); ?></h2>
+                    </div>
+                    <?php endif; ?>
 
-                        'edit' => function($question){
-                            return Icon::edit(
-                                $this->url('Quiz:Admin:Question@editAction', $question->getId()),
-                                $this->translate('Edit this question')
-                            );
-                        },
-
-                        'remove' => function($question){
-                            return Icon::remove(
-                                $this->url('Advice:Admin:Advice@deleteAction', $question->getId()),
-                                $this->translate('Remove this question')
-                            );
-                        }
-                    )
-                ))); ?>
-
-                <?php if (empty($questions)): ?>
-                <div class="center-block">
-                    <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No questions'); ?></h2>
+                    <?php $this->loadPartial('paginator'); ?>
                 </div>
-                <?php endif; ?>
-                
-                <?php $this->loadPartial('paginator'); ?>
             </div>
         </div>
-        
+
         <div class="col-lg-6">
-            <div class="table-responsive">
+            <div class="card">
                 <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
                 <div class="table-responsive">
@@ -112,7 +119,7 @@ defined('KRYSTAL') or die;
                         'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                         'rowAttributes' => array(
                             'class' => function($category) use ($categoryId){
-                                return $categoryId == $category->getId() ? 'info' : null;
+                                return $categoryId == $category->getId() ? 'table-info' : null;
                             }
                         ),
 
@@ -124,6 +131,9 @@ defined('KRYSTAL') or die;
 
                             array(
                                 'column' => 'name',
+                                'attributes' => array(
+                                    'class' => null
+                                ),
                                 'value' => function($category){
                                     return Element::link($category->getName(), $this->url('Quiz:Admin:Browser@categoryAction', $category->getId(), 1));
                                 }
