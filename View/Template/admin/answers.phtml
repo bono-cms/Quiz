@@ -15,10 +15,10 @@ defined('KRYSTAL') or die;
 
             <form autocomplete="off">
                 <?= $this->widget(new GridViewWidget($answers, array(
-                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                    'tableClass' => 'table table-hover table-bordered table-striped',
                     'rowAttributes' => array(
                         'class' => function($row) use ($answer){
-                            return $row->getId() == $answer->getId() ? 'info' : null;
+                            return $row->getId() == $answer->getId() ? 'table-info' : null;
                         }
                     ),
 
