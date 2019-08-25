@@ -81,7 +81,7 @@ final class Question extends AbstractController
         $question = $this->getModuleService('questionService')->fetchById($id);
 
         if ($question !== false) {
-            return $this->createForm($question, 'Edit the question');
+            return $this->createForm($question, $this->translator->translate('Edit the question "%s"', $question->getQuestion()));
         } else {
             return false;
         }
