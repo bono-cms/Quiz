@@ -78,10 +78,9 @@ defined('KRYSTAL') or die;
                                     $this->translate('Edit this question')
                                 );
                             },
-
                             'remove' => function($question){
                                 return Icon::remove(
-                                    $this->url('Advice:Admin:Advice@deleteAction', $question->getId()),
+                                    $this->url('Quiz:Admin:Question@deleteAction', $question->getId()),
                                     $this->translate('Remove this question')
                                 );
                             }
