@@ -10,7 +10,6 @@
  */
 
 return array(
-    
     '/quiz' => array(
         'controller' => 'Quiz@indexAction'
     ),

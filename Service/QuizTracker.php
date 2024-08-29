@@ -35,9 +35,10 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     const PARAM_STORAGE_KEY = 'quiz_track';
     const PARAM_STORAGE_INITIAL_COUNT = 'quiz_track_initial_count';
     const PARAM_STORAGE_TIMESTAMP_START = 'quiz_timestamp_start';
-    const PARAM_STORAGE_TIMESTAMP_END = 'quiz_stopped';
+    const PARAM_STORAGE_TIMESTAMP_END = 'quiz_timestamp_end';
     const PARAM_STORAGE_META_DATA = 'quiz_meta';
     const PARAM_STORAGE_CORRECT_IDS = 'quiz_correct_ids';
+    const PARAM_STORAGE_STOPPED = 'quiz_stopped';
 
     /**
      * State initialization
