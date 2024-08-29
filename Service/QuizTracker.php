@@ -159,9 +159,9 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     private function getCorrectAnsweredCount()
     {
         $collection = $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
-        $collection = array_unique($collection);
 
         if (is_array($collection)) {
+            $collection = array_unique($collection);
             return count($collection);
         } else {
             return 0;
