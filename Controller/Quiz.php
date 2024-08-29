@@ -17,6 +17,12 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class Quiz extends AbstractController
 {
+    /* View templates */
+    const QUIZ_TEMPLATE_QUIZ = 'quiz';
+    const QUIZ_TEMPLATE_RESULT = 'result';
+    const QUIZ_TEMPLATE_WELCOME = 'welcome';
+    const QUIZ_TEMPLATE_EMPTY_CAT = 'empty';
+
     /**
      * {@inheritDoc}
      */
@@ -73,6 +79,13 @@ final class Quiz extends AbstractController
                 $categoryId = $this->request->getPost('category');
                 $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId, $config->getSortingMethod());
 
+                // Does this category even have quesions?
+                if (empty($ids)) {
+                    return $this->view->render(self::QUIZ_TEMPLATE_EMPTY_CAT, array(
+                        'page' => $page
+                    ));
+                }
+
                 $quizTracker->start($ids);
                 $quizTracker->saveMeta(array(
                     'name' => $this->request->getPost('name'),
@@ -86,7 +99,7 @@ final class Quiz extends AbstractController
 
         } else {
             // In case that was the first GET request, render welcome page
-            return $this->view->render('welcome', array(
+            return $this->view->render(self::QUIZ_TEMPLATE_WELCOME, array(
                 'categories' => $this->getModuleService('categoryService')->fetchList(),
                 'page' => $page
             ));
@@ -102,7 +115,6 @@ final class Quiz extends AbstractController
     private function stopAction(VirtualEntity $page)
     {
         $quizTracker = $this->getModuleService('quizTracker');
-
         $points = $quizTracker->getPoints(true);
 
         // Do save track only in case the stopping has been indicated
@@ -117,7 +129,7 @@ final class Quiz extends AbstractController
         // Indicate stopping
         $quizTracker->stop();
 
-        return $this->view->render('result', array(
+        return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(
             'meta' => $quizTracker->getMeta(),
             'takenTime' => $quizTracker->getTakenTime(),
             'points' => $points,
@@ -177,7 +189,7 @@ final class Quiz extends AbstractController
         $quizTracker = $this->getModuleService('quizTracker');
         $data = $this->createPair($id);
 
-        return $this->view->render('quiz', array_merge($data, array(
+        return $this->view->render(self::QUIZ_TEMPLATE_QUIZ, array_merge($data, array(
             'page' => $page,
             'hasManyCorrectAnswers' => $this->getModuleService('answerService')->hasManyCorrectAnswers($data['answers']),
             'initialCount' => $quizTracker->getInitialCount(),
