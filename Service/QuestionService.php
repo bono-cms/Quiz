@@ -97,7 +97,7 @@ final class QuestionService extends AbstractManager
      * @param bool $limit Optinal limit
      * @return int
      */
-    public function countQuestionsByCategoryId($categoryId, $limit = null);
+    public function countQuestionsByCategoryId($categoryId, $limit = null)
     {
         return $this->questionMapper->countQuestionsByCategoryId($categoryId, $limit);
     }

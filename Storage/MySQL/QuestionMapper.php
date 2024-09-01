@@ -105,23 +105,6 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
     }
 
     /**
-     * Counts amount of questions by associated category id
-     * 
-     * @param string $id Category id
-     * @return integer
-     */
-    public function countAllByCategoryId($id)
-    {
-        $alias = 'count';
-
-        return $this->db->select()
-                        ->count('id', $alias)
-                        ->from(self::getTableName())
-                        ->whereEquals('category_id', $id)
-                        ->query($alias);
-    }
-
-    /**
      * Count amount of questions by category id
      * 
      * @param int $categoryId Category id
