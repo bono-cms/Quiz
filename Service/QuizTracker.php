@@ -55,6 +55,7 @@ final class QuizTracker extends AbstractManager
             self::PARAM_STORAGE_CURRENT_COUNT,
             self::PARAM_STORAGE_INITIAL_COUNT,
             self::PARAM_STORAGE_TIMESTAMP_START,
+            self::PARAM_STORAGE_TIMESTAMP_END,
             self::PARAM_STORAGE_META_DATA,
             self::PARAM_STORAGE_CORRECT_IDS,
             self::PARAM_STORAGE_STOPPED
@@ -162,10 +163,7 @@ final class QuizTracker extends AbstractManager
      */
     public function stop()
     {
-        // Don't stop twice
-        if (!$this->isStopped()) {
-            $this->sessionBag->set(self::PARAM_STORAGE_TIMESTAMP_END, time());
-        }
+        $this->sessionBag->set(self::PARAM_STORAGE_TIMESTAMP_END, time());
 
         // Remove tracking count
         if ($this->sessionBag->has(self::PARAM_STORAGE_CURRENT_COUNT)) {
