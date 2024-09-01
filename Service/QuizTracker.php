@@ -25,6 +25,7 @@ final class QuizTracker extends AbstractManager
      */
     private $sessionBag;
 
+    const PARAM_STORAGE_PASSED = 'quiz_passed';
     const PARAM_STORAGE_CURRENT_COUNT = 'quiz_current_count';
     const PARAM_STORAGE_INITIAL_COUNT = 'quiz_track_initial_count';
     const PARAM_STORAGE_TIMESTAMP_START = 'quiz_timestamp_start';
@@ -52,6 +53,7 @@ final class QuizTracker extends AbstractManager
     public function clear()
     {
         return $this->sessionBag->removeMany(array(
+            self::PARAM_STORAGE_PASSED,
             self::PARAM_STORAGE_CURRENT_COUNT,
             self::PARAM_STORAGE_INITIAL_COUNT,
             self::PARAM_STORAGE_TIMESTAMP_START,
@@ -230,6 +232,62 @@ final class QuizTracker extends AbstractManager
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Returns last passed question id
+     * 
+     * @return mixed
+     */
+    public function getLastPassed()
+    {
+        $passed = $this->getPassed(false);
+
+        if (!empty($passed)) {
+            return end($passed);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a collection of passed questions with their ansnwers
+     * 
+     * @param boolean $complete Whether to return only question ids with or without answer ids
+     * @return array
+     */
+    public function getPassed($complete)
+    {
+        // Lazy initialization
+        if (!$this->sessionBag->has(self::PARAM_STORAGE_PASSED)) {
+            $this->sessionBag->set(self::PARAM_STORAGE_PASSED, array());
+        }
+
+        $passed = $this->sessionBag->get(self::PARAM_STORAGE_PASSED);
+
+        if ($complete) {
+            return $passed;
+        } else {
+            return array_keys($passed);
+        }
+    }
+
+    /**
+     * Append passed question and their answer ids
+     * 
+     * @param int $questionId
+     * @param array $answerIds
+     * @return void
+     */
+    public function appendPassed($questionId, array $answerIds)
+    {
+        $passed = $this->getPassed(true);
+
+        // $questionId is unique, so that it can not be repeated
+        $passed[$questionId] = $answerIds;
+
+        // Update the storage with altered collection
+        $this->sessionBag->set(self::PARAM_STORAGE_PASSED, $passed);
     }
 
     /**
