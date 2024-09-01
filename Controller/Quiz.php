@@ -153,8 +153,8 @@ final class Quiz extends AbstractController
         $questionId = $this->request->getPost('question');
 
         // Answer ids
-        $ids = $this->request->getPost('answerIds', array());
-        $input['collection'] = $ids;
+        $answerIds = $this->request->getPost('answerIds', array());
+        $input['collection'] = $answerIds;
 
         $formValidator = $this->createValidator(array(
             'input' => array(
@@ -167,8 +167,12 @@ final class Quiz extends AbstractController
 
         // Make sure that at least one answer is picked
         if ($formValidator->isValid()) {
+            // Append passed question ID with its answers choices
+            // @TODO: This should be tracked only for random items
+            $quizTracker->appendPassed($questionId, $answerIds);
+
             // Keep track of correctness
-            foreach ($ids as $answerId) {
+            foreach ($answerIds as $answerId) {
                 $correct = $this->getModuleService('answerService')->isCorrect($questionId, $answerId);
 
                 if ($correct) {
@@ -224,6 +228,10 @@ final class Quiz extends AbstractController
      */
     public function indexAction()
     {
+        $quizTracker = $this->getModuleService('quizTracker');
+        $questionService = $this->getModuleService('questionService');
+        $config = $this->getModuleService('configManager')->getEntity();
+
         $this->loadSitePlugins();
 
         // Configure view
@@ -232,9 +240,6 @@ final class Quiz extends AbstractController
                    ->setTheme('site');
 
         $page = new VirtualEntity();
-
-        $quizTracker = $this->getModuleService('quizTracker');
-        $questionService = $this->getModuleService('questionService');
 
         // Do pre-processing if not started yet
         if (!$quizTracker->isStarted()) {
@@ -257,20 +262,33 @@ final class Quiz extends AbstractController
             }
         }
 
+        $random = false; // @TODO: Grab from configuration
         $categoryId = $_SESSION['cat_id'];
 
-        if ($this->request->hasQuery('prev')) {
-            $trackNumber = $quizTracker->getPrevCount();
-        } else {
-            $trackNumber = $quizTracker->getNextCount();
-        }
+        // Logic for non-random
+        if ($random === false) {
+            if ($this->request->hasQuery('prev')) {
+                $trackNumber = $quizTracker->getPrevCount();
+            } else {
+                $trackNumber = $quizTracker->getNextCount();
+            }
 
-        $config = $this->getModuleService('configManager')->getEntity();
-        $id = $questionService->fetchQuiestionIdByCategoryId(
-            $categoryId,
-            $config->getSortingMethod(),
-            $trackNumber
-        );
+            $id = $questionService->fetchQuiestionIdByCategoryId(
+                $categoryId,
+                $config->getSortingMethod(),
+                $trackNumber
+            );
+        } else {
+
+            if ($this->request->hasQuery('prev')) {
+                $quizTracker->getPrevCount();
+                $id = $quizTracker->getLastPassed();
+            } else {
+                // Keep the track
+                $quizTracker->getNextCount();
+                $id = $questionService->fetchRandomQuestionIdByCategoryId($categoryId, $quizTracker->getPassed(false));
+            }
+        }
 
         // If $id is false, then there's no more questions to be shown
         if (!$id) {
