@@ -11,10 +11,10 @@
 
 namespace Quiz\Storage\MySQL;
 
+use Krystal\Db\Sql\QueryBuilder;
+use Krystal\Db\Sql\RawSqlFragment;
 use Cms\Storage\MySQL\AbstractMapper;
 use Quiz\Storage\QuestionMapperInterface;
-use Krystal\Db\Sql\RawSqlFragment;
-use UnexpectedValueException;
 
 final class QuestionMapper extends AbstractMapper implements QuestionMapperInterface
 {
@@ -113,13 +113,26 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
      */
     public function countQuestionsByCategoryId($categoryId, $limit = null)
     {
-        $db = $this->db->select()
-                       ->count('id')
-                       ->from(self::getTableName())
-                       ->whereEquals('category_id', $categoryId);
+        // Case: No restriction when couting
+        if ($limit == null) {
+            $db = $this->db->select()
+                           ->count('id')
+                           ->from(self::getTableName())
+                           ->whereEquals('category_id', $categoryId);
+        } else {
+            // Case: Restricted when couting up to $limit
+            $qb = new QueryBuilder();
+            $qb->openBracket()
+               ->select('id')
+               ->from(self::getTableName())
+               ->whereEquals('category_id', (int) $categoryId)
+               ->limit($limit)
+               ->closeBracket();
 
-        if ($limit !== null) {
-            $db->limit($limit);
+            $db = $this->db->select()
+                           ->count('id')
+                           ->from($qb->getQueryString())
+                           ->asAlias('alias');
         }
 
         return (int) $db->queryScalar();
