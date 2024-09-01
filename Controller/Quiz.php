@@ -61,7 +61,6 @@ final class Quiz extends AbstractController
     private function welcomeAction(VirtualEntity $page)
     {
         $quizTracker = $this->getModuleService('quizTracker');
-        $config = $this->getModuleService('configManager')->getEntity();
 
         // If the welcoming form was submitted, then grab and save its value and start tracking
         if ($this->request->hasPost('category')) {
@@ -75,18 +74,24 @@ final class Quiz extends AbstractController
             ));
 
             if ($formValidator->isValid()) {
+                $questionService = $this->getModuleService('questionService');
+
                 // Initial loading from request
                 $categoryId = $this->request->getPost('category');
-                $ids = $this->getModuleService('questionService')->fetchQuiestionIdsByCategoryId($categoryId, $config->getSortingMethod());
+
+                $_SESSION['cat_id'] = $categoryId;
+
+                // Get total count
+                $count = $questionService->countQuestionsByCategoryId($categoryId);
 
                 // Does this category even have quesions?
-                if (empty($ids)) {
+                if ($count == 0) {
                     return $this->view->render(self::QUIZ_TEMPLATE_EMPTY_CAT, array(
                         'page' => $page
                     ));
                 }
 
-                $quizTracker->start($ids);
+                $quizTracker->start($count);
                 $quizTracker->saveMeta(array(
                     'name' => $this->request->getPost('name'),
                     'category' => $this->getModuleService('categoryService')->fetchNameById($categoryId)
@@ -193,8 +198,9 @@ final class Quiz extends AbstractController
             'page' => $page,
             'hasManyCorrectAnswers' => $this->getModuleService('answerService')->hasManyCorrectAnswers($data['answers']),
             'initialCount' => $quizTracker->getInitialCount(),
-            'currentQuestionCount' => $quizTracker->getCurrentQuestionCount(),
-            'lastQuestion' => $quizTracker->getInitialCount() == $quizTracker->getCurrentQuestionCount()
+            'currentQuestionCount' => $quizTracker->getCurrentCount(),
+            'lastQuestion' => $quizTracker->isLastCount(),
+            'firstQuestion' => $quizTracker->isFirstQuestion()
         )));
     }
 
@@ -228,6 +234,7 @@ final class Quiz extends AbstractController
         $page = new VirtualEntity();
 
         $quizTracker = $this->getModuleService('quizTracker');
+        $questionService = $this->getModuleService('questionService');
 
         // Do pre-processing if not started yet
         if (!$quizTracker->isStarted()) {
@@ -236,7 +243,6 @@ final class Quiz extends AbstractController
             if ($welcome !== true) {
                 return $welcome;
             }
-
         } else {
             // Answer page
             if ($this->request->isPost()) {
@@ -251,10 +257,23 @@ final class Quiz extends AbstractController
             }
         }
 
-        $id = $quizTracker->createQuestionId();
+        $categoryId = $_SESSION['cat_id'];
+
+        if ($this->request->hasQuery('prev')) {
+            $trackNumber = $quizTracker->getPrevCount();
+        } else {
+            $trackNumber = $quizTracker->getNextCount();
+        }
+
+        $config = $this->getModuleService('configManager')->getEntity();
+        $id = $questionService->fetchQuiestionIdByCategoryId(
+            $categoryId,
+            $config->getSortingMethod(),
+            $trackNumber
+        );
 
         // If $id is false, then there's no more questions to be shown
-        if ($id === false) {
+        if (!$id) {
             return $this->stopAction($page);
         }
 
