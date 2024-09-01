@@ -4,36 +4,40 @@ use Krystal\Form\Element;
 
 ?>
 
-<form class="form-horizontal" method="POST" action="<?php echo $this->url('Quiz:Quiz@indexAction'); ?>">
+<form method="POST" action="<?= $this->url('Quiz:Quiz@indexAction'); ?>">
   <fieldset>
-    <legend><?php echo $question->getQuestion(); ?></legend>
+    <legend><?= $question->getQuestion(); ?></legend>
     <?= Element::hidden('csrf-token', $csrfToken); ?>
 
-    <p class="text-muted"><?php echo $this->translate('Question %s of %s', $currentQuestionCount, $initialCount); ?></p>
-
-    <article><?php echo $question->getDescription(); ?></article>
+    <p class="text-muted"><?= $this->translate('Question %s of %s', $currentQuestionCount, $initialCount); ?></p>
+    <article><?= $question->getDescription(); ?></article>
 
     <div class="form-group">
       <div class="col-lg-10">
-        <input type="hidden" name="question" value="<?php echo $question->getId(); ?>" />
+        <input type="hidden" name="question" value="<?= $question->getId(); ?>" />
 
         <?php foreach ($answers as $answer): ?>
         <div class="radio">
-          <label for="<?php echo $answer->getSignature(); ?>">
-            <input type="<?php echo !$hasManyCorrectAnswers ? 'radio' : 'checkbox'; ?>" name="answerIds[]" id="<?php echo $answer->getSignature(); ?>" value="<?php echo $answer->getId(); ?>" /><?php echo $answer->getAnswer(); ?>
+          <label for="<?= $answer->getSignature(); ?>">
+            <input type="<?= !$hasManyCorrectAnswers ? 'radio' : 'checkbox'; ?>" name="answerIds[]" id="<?= $answer->getSignature(); ?>" value="<?= $answer->getId(); ?>" /><?= $answer->getAnswer(); ?>
           </label>
         </div>
         <?php endforeach; ?>
       </div>
     </div>
-    
+
     <div class="form-group">
       <div class="col-lg-10">
-        <a href="<?php echo $this->url('Quiz:Quiz@abortAction'); ?>" class="btn btn-danger"><i class="glyphicon glyphicon-ban-circle"></i> <?php $this->show('Cancel'); ?></a>&nbsp;
+        <a href="<?= $this->url('Quiz:Quiz@abortAction'); ?>" class="btn btn-danger"><?php $this->show('Cancel'); ?></a>&nbsp;
         <?php if ($lastQuestion): ?>
-        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> <?php $this->show('Finish'); ?></button>
+        <button type="submit" class="btn btn-success"><?php $this->show('Finish'); ?></button>
         <?php else: ?>
-        <button type="submit" class="btn btn-primary"><?php $this->show('Next'); ?> <i class="glyphicon glyphicon-chevron-right"></i></button>
+
+        <?php if (!$firstQuestion): ?>
+        <a class="btn btn-secondary" href="<?= $this->url('Quiz:Quiz@indexAction', ['prev' => 1]); ?>"><?php $this->show('Previous'); ?></a>
+        <?php endif; ?>
+
+        <button type="submit" class="btn btn-primary"><?php $this->show('Next'); ?></button>
         <?php endif; ?>
       </div>
     </div>
