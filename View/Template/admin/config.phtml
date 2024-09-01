@@ -7,9 +7,16 @@ defined('KRYSTAL') or die;
 
 <form class="card" data-group="config" autocomplete="off">
     <div class="form-group">
-        <label class="col-lg-10 control-label"><?php $this->show('Answer sorting method'); ?></label>
-        <div class="col-lg-10">
-            <?php echo Element::select('config[order_type]', $this->translator->translateArray($config->getSortingTypes()), $config->getSortingMethod(), array('class' => 'form-control')); ?>
+        <label><?= $this->translate('Answer sorting method'); ?></label>
+        <div>
+            <?= Element::select('config[order_type]', $this->translator->translateArray($config->getSortingTypes()), $config->getSortingMethod(), array('class' => 'form-control')); ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label><?= $this->translate('Forced limitation of answers per category'); ?></label>
+        <div>
+            <?= Element::number('config[limit]', $config->getLimit(), array('class' => 'form-control', 'min' => 0)); ?>
         </div>
     </div>
 
