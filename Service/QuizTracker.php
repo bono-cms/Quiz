@@ -25,6 +25,7 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
      */
     private $sessionBag;
 
+    const PARAM_STORAGE_CURRENT_COUNT = 'quiz_current_count';
     const PARAM_STORAGE_INITIAL_COUNT = 'quiz_track_initial_count';
     const PARAM_STORAGE_TIMESTAMP_START = 'quiz_timestamp_start';
     const PARAM_STORAGE_TIMESTAMP_END = 'quiz_timestamp_end';
@@ -51,12 +52,81 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     public function clear()
     {
         return $this->sessionBag->removeMany(array(
+            self::PARAM_STORAGE_CURRENT_COUNT,
             self::PARAM_STORAGE_INITIAL_COUNT,
             self::PARAM_STORAGE_TIMESTAMP_START,
             self::PARAM_STORAGE_META_DATA,
             self::PARAM_STORAGE_CORRECT_IDS,
             self::PARAM_STORAGE_STOPPED
         ));
+    }
+
+    /**
+     * Returns previous tracking number
+     * 
+     * @return int
+     */
+    public function getPrevCount()
+    {
+        $count = $this->getCurrentCount();
+
+        if ($count > 1) {
+            $count--;
+        } else {
+            $count = 1;
+        }
+
+        $this->sessionBag->set(self::PARAM_STORAGE_CURRENT_COUNT, $count);
+        return $count;
+    }
+
+    /**
+     * Whether current tracking number is first
+     * 
+     * @return boolean
+     */
+    public function isFirstQuestion()
+    {
+        return $this->getCurrentCount() == 1;
+    }
+
+    /**
+     * Whether current tracking number is last
+     * 
+     * @return boolean
+     */
+    public function isLastCount()
+    {
+        return $this->getInitialCount() == $this->getCurrentCount();
+    }
+
+    /**
+     * Returns next tracking number
+     * 
+     * @return int
+     */
+    public function getNextCount()
+    {
+        $count = $this->getCurrentCount();
+        $count++;
+
+        $this->sessionBag->set(self::PARAM_STORAGE_CURRENT_COUNT, $count);
+        return $count;
+    }
+
+    /**
+     * Returns current count
+     * 
+     * @return int
+     */
+    public function getCurrentCount()
+    {
+        // If not started yet, start by 1, by default
+        if (!$this->sessionBag->has(self::PARAM_STORAGE_CURRENT_COUNT)) {
+            $this->sessionBag->set(self::PARAM_STORAGE_CURRENT_COUNT, 0);
+        }
+
+        return $this->sessionBag->get(self::PARAM_STORAGE_CURRENT_COUNT);
     }
 
     /**
@@ -95,6 +165,11 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
         // Don't stop twice
         if (!$this->isStopped()) {
             $this->sessionBag->set(self::PARAM_STORAGE_TIMESTAMP_END, time());
+        }
+
+        // Remove tracking count
+        if ($this->sessionBag->has(self::PARAM_STORAGE_CURRENT_COUNT)) {
+            $this->sessionBag->remove(self::PARAM_STORAGE_CURRENT_COUNT);
         }
     }
 
@@ -229,15 +304,5 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     public function getInitialCount()
     {
         return $this->sessionBag->get(self::PARAM_STORAGE_INITIAL_COUNT);
-    }
-
-    /**
-     * Returns current question count
-     * 
-     * @return integer
-     */
-    public function getCurrentQuestionCount()
-    {
-        return $this->getInitialCount();
     }
 }

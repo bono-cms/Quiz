@@ -95,11 +95,4 @@ interface QuizTrackerInterface
      * @return integer
      */
     public function getInitialCount();
-
-    /**
-     * Returns current question count
-     * 
-     * @return integer
-     */
-    public function getCurrentQuestionCount();
 }
