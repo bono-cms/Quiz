@@ -25,14 +25,6 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
      */
     private $sessionBag;
 
-    /**
-     * Category identificators
-     * 
-     * @var array
-     */
-    private $identificators = array();
-
-    const PARAM_STORAGE_KEY = 'quiz_track';
     const PARAM_STORAGE_INITIAL_COUNT = 'quiz_track_initial_count';
     const PARAM_STORAGE_TIMESTAMP_START = 'quiz_timestamp_start';
     const PARAM_STORAGE_TIMESTAMP_END = 'quiz_timestamp_end';
@@ -59,7 +51,6 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
     public function clear()
     {
         return $this->sessionBag->removeMany(array(
-            self::PARAM_STORAGE_KEY,
             self::PARAM_STORAGE_INITIAL_COUNT,
             self::PARAM_STORAGE_TIMESTAMP_START,
             self::PARAM_STORAGE_META_DATA,
@@ -75,20 +66,19 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
      */
     public function isStarted()
     {
-        return $this->sessionBag->get(self::PARAM_STORAGE_KEY) !== false;
+        return $this->sessionBag->get(self::PARAM_STORAGE_TIMESTAMP_START) !== false;
     }
 
     /**
      * Start tracking
      * 
-     * @param array $identificators
+     * @param int $count
      * @return void
      */
-    public function start(array $identificators)
+    public function start($count)
     {
         $this->sessionBag->setMany(array(
-            self::PARAM_STORAGE_KEY => $identificators,
-            self::PARAM_STORAGE_INITIAL_COUNT => count($identificators),
+            self::PARAM_STORAGE_INITIAL_COUNT => $count,
             self::PARAM_STORAGE_TIMESTAMP_START => time()
         ));
 
@@ -248,30 +238,6 @@ final class QuizTracker extends AbstractManager implements QuizTrackerInterface
      */
     public function getCurrentQuestionCount()
     {
-        $collection = $this->sessionBag->get(self::PARAM_STORAGE_KEY);
-        return $this->getInitialCount() - count($collection);
-    }
-
-    /**
-     * Creates question id
-     * 
-     * @return string|boolean
-     */
-    public function createQuestionId()
-    {
-        $collection = $this->sessionBag->get(self::PARAM_STORAGE_KEY);
-
-        // The collection is empty, the immediately stop returning false
-        if (empty($collection)) {
-            return false;
-        } else {
-            // Save first item in collection and them immediately remove it
-            $id = array_shift($collection);
-
-            // Update the collection
-            $this->sessionBag->set(self::PARAM_STORAGE_KEY, $collection);
-
-            return $id;
-        }
+        return $this->getInitialCount();
     }
 }

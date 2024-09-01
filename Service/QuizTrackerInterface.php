@@ -26,14 +26,14 @@ interface QuizTrackerInterface
      * @return boolean
      */
     public function isStarted();
-    
+
     /**
      * Start tracking
      * 
-     * @param array $identificators
+     * @param int $count
      * @return void
      */
-    public function start(array $identificators);
+    public function start($count);
 
     /**
      * Indicates that the quiz must be stopped
@@ -102,11 +102,4 @@ interface QuizTrackerInterface
      * @return integer
      */
     public function getCurrentQuestionCount();
-
-    /**
-     * Creates question id
-     * 
-     * @return string|boolean
-     */
-    public function createQuestionId();
 }
