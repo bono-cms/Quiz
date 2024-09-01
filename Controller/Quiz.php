@@ -53,6 +53,24 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Returns limit for questions stack, if provided
+     * 
+     * @return mixed
+     */
+    private function getLimit()
+    {
+        $limit = $this->getModuleService('configManager')
+                      ->getEntity()
+                      ->getLimit();
+
+        if (is_numeric($limit) && $limit > 0) {
+            return $limit;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Outputs and handlers welcome page
      * 
      * @param \Krystal\Stdlib\VirtualEntity $page
@@ -75,14 +93,13 @@ final class Quiz extends AbstractController
 
             if ($formValidator->isValid()) {
                 $questionService = $this->getModuleService('questionService');
-
                 // Initial loading from request
                 $categoryId = $this->request->getPost('category');
 
                 $_SESSION['cat_id'] = $categoryId;
 
                 // Get total count
-                $count = $questionService->countQuestionsByCategoryId($categoryId);
+                $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit());
 
                 // Does this category even have quesions?
                 if ($count == 0) {
@@ -302,7 +319,8 @@ final class Quiz extends AbstractController
         $id = $this->getQuestionId();
 
         // If $id is false, then there's no more questions to be shown
-        if (!$id) {
+        // Or if the provided limit exceeds the current track count
+        if (!$id || ($this->getLimit() < $quizTracker->getCurrentCount())) {
             return $this->stopAction($page);
         }
 
