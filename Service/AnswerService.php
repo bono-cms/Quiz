@@ -15,7 +15,7 @@ use Cms\Service\AbstractManager;
 use Quiz\Storage\AnswerMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 
-final class AnswerService extends AbstractManager implements AnswerServiceInterface
+final class AnswerService extends AbstractManager
 {
     /**
      * Any compliant answer mapper

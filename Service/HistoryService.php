@@ -16,7 +16,7 @@ use Cms\Service\AbstractManager;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Db\Filter\FilterableServiceInterface;
 
-final class HistoryService extends AbstractManager implements HistoryServiceInterface, FilterableServiceInterface
+final class HistoryService extends AbstractManager implements FilterableServiceInterface
 {
     /**
      * History mapper

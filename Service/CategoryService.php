@@ -17,7 +17,7 @@ use Quiz\Storage\QuestionMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Stdlib\ArrayUtils;
 
-final class CategoryService extends AbstractManager implements CategoryServiceInterface
+final class CategoryService extends AbstractManager
 {
     /**
      * Any compliant category mapper
