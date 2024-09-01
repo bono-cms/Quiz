@@ -138,6 +138,26 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
     }
 
     /**
+     * Fetch random question id by category id
+     * 
+     * @param int $categoryId Category id
+     * @param array $excludedIds Ids to be excluded
+     * @return int
+     */
+    public function fetchRandomQuestionIdByCategoryId($categoryId, array $excludedIds = array())
+    {
+        $db = $this->db->select('id')
+                       ->from(self::getTableName())
+                       ->whereEquals('category_id', $categoryId)
+                       ->andWhereNotIn('id', $excludedIds)
+                       ->orderBy()
+                       ->rand()
+                       ->limit(1);
+
+        return $db->queryScalar();
+    }
+
+    /**
      * Fetches next question ids by associated category id
      * 
      * @param int $categoryId Category id

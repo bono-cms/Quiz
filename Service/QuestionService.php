@@ -102,6 +102,18 @@ final class QuestionService extends AbstractManager
     }
 
     /**
+     * Fetch random question id by category id
+     * 
+     * @param int $categoryId Category id
+     * @param array $excludedIds Ids to be excluded
+     * @return int
+     */
+    public function fetchRandomQuestionIdByCategoryId($categoryId, array $excludedIds = array())
+    {
+        return $this->questionMapper->fetchRandomQuestionIdByCategoryId($categoryId, $excludedIds);
+    }
+
+    /**
      * Fetches question ids by associated category id
      * 
      * @param int $categoryId Category id
