@@ -16,7 +16,7 @@ use Krystal\Session\SessionBagInterface;
 use Krystal\Date\TimeHelper;
 use LogicException;
 
-final class QuizTracker extends AbstractManager implements QuizTrackerInterface
+final class QuizTracker extends AbstractManager
 {
     /**
      * Session bag service
