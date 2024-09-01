@@ -41,11 +41,12 @@ interface QuestionServiceInterface
     /**
      * Fetches question ids by associated category id
      * 
-     * @param string $id Category id
-     * @param string $sortingColumn
-     * @return array
+     * @param int $categoryId Category id
+     * @param bool $sort Whether to enable sorting by order
+     * @param int $current Current number
+     * @return int Question id
      */
-    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn);
+    public function fetchQuiestionIdByCategoryId($categoryId, $sort, $current);
 
     /**
      * Fetches question entity by its associate id

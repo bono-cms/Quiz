@@ -91,15 +91,27 @@ final class QuestionService extends AbstractManager implements QuestionServiceIn
     }
 
     /**
+     * Count amount of questions by category id
+     * 
+     * @param int $categoryId Category id
+     * @return int
+     */
+    public function countQuestionsByCategoryId($categoryId)
+    {
+        return $this->questionMapper->countQuestionsByCategoryId($categoryId);
+    }
+
+    /**
      * Fetches question ids by associated category id
      * 
-     * @param string $id Category id
-     * @param string $sortingColumn
-     * @return array
+     * @param int $categoryId Category id
+     * @param bool $sort Whether to enable sorting by order
+     * @param int $current Current number
+     * @return int Question id
      */
-    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn)
+    public function fetchQuiestionIdByCategoryId($categoryId, $sort, $current)
     {
-        return $this->questionMapper->fetchQuiestionIdsByCategoryId($id, $sortingColumn);
+        return $this->questionMapper->fetchQuiestionIdByCategoryId($categoryId, $sort, $current);
     }
 
     /**
