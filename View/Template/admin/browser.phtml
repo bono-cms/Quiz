@@ -100,7 +100,7 @@ defined('KRYSTAL') or die;
 
         <div class="col-lg-6">
             <div class="card">
-                <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
+                <h4 class="mb-3"><i class="fas fa-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
                 <div class="table-responsive">
                     <?= $this->widget(new GridViewWidget($categories, array(

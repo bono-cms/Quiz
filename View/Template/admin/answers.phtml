@@ -11,7 +11,7 @@ defined('KRYSTAL') or die;
 <div class="row">
     <div class="col-lg-6">
         <div class="card">
-            <h2 class="page-header"><i class="glyphicon glyphicon-th-list"></i> <?php echo $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?php echo count($answers); ?>)</small></h2>
+            <h4 class="page-header mb-4"><i class="fas fa-list-ol"></i> <?php echo $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?php echo count($answers); ?>)</small></h4>
 
             <form autocomplete="off">
                 <?= $this->widget(new GridViewWidget($answers, array(
@@ -73,7 +73,7 @@ defined('KRYSTAL') or die;
 
     <div class="col-lg-6">
         <div class="card">
-            <h2 class="page-header"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show(!$answer->getId() ? 'Add new answer' : 'Edit the answer'); ?></h2>
+            <h4 class="page-header mb-4"><i class="fas fa-pencil-alt"></i> <?php $this->show(!$answer->getId() ? 'Add new answer' : 'Edit the answer'); ?></h4>
 
             <form data-group="answer" autocomplete="off">
                 <?php echo Element::hidden('answer[id]', $answer->getId()); ?>
