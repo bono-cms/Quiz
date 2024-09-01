@@ -29,7 +29,7 @@ DROP TABLE IF EXISTS `bono_module_quiz_answers`;
 CREATE TABLE `bono_module_quiz_answers` (
   `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `question_id` INT NOT NULL,
-  `answer` TEXT NOT NULL,
+  `answer` LONGTEXT NOT NULL,
   `order` INT NOT NULL COMMENT 'Sorting order',
   `correct` BOOLEAN NOT NULL COMMENT 'Whether the answer is corrent. Possible values are 0 and 1',
 
