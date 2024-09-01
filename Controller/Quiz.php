@@ -222,6 +222,47 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Generates current question id depending on position
+     * 
+     * @return int|mixed
+     */
+    private function getQuestionId()
+    {
+        $questionService = $this->getModuleService('questionService');
+        $quizTracker = $this->getModuleService('quizTracker');
+        $config = $this->getModuleService('configManager')->getEntity();
+
+        $categoryId = $_SESSION['cat_id'];
+
+        // Logic for non-random
+        if ($config->sortByOrder()) {
+            if ($this->request->hasQuery('prev')) {
+                $trackNumber = $quizTracker->getPrevCount();
+            } else {
+                $trackNumber = $quizTracker->getNextCount();
+            }
+
+            $id = $questionService->fetchQuiestionIdByCategoryId(
+                $categoryId,
+                $config->getSortingMethod(),
+                $trackNumber
+            );
+        } else {
+            // Logic for random
+            if ($this->request->hasQuery('prev')) {
+                $quizTracker->getPrevCount();
+                $id = $quizTracker->getLastPassed();
+            } else {
+                // Keep the track
+                $quizTracker->getNextCount();
+                $id = $questionService->fetchRandomQuestionIdByCategoryId($categoryId, $quizTracker->getPassed(false));
+            }
+        }
+
+        return $id;
+    }
+
+    /**
      * Runs the initial test
      * 
      * @return string
@@ -229,8 +270,6 @@ final class Quiz extends AbstractController
     public function indexAction()
     {
         $quizTracker = $this->getModuleService('quizTracker');
-        $questionService = $this->getModuleService('questionService');
-        $config = $this->getModuleService('configManager')->getEntity();
 
         $this->loadSitePlugins();
 
@@ -252,43 +291,15 @@ final class Quiz extends AbstractController
             // Answer page
             if ($this->request->isPost()) {
                 $answer = $this->answerAction();
-
                 if ($answer !== true) {
                     return $answer;
                 }
-
             } else {
                 // @TODO Do nothing or render the same question
             }
         }
 
-        $random = false; // @TODO: Grab from configuration
-        $categoryId = $_SESSION['cat_id'];
-
-        // Logic for non-random
-        if ($random === false) {
-            if ($this->request->hasQuery('prev')) {
-                $trackNumber = $quizTracker->getPrevCount();
-            } else {
-                $trackNumber = $quizTracker->getNextCount();
-            }
-
-            $id = $questionService->fetchQuiestionIdByCategoryId(
-                $categoryId,
-                $config->getSortingMethod(),
-                $trackNumber
-            );
-        } else {
-
-            if ($this->request->hasQuery('prev')) {
-                $quizTracker->getPrevCount();
-                $id = $quizTracker->getLastPassed();
-            } else {
-                // Keep the track
-                $quizTracker->getNextCount();
-                $id = $questionService->fetchRandomQuestionIdByCategoryId($categoryId, $quizTracker->getPassed(false));
-            }
-        }
+        $id = $this->getQuestionId();
 
         // If $id is false, then there's no more questions to be shown
         if (!$id) {
