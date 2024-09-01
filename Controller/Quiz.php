@@ -320,7 +320,7 @@ final class Quiz extends AbstractController
 
         // If $id is false, then there's no more questions to be shown
         // Or if the provided limit exceeds the current track count
-        if (!$id || ($this->getLimit() < $quizTracker->getCurrentCount())) {
+        if (!$id || ($this->getLimit() !== null && $this->getLimit() < $quizTracker->getCurrentCount())) {
             return $this->stopAction($page);
         }
 
