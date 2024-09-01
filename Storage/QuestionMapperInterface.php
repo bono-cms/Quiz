@@ -82,9 +82,10 @@ interface QuestionMapperInterface
      * Count amount of questions by category id
      * 
      * @param int $categoryId Category id
+     * @param bool $limit Optinal limit
      * @return int
      */
-    public function countQuestionsByCategoryId($categoryId);
+    public function countQuestionsByCategoryId($categoryId, $limit = null);
 
     /**
      * Fetch random question id by category id

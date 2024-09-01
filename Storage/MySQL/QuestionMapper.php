@@ -125,16 +125,21 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
      * Count amount of questions by category id
      * 
      * @param int $categoryId Category id
+     * @param bool $limit Optinal limit
      * @return int
      */
-    public function countQuestionsByCategoryId($categoryId)
+    public function countQuestionsByCategoryId($categoryId, $limit = null)
     {
         $db = $this->db->select()
                        ->count('id')
                        ->from(self::getTableName())
                        ->whereEquals('category_id', $categoryId);
 
-        return $db->queryScalar();
+        if ($limit !== null) {
+            $db->limit($limit);
+        }
+
+        return (int) $db->queryScalar();
     }
 
     /**
