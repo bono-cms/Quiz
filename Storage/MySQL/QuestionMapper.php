@@ -122,41 +122,48 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
     }
 
     /**
-     * Fetches question ids by associated category id
+     * Count amount of questions by category id
      * 
-     * @param string $id Category id
-     * @param string $sortingColumn
-     * @throws \UnexpectedValueException if $sortingColumn isn't one of these: order, id, rand
-     * @return array
+     * @param int $categoryId Category id
+     * @return int
      */
-    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn)
+    public function countQuestionsByCategoryId($categoryId)
+    {
+        $db = $this->db->select()
+                       ->count('id')
+                       ->from(self::getTableName())
+                       ->whereEquals('category_id', $categoryId);
+
+        return $db->queryScalar();
+    }
+
+    /**
+     * Fetches next question ids by associated category id
+     * 
+     * @param int $categoryId Category id
+     * @param bool $sort Whether to enable sorting by order
+     * @param int $current Current number
+     * @return int Question id
+     */
+    public function fetchQuiestionIdByCategoryId($categoryId, $sort, $current)
     {
         $db = $this->db->select('id')
-                        ->from(self::getTableName())
-                        ->whereEquals('category_id', $id);
+                       ->from(self::getTableName())
+                       ->whereEquals('category_id', $categoryId);
 
-        switch ($sortingColumn) {
-            case 'order':
-                $db->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
-            break;
-
-            case 'id':
-                $db->orderBy('id')
-                   ->desc();
-            break;
-
-            case 'rand':
-                $db->orderBy()
-                   ->rand();
-            break;
-
-            default:
-                throw new UnexpectedValueException(sprintf(
-                    'Sorting column must be "order", "id", or "rand". Received "%s"', $sortingColumn
-                ));
+        if ($sort) {
+            $db->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
+        } else {
+            $db->orderBy('id')
+               ->desc();
         }
 
-        return $db->queryAll('id');
+        $limit = 1;
+        $offset = ($current - 1) * $limit;
+
+        $db->limit($offset, $limit);
+
+        return $db->queryScalar();
     }
 
     /**

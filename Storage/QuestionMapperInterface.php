@@ -79,14 +79,22 @@ interface QuestionMapperInterface
     public function countAllByCategoryId($id);
 
     /**
-     * Fetches question ids by associated category id
+     * Count amount of questions by category id
      * 
-     * @param string $id Category id
-     * @param string $sortingColumn
-     * @throws \UnexpectedValueException if $sortingColumn isn't one of these: order, id, rand
-     * @return array
+     * @param int $categoryId Category id
+     * @return int
      */
-    public function fetchQuiestionIdsByCategoryId($id, $sortingColumn);
+    public function countQuestionsByCategoryId($categoryId);
+
+    /**
+     * Fetches next question ids by associated category id
+     * 
+     * @param int $categoryId Category id
+     * @param bool $sort Whether to enable sorting by order
+     * @param int $current Current number
+     * @return int Question id
+     */
+    public function fetchQuiestionIdByCategoryId($categoryId, $sort, $current);
 
     /**
      * Fetches all answer entities associated with category id
