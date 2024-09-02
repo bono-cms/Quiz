@@ -10,6 +10,10 @@
  */
 
 return array(
+    '/quiz/continue' => array(
+        'controller' => 'Quiz@continueAction'
+    ),
+
     '/quiz' => array(
         'controller' => 'Quiz@indexAction'
     ),

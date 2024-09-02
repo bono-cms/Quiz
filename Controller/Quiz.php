@@ -30,6 +30,13 @@ final class Quiz extends AbstractController
     {
         parent::bootstrap($action);
 
+        $this->loadSitePlugins();
+
+        // Configure view
+        $this->view->setLayout('__layout__')
+                   ->setModule('Quiz')
+                   ->setTheme('site');
+
         $this->view->addVariables(array(
             'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
         ));
@@ -71,6 +78,38 @@ final class Quiz extends AbstractController
     }
 
     /**
+     * Continues test by next category id
+     * 
+     * @return string
+     */
+    public function continueAction()
+    {
+        // Get services
+        $quizTracker = $this->getModuleService('quizTracker');
+        $questionService = $this->getModuleService('questionService');
+
+        $categoryId = $quizTracker->getNextCategoryId();
+
+        // Continue, if found a category
+        if ($categoryId !== null) {
+            $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit());
+            
+            // @TODO: Change API to continue timing
+            $quizTracker->start($count);
+            
+            $_SESSION['cat_id'] = $categoryId;
+            
+            $id = $this->getQuestionId();
+            $page = new VirtualEntity();
+
+            return $this->quizAction($page, $id);
+        } else {
+            // Can not continue. No more categories left.
+            die('No more categories left');
+        }
+    }
+
+    /**
      * Outputs and handlers welcome page
      * 
      * @param \Krystal\Stdlib\VirtualEntity $page
@@ -108,6 +147,8 @@ final class Quiz extends AbstractController
                     ));
                 }
 
+                // Save category ids initially
+                $quizTracker->setCategoryIds($this->getModuleService('categoryService')->fetchNonEmptyCategoryIds());
                 $quizTracker->start($count);
                 $quizTracker->saveMeta(array(
                     'name' => $this->request->getPost('name'),
@@ -150,6 +191,7 @@ final class Quiz extends AbstractController
 
         // Indicate stopping
         $quizTracker->stop();
+        $quizTracker->excludeCategoryId($_SESSION['cat_id']);
 
         return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(
             'meta' => $quizTracker->getMeta(),
@@ -287,14 +329,6 @@ final class Quiz extends AbstractController
     public function indexAction()
     {
         $quizTracker = $this->getModuleService('quizTracker');
-
-        $this->loadSitePlugins();
-
-        // Configure view
-        $this->view->setLayout('__layout__')
-                   ->setModule('Quiz')
-                   ->setTheme('site');
-
         $page = new VirtualEntity();
 
         // Do pre-processing if not started yet
