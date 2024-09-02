@@ -40,7 +40,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
 
         $columns = [
             self::column('id'),
-            self::column('name'),
+            self::column('name') => 'category',
             self::column('mark')
         ];
 
