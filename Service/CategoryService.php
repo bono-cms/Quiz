@@ -55,7 +55,7 @@ final class CategoryService extends AbstractManager
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'], VirtualEntity::FILTER_TAGS)
                ->setOrder($row['order'], VirtualEntity::FILTER_INT)
-               ->setQuestionsCount($this->questionMapper->countQuestionsByCategoryId($row['id']), VirtualEntity::FILTER_INT);
+               ->setQuestionsCount((isset($row['count']) ? $row['count'] : $this->questionMapper->countQuestionsByCategoryId($row['id'])), VirtualEntity::FILTER_INT);
 
         return $entity;
     }
@@ -81,11 +81,12 @@ final class CategoryService extends AbstractManager
      * Fetch all categories
      * 
      * @param boolean $sort Whether to use sorting by order attribute or not
+     * @param boolean $empty Whether to fetch empty categories as well
      * @return array
      */
-    public function fetchAll($sort)
+    public function fetchAll($sort, $empty = true)
     {
-        return $this->prepareResults($this->categoryMapper->fetchAll($sort));
+        return $this->prepareResults($this->categoryMapper->fetchAll($sort, $empty));
     }
 
     /**

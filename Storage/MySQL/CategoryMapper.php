@@ -29,18 +29,38 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      * Fetch all categories
      * 
      * @param boolean $sort Whether to use sorting by order attribute or not
+     * @param boolean $empty Whether to fetch empty categories as well
      * @return array
      */
-    public function fetchAll($sort)
+    public function fetchAll($sort, $empty = true)
     {
-        $db = $this->db->select('*')
+        // Columns to be selected
+        $columns = [
+            self::column('id'),
+            self::column('name'),
+            self::column('order')
+        ];
+
+        $db = $this->db->select($columns)
+                       ->count(QuestionMapper::column('id'), 'count')
                        ->from(self::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId());
+                       ->join(!$empty ? 'RIGHT' : 'LEFT', QuestionMapper::getTableName(), [
+                            QuestionMapper::column('category_id') => self::getRawColumn('id')
+                       ])
+                       ->whereEquals(self::column('lang_id'), $this->getLangId())
+                       ->groupBy([
+                            self::column('id'),
+                            self::column('name'),
+                            self::column('order'),
+                       ]);
+
+        $colOrder = self::column('order');
+        $colId = self::column('id');
 
         if ($sort === true) {
-            $db->orderBy(new RawSqlFragment('`order`, CASE WHEN `order` = 0 THEN `id` END DESC'));
+            $db->orderBy(new RawSqlFragment(sprintf('%s, CASE WHEN %s = 0 THEN %s END DESC', $colOrder, $colOrder, $colId)));
         } else {
-            $db->orderBy('id')
+            $db->orderBy($colId)
                ->desc();
         }
 

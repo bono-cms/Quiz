@@ -17,9 +17,10 @@ interface CategoryMapperInterface
      * Fetch all categories
      * 
      * @param boolean $sort Whether to use sorting by order attribute or not
+     * @param boolean $empty Whether to fetch empty categories as well
      * @return array
      */
-    public function fetchAll($sort);
+    public function fetchAll($sort, $empty = true);
 
     /**
      * Deletes a category by its associated id
