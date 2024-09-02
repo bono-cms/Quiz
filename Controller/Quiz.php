@@ -43,38 +43,43 @@ final class Quiz extends AbstractController
     }
 
     /**
-     * Creates a pair
+     * Runs the initial test
      * 
-     * @param string $id
-     * @return array
+     * @return string
      */
-    private function createPair($id)
+    public function indexAction()
     {
-        $question = $this->getModuleService('questionService')->fetchById($id);
-        $answers = $this->getModuleService('answerService')->fetchAll($id, true);
+        $quizTracker = $this->getModuleService('quizTracker');
+        $page = new VirtualEntity();
 
-        return array(
-            'question' => $question,
-            'answers' => $answers
-        );
-    }
+        // Do pre-processing if not started yet
+        if (!$quizTracker->isStarted()) {
+            $welcome = $this->welcomeAction($page);
 
-    /**
-     * Returns limit for questions stack, if provided
-     * 
-     * @return mixed
-     */
-    private function getLimit()
-    {
-        $limit = $this->getModuleService('configManager')
-                      ->getEntity()
-                      ->getLimit();
-
-        if (is_numeric($limit) && $limit > 0) {
-            return $limit;
+            if ($welcome !== true) {
+                return $welcome;
+            }
         } else {
-            return null;
+            // Answer page
+            if ($this->request->isPost()) {
+                $answer = $this->answerAction();
+                if ($answer !== true) {
+                    return $answer;
+                }
+            } else {
+                // @TODO Do nothing or render the same question
+            }
         }
+
+        $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
+
+        // If $id is false, then there's no more questions to be shown
+        // Or if the provided limit exceeds the current track count
+        if (!$id || ($this->getLimit() !== null && $this->getLimit() < $quizTracker->getCurrentCount())) {
+            return $this->stopAction($page);
+        }
+
+        return $this->quizAction($page, $id);
     }
 
     /**
@@ -106,6 +111,19 @@ final class Quiz extends AbstractController
             // Can not continue. No more categories left.
             return ('No more categories left');
         }
+    }
+
+    /**
+     * Aborts the quiz
+     * 
+     * @return void
+     */
+    public function abortAction()
+    {
+        $quizTracker = $this->getModuleService('quizTracker');
+        $quizTracker->clear();
+
+        return $this->redirectToRoute('Quiz:Quiz@indexAction');
     }
 
     /**
@@ -266,16 +284,38 @@ final class Quiz extends AbstractController
     }
 
     /**
-     * Aborts the quiz
+     * Creates a pair
      * 
-     * @return void
+     * @param string $id
+     * @return array
      */
-    public function abortAction()
+    private function createPair($id)
     {
-        $quizTracker = $this->getModuleService('quizTracker');
-        $quizTracker->clear();
+        $question = $this->getModuleService('questionService')->fetchById($id);
+        $answers = $this->getModuleService('answerService')->fetchAll($id, true);
 
-        return $this->redirectToRoute('Quiz:Quiz@indexAction');
+        return array(
+            'question' => $question,
+            'answers' => $answers
+        );
+    }
+
+    /**
+     * Returns limit for questions stack, if provided
+     * 
+     * @return mixed
+     */
+    private function getLimit()
+    {
+        $limit = $this->getModuleService('configManager')
+                      ->getEntity()
+                      ->getLimit();
+
+        if (is_numeric($limit) && $limit > 0) {
+            return $limit;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -316,45 +356,5 @@ final class Quiz extends AbstractController
         }
 
         return $id;
-    }
-
-    /**
-     * Runs the initial test
-     * 
-     * @return string
-     */
-    public function indexAction()
-    {
-        $quizTracker = $this->getModuleService('quizTracker');
-        $page = new VirtualEntity();
-
-        // Do pre-processing if not started yet
-        if (!$quizTracker->isStarted()) {
-            $welcome = $this->welcomeAction($page);
-
-            if ($welcome !== true) {
-                return $welcome;
-            }
-        } else {
-            // Answer page
-            if ($this->request->isPost()) {
-                $answer = $this->answerAction();
-                if ($answer !== true) {
-                    return $answer;
-                }
-            } else {
-                // @TODO Do nothing or render the same question
-            }
-        }
-
-        $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
-
-        // If $id is false, then there's no more questions to be shown
-        // Or if the provided limit exceeds the current track count
-        if (!$id || ($this->getLimit() !== null && $this->getLimit() < $quizTracker->getCurrentCount())) {
-            return $this->stopAction($page);
-        }
-
-        return $this->quizAction($page, $id);
     }
 }
