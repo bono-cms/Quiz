@@ -9,5 +9,17 @@
 
     <?php endif; ?>
 
+    <?php if ($takenTime): ?>
     <p><?php echo $this->translate('Taken time'); ?>: <?php echo $takenTime; ?></p>
+    <?php endif; ?>
+
+    <?php if ($canContinue): ?>
+    <p>
+        <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@continueAction'); ?>"><?php $this->show('Continue'); ?></a>
+    </p>
+    <?php else: ?>
+    <p>
+        <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@abortAction'); ?>"><?php $this->show('Start again'); ?></a>
+    </p>
+    <?php endif; ?>
 </form>

@@ -89,6 +89,10 @@ final class Quiz extends AbstractController
      */
     public function continueAction()
     {
+        if (!$this->canContinue()) {
+            return false;
+        }
+
         // Get services
         $quizTracker = $this->getModuleService('quizTracker');
         $questionService = $this->getModuleService('questionService');
@@ -99,9 +103,9 @@ final class Quiz extends AbstractController
         if ($categoryId !== null) {
             $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit());
 
-            // @TODO: Change API to continue timing
             $quizTracker->setCurrentCategoryId($categoryId);
             $quizTracker->start($count);
+            $quizTracker->resetCount(); // Reset trucking number count
 
             $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
             return $this->quizAction($this->createEntity(), $id);
@@ -204,15 +208,23 @@ final class Quiz extends AbstractController
             )));
         }
 
-        // Indicate stopping
-        $quizTracker->stop();
+        // First priority
         $quizTracker->excludeCategoryId($quizTracker->getCurrentCategoryId());
+
+        // Whether can continue
+        $canContinue = $this->canContinue();
+
+        // Indicate stopping, if can't go on
+        if (!$canContinue) {
+            $quizTracker->stop();
+        }
 
         return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(
             'meta' => $quizTracker->getMeta(),
             'takenTime' => $quizTracker->getTakenTime(),
             'points' => $points,
-            'page' => $page
+            'page' => $page,
+            'canContinue' => $canContinue
         ));
     }
 
@@ -369,5 +381,18 @@ final class Quiz extends AbstractController
              ->setTitle($this->translator->translate('Passing the quiz'));
 
         return $page;
+    }
+
+    /**
+     * Checks whether user can continue (allowed) with different category
+     * 
+     * @return boolean
+     */
+    private function canContinue()
+    {
+        $config = $this->getModuleService('configManager')->getEntity();
+        $quizTracker = $this->getModuleService('quizTracker');
+
+        return !$config->shouldStop() && $quizTracker->hasNextCategoryId();
     }
 }

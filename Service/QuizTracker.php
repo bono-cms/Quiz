@@ -14,7 +14,6 @@ namespace Quiz\Service;
 use Cms\Service\AbstractManager;
 use Krystal\Session\SessionBagInterface;
 use Krystal\Date\TimeHelper;
-use LogicException;
 
 final class QuizTracker extends AbstractManager
 {
@@ -98,6 +97,17 @@ final class QuizTracker extends AbstractManager
         }
 
         return $this->setCategoryIds($output);
+    }
+
+    /**
+     * Checks whether there's at least one next category remaining
+     * 
+     * @return boolean
+     */
+    public function hasNextCategoryId()
+    {
+        $data = $this->sessionBag->get(self::PARAM_STORAGE_CATEGORY_IDS);
+        return !empty($data);
     }
 
     /**
@@ -199,10 +209,20 @@ final class QuizTracker extends AbstractManager
     {
         // If not started yet, start by 1, by default
         if (!$this->sessionBag->has(self::PARAM_STORAGE_CURRENT_COUNT)) {
-            $this->sessionBag->set(self::PARAM_STORAGE_CURRENT_COUNT, 0);
+            $this->resetCount();
         }
 
         return $this->sessionBag->get(self::PARAM_STORAGE_CURRENT_COUNT);
+    }
+
+    /**
+     * Resets current count
+     * 
+     * @return mixed
+     */
+    public function resetCount()
+    {
+        return $this->sessionBag->set(self::PARAM_STORAGE_CURRENT_COUNT, 0);
     }
 
     /**
@@ -216,17 +236,19 @@ final class QuizTracker extends AbstractManager
     }
 
     /**
-     * Start tracking
+     * Start or continue tracking
      * 
      * @param int $count
      * @return void
      */
     public function start($count)
     {
-        $this->sessionBag->setMany(array(
-            self::PARAM_STORAGE_INITIAL_COUNT => $count,
-            self::PARAM_STORAGE_TIMESTAMP_START => time()
-        ));
+        $this->sessionBag->set(self::PARAM_STORAGE_INITIAL_COUNT, $count);
+
+        // Start or continue timing
+        if (!$this->sessionBag->has(self::PARAM_STORAGE_TIMESTAMP_START)) {
+            $this->sessionBag->set(self::PARAM_STORAGE_TIMESTAMP_START, time());
+        }
 
         return $this;
     }
@@ -410,7 +432,6 @@ final class QuizTracker extends AbstractManager
     /**
      * Returns taken time
      * 
-     * @throws \LogicException if tried to get taken time when quiz isn't finished
      * @return string
      */
     public function getTakenTime()
@@ -421,7 +442,7 @@ final class QuizTracker extends AbstractManager
                 $this->sessionBag->get(self::PARAM_STORAGE_TIMESTAMP_END)
             );
         } else {
-            throw new LogicException('Can not get taken time if the quiz is not finished');
+            return null;
         }
     }
 
