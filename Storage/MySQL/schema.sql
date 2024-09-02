@@ -41,8 +41,9 @@ CREATE TABLE `bono_module_quiz_answers` (
 DROP TABLE IF EXISTS `bono_module_quiz_history`;
 CREATE TABLE `bono_module_quiz_history` (
   `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `category` varchar(30) NOT NULL,
-  `name` varchar(30),
-  `points` INT NOT NULL,
-  `timestamp` INT(10) NOT NULL 
+  `slug` varchar(255) NOT NULL COMMENT 'Unique slug',
+  `category` varchar(30) NOT NULL COMMENT 'Category name',
+  `name` varchar(30) COMMENT 'User name',
+  `points` INT NOT NULL COMMENT 'Total points',
+  `timestamp` INT(10) NOT NULL
 ) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;

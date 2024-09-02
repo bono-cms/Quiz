@@ -199,15 +199,6 @@ final class Quiz extends AbstractController
         $quizTracker = $this->getModuleService('quizTracker');
         $points = $quizTracker->getPoints(true);
 
-        // Do save track only in case the stopping has been indicated
-        if (!$quizTracker->isStopped()) {
-            // Keep the track
-            $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
-                'timestamp' => time(),
-                'points' => $points
-            )));
-        }
-
         // First priority
         $quizTracker->excludeCategoryId($quizTracker->getCurrentCategoryId());
 
@@ -217,6 +208,15 @@ final class Quiz extends AbstractController
         // Indicate stopping, if can't go on
         if (!$canContinue) {
             $quizTracker->stop();
+
+            // Keep the track
+            $history = $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
+                'points' => $points
+            )));
+
+            $this->view->addVariables([
+                'history' => $history
+            ]);
         }
 
         return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(

@@ -114,6 +114,9 @@ final class HistoryService extends AbstractManager implements FilterableServiceI
      */
     public function track(array $data)
     {
-        return $this->historyMapper->persist($data);
+        $data['timestamp'] = time();
+        $data['slug'] = uniqid();
+
+        return $this->historyMapper->persistRow($data);
     }
 }
