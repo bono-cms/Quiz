@@ -5,7 +5,7 @@
     <p><?php $this->show("Unfortunately, you didn't answer any question correctly"); ?></p>
 
     <?php else: ?>
-    <h4 class="mb-3"><?php echo $this->translate('You have got %s points', $points); ?></h4>
+    <h4 class="mb-3"><?php echo $this->translate('You have got %s points', $scores['total']); ?></h4>
 
     <?php endif; ?>
 
@@ -21,7 +21,7 @@
 
     <div class="py-4">
         <table class="table">
-            <?php foreach ($scores as $score): ?>
+            <?php foreach ($scores['items'] as $score): ?>
             <tr>
                 <td><?= $score['category']; ?></td>
                 <td class="text-end"><?= $score['score']; ?></td>
