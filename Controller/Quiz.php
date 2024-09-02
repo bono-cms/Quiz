@@ -224,7 +224,8 @@ final class Quiz extends AbstractController
             'takenTime' => $quizTracker->getTakenTime(),
             'points' => $points,
             'page' => $page,
-            'canContinue' => $canContinue
+            'canContinue' => $canContinue,
+            'scores' => $this->getModuleService('categoryService')->fetchResultset($quizTracker->getCorrectQuestionIds())
         ));
     }
 
