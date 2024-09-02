@@ -61,6 +61,17 @@ final class CategoryService extends AbstractManager
     }
 
     /**
+     * Fetch non-empty category Ids
+     * 
+     * @return array
+     */
+    public function fetchNonEmptyCategoryIds()
+    {
+        $rows = $this->categoryMapper->fetchAll(true, false);
+        return array_column($rows, 'id');
+    }
+
+    /**
      * Fetches category list
      * 
      * @param boolean $values Whether to fetch only values
