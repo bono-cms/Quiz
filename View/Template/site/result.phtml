@@ -18,6 +18,18 @@
         <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@continueAction'); ?>"><?php $this->show('Continue'); ?></a>
     </p>
     <?php else: ?>
+
+    <div class="py-4">
+        <table class="table">
+            <?php foreach ($scores as $score): ?>
+            <tr>
+                <td><?= $score['category']; ?></td>
+                <td class="text-end"><?= $score['score']; ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    
     <p>
         <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@abortAction'); ?>"><?php $this->show('Start again'); ?></a>
     </p>
