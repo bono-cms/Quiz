@@ -50,7 +50,7 @@ final class Quiz extends AbstractController
     public function indexAction()
     {
         $quizTracker = $this->getModuleService('quizTracker');
-        $page = new VirtualEntity();
+        $page = $this->createEntity();
 
         // Do pre-processing if not started yet
         if (!$quizTracker->isStarted()) {
@@ -104,9 +104,8 @@ final class Quiz extends AbstractController
             $quizTracker->start($count);
 
             $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
-            $page = new VirtualEntity();
+            return $this->quizAction($this->createEntity(), $id);
 
-            return $this->quizAction($page, $id);
         } else {
             // Can not continue. No more categories left.
             return ('No more categories left');
@@ -356,5 +355,19 @@ final class Quiz extends AbstractController
         }
 
         return $id;
+    }
+
+    /**
+     * Creates page entity
+     * 
+     * @return \Krystal\Stdlib\VirtualEntity
+     */
+    private function createEntity()
+    {
+        $page = new VirtualEntity();
+        $page->setSeo(false)
+             ->setTitle($this->translator->translate('Passing the quiz'));
+
+        return $page;
     }
 }
