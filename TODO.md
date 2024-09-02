@@ -1,9 +1,9 @@
 TODO
 ====
 
-* Next & Back inside a single block. Switch to different category. Wizard.
-* Math formulas in answers
-* Add custom points to category
+* Resulting page by category with points
+* Track points for every category (optional)
+* Math formulas in answers (images for now)
 * Add difficulty levels to questions with corresponding filter
 * Bug in History with filter button
 * Form validation [ AJAX ]
