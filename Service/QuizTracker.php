@@ -124,6 +124,7 @@ final class QuizTracker extends AbstractManager
     public function clear()
     {
         return $this->sessionBag->removeMany(array(
+            self::PARAM_STORAGE_CURRENT_CATEGORY_ID,
             self::PARAM_STORAGE_CATEGORY_IDS,
             self::PARAM_STORAGE_PASSED,
             self::PARAM_STORAGE_CURRENT_COUNT,

@@ -93,19 +93,18 @@ final class Quiz extends AbstractController
         // Continue, if found a category
         if ($categoryId !== null) {
             $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit());
-            
+
             // @TODO: Change API to continue timing
+            $quizTracker->setCurrentCategoryId($categoryId);
             $quizTracker->start($count);
-            
-            $_SESSION['cat_id'] = $categoryId;
-            
-            $id = $this->getQuestionId();
+
+            $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
             $page = new VirtualEntity();
 
             return $this->quizAction($page, $id);
         } else {
             // Can not continue. No more categories left.
-            die('No more categories left');
+            return ('No more categories left');
         }
     }
 
@@ -135,8 +134,6 @@ final class Quiz extends AbstractController
                 // Initial loading from request
                 $categoryId = $this->request->getPost('category');
 
-                $_SESSION['cat_id'] = $categoryId;
-
                 // Get total count
                 $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit());
 
@@ -149,6 +146,7 @@ final class Quiz extends AbstractController
 
                 // Save category ids initially
                 $quizTracker->setCategoryIds($this->getModuleService('categoryService')->fetchNonEmptyCategoryIds());
+                $quizTracker->setCurrentCategoryId($categoryId);
                 $quizTracker->start($count);
                 $quizTracker->saveMeta(array(
                     'name' => $this->request->getPost('name'),
@@ -191,7 +189,7 @@ final class Quiz extends AbstractController
 
         // Indicate stopping
         $quizTracker->stop();
-        $quizTracker->excludeCategoryId($_SESSION['cat_id']);
+        $quizTracker->excludeCategoryId($quizTracker->getCurrentCategoryId());
 
         return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(
             'meta' => $quizTracker->getMeta(),
@@ -283,15 +281,14 @@ final class Quiz extends AbstractController
     /**
      * Generates current question id depending on position
      * 
+     * @param int $categoryId Category id
      * @return int|mixed
      */
-    private function getQuestionId()
+    private function getQuestionId($categoryId)
     {
         $questionService = $this->getModuleService('questionService');
         $quizTracker = $this->getModuleService('quizTracker');
         $config = $this->getModuleService('configManager')->getEntity();
-
-        $categoryId = $_SESSION['cat_id'];
 
         // Logic for non-random
         if ($config->sortByOrder()) {
@@ -350,7 +347,7 @@ final class Quiz extends AbstractController
             }
         }
 
-        $id = $this->getQuestionId();
+        $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
 
         // If $id is false, then there's no more questions to be shown
         // Or if the provided limit exceeds the current track count
