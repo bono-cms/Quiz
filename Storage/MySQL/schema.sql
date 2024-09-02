@@ -45,5 +45,6 @@ CREATE TABLE `bono_module_quiz_history` (
   `category` varchar(30) NOT NULL COMMENT 'Category name',
   `name` varchar(30) COMMENT 'User name',
   `points` INT NOT NULL COMMENT 'Total points',
-  `timestamp` INT(10) NOT NULL
+  `timestamp` INT(10) NOT NULL,
+  `content` TEXT NOT NULL COMMENT 'Meta data'
 ) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;

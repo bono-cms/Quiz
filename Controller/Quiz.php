@@ -204,6 +204,7 @@ final class Quiz extends AbstractController
 
         // Whether can continue
         $canContinue = $this->canContinue();
+        $scores = $this->getModuleService('categoryService')->fetchResultset($quizTracker->getCorrectQuestionIds());
 
         // Indicate stopping, if can't go on
         if (!$canContinue) {
@@ -211,7 +212,8 @@ final class Quiz extends AbstractController
 
             // Keep the track
             $history = $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
-                'points' => $points
+                'points' => $points,
+                'content' => json_encode($scores)
             )));
 
             $this->view->addVariables([
@@ -225,7 +227,7 @@ final class Quiz extends AbstractController
             'points' => $points,
             'page' => $page,
             'canContinue' => $canContinue,
-            'scores' => $this->getModuleService('categoryService')->fetchResultset($quizTracker->getCorrectQuestionIds())
+            'scores' => $scores
         ));
     }
 
