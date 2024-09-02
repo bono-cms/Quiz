@@ -6,13 +6,18 @@ use Krystal\Form\Element;
 
 <form method="POST" action="<?= $this->url('Quiz:Quiz@indexAction'); ?>">
   <fieldset>
-    <legend><?= $question->getQuestion(); ?></legend>
+    <legend class="mb-3"><?= $question->getQuestion(); ?></legend>
     <?= Element::hidden('csrf-token', $csrfToken); ?>
 
     <p class="text-muted"><?= $this->translate('Question %s of %s', $currentQuestionCount, $initialCount); ?></p>
-    <article><?= $question->getDescription(); ?></article>
 
-    <div class="form-group">
+    <?php if ($question->getDescription()): ?>
+    <div class="my-3">
+        <?= $question->getDescription(); ?>
+    </div>
+    <?php endif; ?>
+
+    <div class="row form-group">
       <div class="col-lg-10">
         <input type="hidden" name="question" value="<?= $question->getId(); ?>" />
 
@@ -26,7 +31,7 @@ use Krystal\Form\Element;
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="row form-group mt-4">
       <div class="col-lg-10">
         <a href="<?= $this->url('Quiz:Quiz@abortAction'); ?>" class="btn btn-danger"><?php $this->show('Cancel'); ?></a>&nbsp;
         <?php if ($lastQuestion): ?>

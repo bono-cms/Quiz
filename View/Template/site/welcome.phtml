@@ -4,35 +4,28 @@ use Krystal\Form\Element;
 
 ?>
 
-<form class="form-horizontal" method="POST" action="<?php echo $this->url('Quiz:Quiz@indexAction'); ?>">
+<form method="POST" action="<?= $this->url('Quiz:Quiz@indexAction'); ?>">
   <fieldset>
-    <legend>Welcome to Quiz</legend>
+    <legend class="mb-4"><?php $this->show('Welcome to Quiz'); ?></legend>
 
     <?= Element::hidden('csrf-token', $csrfToken); ?>
 
-    <div class="form-group">
-      <label for="inputName" class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" name="name" id="inputName" placeholder="<?php $this->show('Type your name'); ?>" />
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="inputCategory" class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
-      <div class="col-lg-10">
-        <select class="form-control" name="category" id="inputCategory">
-          <?php foreach ($categories as $id => $category): ?>
-          <option value="<?php echo $id; ?>"><?php echo $category?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+    <div class="form-group mb-3">
+      <label><?php $this->show('Name'); ?></label>
+      <input class="form-control" name="name" placeholder="<?php $this->show('Type your name'); ?>" />
     </div>
 
-    <div class="form-group">
-      <div class="col-lg-10 col-lg-offset-2">
-        <button type="submit" class="btn btn-primary"><?php $this->show('Start'); ?> <i class="glyphicon glyphicon-chevron-right"></i></button>
-      </div>
+    <div class="form-group mb-3">
+      <label><?php $this->show('Category'); ?></label>
+      <select class="form-control" name="category">
+        <?php foreach ($categories as $id => $category): ?>
+        <option value="<?php echo $id; ?>"><?php echo $category?></option>
+        <?php endforeach; ?>
+      </select>
     </div>
-    
+
+    <div class="form-group mb-3">
+       <button type="submit" class="btn btn-primary"><?php $this->show('Start'); ?></button>
+    </div>
   </fieldset>
 </form>

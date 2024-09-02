@@ -1,15 +1,13 @@
-
 <form>
-<h2 class=""><?php echo $this->translate('Thank you, %s', $meta['name']); ?></h2>
+    <h2 class="mb-3"><?php echo $this->translate('Thank you, %s', $meta['name']); ?></h2>
 
-<?php if ($points === 0): ?>
-<p><?php $this->show("Unfortunately, you didn't answer any question correctly"); ?></p>
+    <?php if ($points === 0): ?>
+    <p><?php $this->show("Unfortunately, you didn't answer any question correctly"); ?></p>
 
-<?php else: ?>
-<h4><?php echo $this->translate('You have got %s points', $points); ?></h4>
+    <?php else: ?>
+    <h4 class="mb-3"><?php echo $this->translate('You have got %s points', $points); ?></h4>
 
-<?php endif; ?>
+    <?php endif; ?>
 
-<p><?php echo $this->translate('Taken time'); ?>: <?php echo $takenTime; ?></p>
-
+    <p><?php echo $this->translate('Taken time'); ?>: <?php echo $takenTime; ?></p>
 </form>
