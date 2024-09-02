@@ -25,6 +25,7 @@ final class QuizTracker extends AbstractManager
      */
     private $sessionBag;
 
+    const PARAM_STORAGE_CATEGORY_IDS = 'quiz_category_ids';
     const PARAM_STORAGE_PASSED = 'quiz_passed';
     const PARAM_STORAGE_CURRENT_COUNT = 'quiz_current_count';
     const PARAM_STORAGE_INITIAL_COUNT = 'quiz_track_initial_count';
@@ -46,6 +47,54 @@ final class QuizTracker extends AbstractManager
     }
 
     /**
+     * Set initial state
+     * 
+     * @param array $ids
+     * @return void
+     */
+    public function setCategoryIds(array $ids)
+    {
+        $this->sessionBag->set(self::PARAM_STORAGE_CATEGORY_IDS, $ids);
+    }
+
+    /**
+     * Excludes category id
+     * 
+     * @param mixed $id
+     * @return boolean
+     */
+    public function excludeCategoryId($id)
+    {
+        $data = $this->sessionBag->get(self::PARAM_STORAGE_CATEGORY_IDS);
+        $output = [];
+
+        // Find and exclude current id
+        foreach ($data as $value) {
+            if ($id != $value) {
+                $output[] = $value;
+            }
+        }
+
+        return $this->setCategoryIds($output);
+    }
+
+    /**
+     * Returns next category id
+     * 
+     * @return mixed
+     */
+    public function getNextCategoryId()
+    {
+        $data = $this->sessionBag->get(self::PARAM_STORAGE_CATEGORY_IDS);
+
+        if (!empty($data)) {
+            return $data[0];
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Clears the storage
      * 
      * @return void
@@ -53,6 +102,7 @@ final class QuizTracker extends AbstractManager
     public function clear()
     {
         return $this->sessionBag->removeMany(array(
+            self::PARAM_STORAGE_CATEGORY_IDS,
             self::PARAM_STORAGE_PASSED,
             self::PARAM_STORAGE_CURRENT_COUNT,
             self::PARAM_STORAGE_INITIAL_COUNT,
