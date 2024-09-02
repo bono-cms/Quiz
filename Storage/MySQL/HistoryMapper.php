@@ -27,6 +27,21 @@ final class HistoryMapper extends AbstractMapper implements HistoryMapperInterfa
     }
 
     /**
+     * Fetch history item by its id
+     * 
+     * @param string $slug
+     * @return array
+     */
+    public function fetchBySlug($slug)
+    {
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->whereEquals('slug', $slug);
+
+        return $db->query();
+    }
+
+    /**
      * Deletes an item by its id
      * 
      * @param string $id

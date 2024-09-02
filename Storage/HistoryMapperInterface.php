@@ -14,6 +14,14 @@ namespace Quiz\Storage;
 interface HistoryMapperInterface
 {
     /**
+     * Fetch history item by its id
+     * 
+     * @param string $slug
+     * @return array
+     */
+    public function fetchBySlug($slug);
+
+    /**
      * Deletes an item by its id
      * 
      * @param string $id

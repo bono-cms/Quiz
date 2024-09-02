@@ -52,6 +52,31 @@ final class HistoryService extends AbstractManager implements FilterableServiceI
     }
 
     /**
+     * Fetch history item by its id
+     * 
+     * @param string $slug
+     * @return array
+     */
+    public function fetchBySlug($slug)
+    {
+        $row = $this->historyMapper->fetchBySlug($slug);
+
+        if ($row) {
+            $row['content'] = json_decode($row['content'], true);
+            $row['meta'] = [
+                'name' => $row['name'],
+                'category' => $row['category']
+            ];
+
+            unset($row['name'], $row['category']);
+
+            return $row;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Delete history items by their associated ids
      * 
      * @param array $ids
