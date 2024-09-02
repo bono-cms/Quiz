@@ -1,4 +1,4 @@
-<form>
+<div>
     <h2 class="mb-3"><?php echo $this->translate('Thank you, %s', $meta['name']); ?></h2>
 
     <?php if ($points === 0): ?>
@@ -34,4 +34,4 @@
         <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@abortAction'); ?>"><?php $this->show('Start again'); ?></a>
     </p>
     <?php endif; ?>
-</form>
+</div>
