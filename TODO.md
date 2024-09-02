@@ -2,7 +2,6 @@ TODO
 ====
 
 * Math formulas in answers (images for now)
-* Permanent URL for results (Idea: save score as JSON)
 * Add difficulty levels to questions with corresponding filter
 * Bug in History with filter button
 * Form validation [ AJAX ]
