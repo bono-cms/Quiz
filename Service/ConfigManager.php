@@ -22,7 +22,8 @@ final class ConfigManager extends ConfigModuleService
     {
         $entity = new ConfigEntity;
         $entity->setSortingMethod($this->get('order_type', 'order'), ConfigEntity::FILTER_TAGS)
-               ->setLimit($this->get('limit'));
+               ->setLimit($this->get('limit'))
+               ->setContinue($this->get('continue'), '0');
 
         return $entity;
     }

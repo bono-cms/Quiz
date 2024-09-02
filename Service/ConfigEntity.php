@@ -19,6 +19,29 @@ final class ConfigEntity extends VirtualEntity
     const PARAM_SORT_TYPE_RANDOM = 'rand';
 
     /**
+     * Whether should stop and diplay results on finish
+     * 
+     * @return boolean
+     */
+    public function shouldStop()
+    {
+        return $this->getContinue() == '0';
+    }
+
+    /**
+     * Returns supported continue types
+     * 
+     * @return array
+     */
+    public function getContinueTypes()
+    {
+        return array(
+            '0' => 'Stop and display results',
+            '1' => 'Allow going to the next category'
+        );
+    }
+
+    /**
      * Returns sorting types
      * 
      * @return array
