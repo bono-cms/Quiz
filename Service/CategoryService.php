@@ -61,6 +61,17 @@ final class CategoryService extends AbstractManager
     }
 
     /**
+     * Used purely for displaying results
+     * 
+     * @param array $questionIds An array of passed questions ids
+     * @return array
+     */
+    public function fetchResultset(array $questionIds)
+    {
+        return $this->categoryMapper->fetchResultset($questionIds);
+    }
+
+    /**
      * Fetch non-empty category Ids
      * 
      * @return array

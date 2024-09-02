@@ -14,6 +14,14 @@ namespace Quiz\Storage;
 interface CategoryMapperInterface
 {
     /**
+     * Used purely for displaying results
+     * 
+     * @param array $questionIds An array of passed questions ids
+     * @return array
+     */
+    public function fetchResultset(array $questionIds);
+
+    /**
      * Fetch all categories
      * 
      * @param boolean $sort Whether to use sorting by order attribute or not

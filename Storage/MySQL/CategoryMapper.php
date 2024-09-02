@@ -26,6 +26,38 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
+     * Used purely for displaying results
+     * 
+     * @param array $questionIds An array of passed questions ids
+     * @return array
+     */
+    public function fetchResultset(array $questionIds)
+    {
+        // Hack to avoid SQL errors when empty set supplied
+        if (empty($questionIds)) {
+            $questionIds = [0];
+        }
+
+        $columns = [
+            self::column('id'),
+            self::column('name')
+        ];
+
+        $db = $this->db->select($columns)
+                       ->count(QuestionMapper::column('id'), 'correct')
+                       ->from(self::getTableName())
+                       ->leftJoin(QuestionMapper::getTableName(), [
+                            QuestionMapper::column('category_id') => self::getRawColumn('id')
+                       ])
+                       ->rawAnd()
+                       ->in(QuestionMapper::column('id'), $questionIds)
+                       ->groupBy($columns)
+                       ->orderBy(self::column('order'));
+
+        return $db->queryAll();
+    }
+
+    /**
      * Fetch all categories
      * 
      * @param boolean $sort Whether to use sorting by order attribute or not
