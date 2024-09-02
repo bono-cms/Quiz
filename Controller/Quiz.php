@@ -41,7 +41,7 @@ final class Quiz extends AbstractController
             'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
         ));
     }
-    
+
     /**
      * Find history item by its slug
      * 
@@ -58,7 +58,8 @@ final class Quiz extends AbstractController
                 'points' => $item['points'],
                 'page' => $this->createEntity(),
                 'canContinue' => false,
-                'scores' => $item['content']
+                'scores' => $item['content'],
+                'url' => $this->request->getBaseUrl() . $this->createUrl('Quiz:Quiz@historyAction', [$slug])
             ));
         } else {
             // Invalid slug. Trigger 404
@@ -241,7 +242,9 @@ final class Quiz extends AbstractController
             )));
 
             $this->view->addVariables([
-                'history' => $history
+                'history' => $history,
+                // Current URL of the entry
+                'url' => $this->request->getBaseUrl() . $this->createUrl('Quiz:Quiz@historyAction', [$history['slug']])
             ]);
         }
 
