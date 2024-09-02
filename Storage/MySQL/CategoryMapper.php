@@ -40,7 +40,8 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
 
         $columns = [
             self::column('id'),
-            self::column('name')
+            self::column('name'),
+            self::column('mark')
         ];
 
         $db = $this->db->select($columns)
@@ -70,7 +71,8 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         $columns = [
             self::column('id'),
             self::column('name'),
-            self::column('order')
+            self::column('order'),
+            self::column('mark')
         ];
 
         $db = $this->db->select($columns)
@@ -80,11 +82,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                             QuestionMapper::column('category_id') => self::getRawColumn('id')
                        ])
                        ->whereEquals(self::column('lang_id'), $this->getLangId())
-                       ->groupBy([
-                            self::column('id'),
-                            self::column('name'),
-                            self::column('order'),
-                       ]);
+                       ->groupBy($columns);
 
         $colOrder = self::column('order');
         $colId = self::column('id');

@@ -6,6 +6,7 @@ CREATE TABLE `bono_module_quiz_categories` (
   `lang_id` INT NOT NULL,
   `name` varchar(255) NOT NULL COMMENT 'Category name',
   `order` INT NOT NULL COMMENT 'Category sorting order',
+  `mark` FLOAT NOT NULL COMMENT 'Optional mark for attached questions',
 
   FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
 ) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
