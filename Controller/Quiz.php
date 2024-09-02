@@ -41,6 +41,30 @@ final class Quiz extends AbstractController
             'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
         ));
     }
+    
+    /**
+     * Find history item by its slug
+     * 
+     * @param string $slug
+     * @return mixed
+     */
+    public function historyAction($slug)
+    {
+        $item = $this->getModuleService('historyService')->fetchBySlug($slug);
+
+        if ($item) {
+            return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(
+                'meta' => $item['meta'],
+                'points' => $item['points'],
+                'page' => $this->createEntity(),
+                'canContinue' => false,
+                'scores' => $item['content']
+            ));
+        } else {
+            // Invalid slug. Trigger 404
+            return false;
+        }
+    }
 
     /**
      * Runs the initial test

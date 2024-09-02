@@ -9,7 +9,7 @@
 
     <?php endif; ?>
 
-    <?php if ($takenTime): ?>
+    <?php if (isset($takenTime)): ?>
     <p><?php echo $this->translate('Taken time'); ?>: <?php echo $takenTime; ?></p>
     <?php endif; ?>
 

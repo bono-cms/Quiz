@@ -10,6 +10,10 @@
  */
 
 return array(
+    '/quiz/history/(:var)' => array(
+        'controller' => 'Quiz@historyAction'
+    ),
+
     '/quiz/continue' => array(
         'controller' => 'Quiz@continueAction'
     ),
