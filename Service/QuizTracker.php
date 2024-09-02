@@ -399,13 +399,23 @@ final class QuizTracker extends AbstractManager
         }
 
         // Get the current collection
-        $collection = $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
+        $collection = $this->getCorrectQuestionIds();
 
         // Append a new item
         $collection[] = $questionId;
 
         // Update the storage with altered collection
         $this->sessionBag->set(self::PARAM_STORAGE_CORRECT_IDS, $collection);
+    }
+
+    /**
+     * Returns a id collection of correctly answered questions
+     * 
+     * @return array
+     */
+    public function getCorrectQuestionIds()
+    {
+        return $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
     }
 
     /**
