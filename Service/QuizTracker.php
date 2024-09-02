@@ -25,6 +25,7 @@ final class QuizTracker extends AbstractManager
      */
     private $sessionBag;
 
+    const PARAM_STORAGE_CURRENT_CATEGORY_ID = 'quiz_current_category_id';
     const PARAM_STORAGE_CATEGORY_IDS = 'quiz_category_ids';
     const PARAM_STORAGE_PASSED = 'quiz_passed';
     const PARAM_STORAGE_CURRENT_COUNT = 'quiz_current_count';
@@ -44,6 +45,27 @@ final class QuizTracker extends AbstractManager
     public function __construct(SessionBagInterface $sessionBag)
     {
         $this->sessionBag = $sessionBag;
+    }
+
+    /**
+     * Persists current category id
+     * 
+     * @param int $categoryId
+     * @return void
+     */
+    public function setCurrentCategoryId($categoryId)
+    {
+        return $this->sessionBag->set(self::PARAM_STORAGE_CURRENT_CATEGORY_ID, $categoryId);
+    }
+
+    /**
+     * Returns current category id
+     * 
+     * @return mixed
+     */
+    public function getCurrentCategoryId()
+    {
+        return $this->sessionBag->get(self::PARAM_STORAGE_CURRENT_CATEGORY_ID);
     }
 
     /**
