@@ -18,10 +18,10 @@ use Krystal\Stdlib\VirtualEntity;
 final class Quiz extends AbstractController
 {
     /* View templates */
-    const QUIZ_TEMPLATE_QUIZ = 'quiz';
-    const QUIZ_TEMPLATE_RESULT = 'result';
-    const QUIZ_TEMPLATE_WELCOME = 'welcome';
-    const QUIZ_TEMPLATE_EMPTY_CAT = 'empty';
+    const QUIZ_TEMPLATE_QUIZ = 'quiz-main';
+    const QUIZ_TEMPLATE_RESULT = 'quiz-result';
+    const QUIZ_TEMPLATE_WELCOME = 'quiz-welcome';
+    const QUIZ_TEMPLATE_EMPTY_CAT = 'quiz-empty';
 
     /**
      * {@inheritDoc}
