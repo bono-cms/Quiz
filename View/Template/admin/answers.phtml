@@ -80,32 +80,21 @@ defined('KRYSTAL') or die;
                 <?php echo Element::hidden('answer[question_id]', $answer->getQuestionId()); ?>
 
                 <div class="form-group">
-                    <label class="col-lg-10 control-label"><?php $this->show('Answer'); ?></label>
-                    <div class="col-lg-10">
-                        <?php echo Element::textarea('answer[answer]', $answer->getAnswer(), array('class' => 'form-control', 'placeholder' => $this->translate('Type the answer'))); ?>
-                    </div>
+                    <label><?php $this->show('Answer'); ?></label>
+                    <?php echo Element::textarea('answer[answer]', $answer->getAnswer(), array('class' => 'form-control', 'placeholder' => $this->translate('Type the answer'))); ?>
                 </div>
 
                 <div class="form-group">
-                    <div class="form-group">
-                        <label class="col-lg-10 control-label"><?php $this->show('Sort order'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::text('answer[order]', $answer->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order. By default comes last'))); ?>
-                        </div>
-                    </div>
+                    <label><?php $this->show('Sort order'); ?></label>
+                    <?php echo Element::text('answer[order]', $answer->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order. By default comes last'))); ?>
                 </div>
 
                 <div class="form-group">
-                    <div class="form-group">
-                        <label class="col-lg-10 control-label"><?php $this->show('Corectness'); ?></label>
-                        <div class="col-lg-10">
-                            <?php echo Element::select('answer[correct]', $this->translateArray(
-                                array(
-                                    '0' => 'This answer is incorreсt',
-                                    '1' => 'This answer is correсt'
-                                )), $answer->getCorrect(), array('class' => 'form-control')); ?>
-                        </div>
-                    </div>
+                    <label><?php $this->show('Corectness'); ?></label>
+                    <?php echo Element::select('answer[correct]', $this->translateArray(array(
+                        '0' => 'This answer is incorreсt',
+                        '1' => 'This answer is correсt'
+                    )), $answer->getCorrect(), array('class' => 'form-control')); ?>
                 </div>
 
                 <?php $this->loadPartial('actions', array(
