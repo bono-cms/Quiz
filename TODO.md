@@ -1,6 +1,7 @@
 TODO
 ====
 
+* Add custom callback function to handle marks for categories
 * Add difficulty levels to questions with corresponding filter
 * Bug in History with filter button
 * Form validation [ AJAX ]
