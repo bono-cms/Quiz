@@ -100,7 +100,7 @@ final class Quiz extends AbstractController
 
         // If $id is false, then there's no more questions to be shown
         // Or if the provided limit exceeds the current track count
-        if (!$id || ($this->getLimit() !== null && $this->getLimit() < $quizTracker->getCurrentCount())) {
+        if (!$id || ($this->getLimit($quizTracker->getCurrentCategoryId()) !== null && $this->getLimit($quizTracker->getCurrentCategoryId()) < $quizTracker->getCurrentCount())) {
             return $this->stopAction($page);
         }
 
@@ -126,7 +126,7 @@ final class Quiz extends AbstractController
 
         // Continue, if found a category
         if ($categoryId !== null) {
-            $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit());
+            $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit($categoryId));
 
             $quizTracker->setCurrentCategoryId($categoryId);
             $quizTracker->start($count);
@@ -181,7 +181,7 @@ final class Quiz extends AbstractController
                 $categoryId = $this->request->getPost('category');
 
                 // Get total count
-                $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit());
+                $count = $questionService->countQuestionsByCategoryId($categoryId, $this->getLimit($categoryId));
 
                 // Does this category even have quesions?
                 if ($count == 0) {
@@ -344,18 +344,42 @@ final class Quiz extends AbstractController
     /**
      * Returns limit for questions stack, if provided
      * 
+     * @param int $categoryId
      * @return mixed
      */
-    private function getLimit()
+    private function getLimit($categoryId = null)
     {
-        $limit = $this->getModuleService('configManager')
-                      ->getEntity()
-                      ->getLimit();
+        static $limit = null; // Cache method calls
 
-        if (is_numeric($limit) && $limit > 0) {
-            return $limit;
+        // Is this a first call?
+        if (is_null($limit)) {
+            // 1. If numeric id provided
+            if (is_numeric($categoryId)) {
+                // First check the category
+                $categoryLimit = $this->getModuleService('categoryService')->fetchLimitById($categoryId);
+                
+                if (is_numeric($categoryLimit) && $categoryLimit > 0) {
+                    $limit = $categoryLimit;
+                    return $categoryLimit;
+                }
+            }
+
+            // 2. If category limit is not provided, then start a global limit lockup
+            $globalLimit = $this->getModuleService('configManager')
+                          ->getEntity()
+                          ->getLimit();
+
+            if (is_numeric($globalLimit) && $globalLimit > 0) {
+                $limit = $globalLimit;
+                return $globalLimit;
+            } else {
+                // No limit can be found
+                return null;
+            }
+
         } else {
-            return null;
+            // Cached call
+            return $limit;
         }
     }
 
