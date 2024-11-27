@@ -72,7 +72,8 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
             self::column('id'),
             self::column('name'),
             self::column('order'),
-            self::column('mark')
+            self::column('mark'),
+            self::column('limit')
         ];
 
         $db = $this->db->select($columns)

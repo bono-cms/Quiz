@@ -23,6 +23,11 @@ defined('KRYSTAL') or die;
         <?php echo Element::text('category[mark]', $category->getMark(), array('class' => 'form-control')); ?>
     </div>
 
+    <div class="form-group">
+        <label><?php $this->show('Listing limit'); ?></label>
+        <?php echo Element::text('category[limit]', $category->getLimit(), array('class' => 'form-control')); ?>
+    </div>
+
     <?php $this->loadPartial('actions', array(
         'new' => !$category->getId(),
         'add' => 'Quiz:Admin:Category@addAction',

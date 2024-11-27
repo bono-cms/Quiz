@@ -56,6 +56,7 @@ final class CategoryService extends AbstractManager
                ->setName($row['name'], VirtualEntity::FILTER_TAGS)
                ->setOrder($row['order'], VirtualEntity::FILTER_INT)
                ->setMark($row['mark'], VirtualEntity::FILTER_FLOAT)
+               ->setLimit($row['limit'])
                ->setQuestionsCount((isset($row['count']) ? $row['count'] : $this->questionMapper->countQuestionsByCategoryId($row['id'])), VirtualEntity::FILTER_INT);
 
         return $entity;
