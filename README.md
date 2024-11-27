@@ -10,7 +10,7 @@ Create online quiz to test knowledge of your users. It currently supports:
 - Allows for multiple correct answers per question.
 - Previous and Next buttons
 - Sorting methods for questions: random or manual sorting
-- Limitations. Display only desired amount of questions per category
+- Limitations. Display only desired amount of questions per category when running tests. Limitations can be applied per category or globally.
 - Tests category by category. When user finished one category, they can go to the next category
 - Marks per category. Each correctly answered question earns a point within its category.
 

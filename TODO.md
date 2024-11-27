@@ -1,7 +1,6 @@
 TODO
 ====
 
-* Add limit support to each category
 * When editing answers, make sure that valid question ID comes from route
 * Add difficulty levels to questions with corresponding filter
 * Bug in History with filter button
