@@ -147,6 +147,17 @@ final class CategoryService extends AbstractManager
     }
 
     /**
+     * Fetch category limit by its id
+     * 
+     * @param int $id
+     * @return mixed
+     */
+    public function fetchLimitById($id)
+    {
+        return $this->categoryMapper->fetchLimitById($id);
+    }
+
+    /**
      * Fetch category name by its associated id
      * 
      * @param string $id
