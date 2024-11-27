@@ -1,6 +1,8 @@
 TODO
 ====
 
+* Add limit support to each category
+* When editing answers, make sure that valid question ID comes from route
 * Add difficulty levels to questions with corresponding filter
 * Bug in History with filter button
 * Form validation [ AJAX ]
@@ -25,3 +27,9 @@ ROADMAP
 * Math formulas in answers (images for now)
 * Published and non-published categories
 * Certificates
+* Ability to count questions with no answers using the following query
+
+`SELECT * FROM bono_module_quiz_questions
+    LEFT OUTER JOIN bono_module_quiz_answers
+    ON bono_module_quiz_answers.question_id = bono_module_quiz_questions.id
+    WHERE bono_module_quiz_answers.question_id IS NULL`
