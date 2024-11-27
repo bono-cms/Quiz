@@ -28,6 +28,11 @@ final class Answer extends AbstractController
     {
         $question = $this->getModuleService('questionService')->fetchQuestionById($id);
 
+        // Trigger not found, if wrong id supplied
+        if ($question === false) {
+            return false;
+        }
+
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('Quiz', 'Quiz:Admin:Browser@indexAction')
                                        ->addOne($this->translator->translate('Answers for "%s"', (string)$question));
@@ -50,7 +55,7 @@ final class Answer extends AbstractController
     {
         $answer = new VirtualEntity();
         $answer->setQuestionId($id);
-        
+
         return $this->createGrid($id, $answer);
     }
 
