@@ -4,6 +4,8 @@ use Krystal\Form\Element;
 
 ?>
 
+<p><?php $this->show('Current category'); ?>: <?= $page->getCategoryName(); ?></p>
+
 <form method="POST" action="<?= $this->url('Quiz:Quiz@indexAction'); ?>">
   <fieldset>
     <legend class="mb-3"><?= $question->getQuestion(); ?></legend>

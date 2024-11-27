@@ -75,6 +75,8 @@ final class Quiz extends AbstractController
     public function indexAction()
     {
         $quizTracker = $this->getModuleService('quizTracker');
+        $categoryService = $this->getModuleService('categoryService');
+
         $page = $this->createEntity();
 
         // Do pre-processing if not started yet
@@ -97,6 +99,9 @@ final class Quiz extends AbstractController
         }
 
         $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
+
+        // Set current category name
+        $page->setCategoryName($categoryService->fetchNameById($quizTracker->getCurrentCategoryId()));
 
         // If $id is false, then there's no more questions to be shown
         // Or if the provided limit exceeds the current track count
@@ -121,6 +126,7 @@ final class Quiz extends AbstractController
         // Get services
         $quizTracker = $this->getModuleService('quizTracker');
         $questionService = $this->getModuleService('questionService');
+        $categoryService = $this->getModuleService('categoryService');
 
         $categoryId = $quizTracker->getNextCategoryId();
 
@@ -132,8 +138,11 @@ final class Quiz extends AbstractController
             $quizTracker->start($count);
             $quizTracker->resetCount(); // Reset trucking number count
 
+            $page = $this->createEntity();
+            $page->setCategoryName($categoryService->fetchNameById($quizTracker->getCurrentCategoryId()));
+
             $id = $this->getQuestionId($quizTracker->getCurrentCategoryId());
-            return $this->quizAction($this->createEntity(), $id);
+            return $this->quizAction($page, $id);
 
         } else {
             // Can not continue. No more categories left.
@@ -426,13 +435,15 @@ final class Quiz extends AbstractController
     /**
      * Creates page entity
      * 
+     * @param string $categoryName
      * @return \Krystal\Stdlib\VirtualEntity
      */
-    private function createEntity()
+    private function createEntity($categoryName = null)
     {
-        $page = new VirtualEntity();
+        $page = new VirtualEntity(false);
         $page->setSeo(false)
-             ->setTitle($this->translator->translate('Passing the quiz'));
+             ->setTitle($this->translator->translate('Passing the quiz'))
+             ->setCategoryName($categoryName);
 
         return $page;
     }
