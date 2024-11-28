@@ -107,6 +107,23 @@ final class SessionService
     }
 
     /**
+     * Fetch all items
+     * 
+     * @param int $sessionId
+     * @return array
+     */
+    public function fetchAll($sessionId)
+    {
+        $rows = $this->sessionTrackMapper->fetchAll($sessionId);
+
+        foreach ($rows as &$row) {
+            $row['answers'] = json_decode($row['answers'], true);
+        }
+
+        return $rows;
+    }
+
+    /**
      * Parse answers
      * 
      * @param array $answers A collection of answers

@@ -23,4 +23,19 @@ final class SessionTrackMapper extends AbstractMapper implements SessionTrackMap
     {
         return self::getWithPrefix('bono_module_quiz_session_track');
     }
+
+    /**
+     * Fetch all tracked items
+     * 
+     * @param int $sessionId
+     * @return array
+     */
+    public function fetchAll($sessionId)
+    {
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->whereEquals('session_id', $sessionId);
+
+        return $db->queryAll();
+    }
 }

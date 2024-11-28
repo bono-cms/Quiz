@@ -13,5 +13,11 @@ namespace Quiz\Storage;
 
 interface SessionTrackMapperInterface
 {
-    
+    /**
+     * Fetch all tracked items
+     * 
+     * @param int $sessionId
+     * @return array
+     */
+    public function fetchAll($sessionId);
 }
