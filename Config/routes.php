@@ -14,6 +14,10 @@ return array(
         'controller' => 'Quiz@historyAction'
     ),
 
+    '/quiz/session/(:var)' => array(
+        'controller' => 'Quiz@sessionAction'
+    ),
+    
     '/quiz/continue' => array(
         'controller' => 'Quiz@continueAction'
     ),

@@ -22,6 +22,7 @@ final class Quiz extends AbstractController
     const QUIZ_TEMPLATE_RESULT = 'quiz-result';
     const QUIZ_TEMPLATE_WELCOME = 'quiz-welcome';
     const QUIZ_TEMPLATE_EMPTY_CAT = 'quiz-empty';
+    const QUIZ_TEMPLATE_SESSION = 'quiz-session';
 
     /**
      * {@inheritDoc}
@@ -65,6 +66,20 @@ final class Quiz extends AbstractController
             // Invalid slug. Trigger 404
             return false;
         }
+    }
+
+    /**
+     * Renders session history by its id
+     * 
+     * @param int $sessionId
+     * @return string
+     */
+    public function sessionAction($sessionId)
+    {
+        return $this->view->render(self::QUIZ_TEMPLATE_SESSION, [
+            'page' => $this->createEntity(),
+            'items' => $this->getModuleService('sessionService')->fetchAll($sessionId)
+        ]);
     }
 
     /**
@@ -175,6 +190,8 @@ final class Quiz extends AbstractController
 
         // If the welcoming form was submitted, then grab and save its value and start tracking
         if ($this->request->hasPost('category')) {
+            $this->getModuleService('sesssionService')->start();
+
             $formValidator = $this->createValidator(array(
                 'input' => array(
                     'source' => $this->request->getPost(),
@@ -275,6 +292,8 @@ final class Quiz extends AbstractController
     private function answerAction()
     {
         $quizTracker = $this->getModuleService('quizTracker');
+        $categoryService = $this->getModuleService('categoryService');
+        $questionService = $this->getModuleService('questionService');
         $questionId = $this->request->getPost('question');
 
         // Answer ids
@@ -295,6 +314,14 @@ final class Quiz extends AbstractController
             // Append passed question ID with its answers choices
             // @TODO: This should be tracked only for random items
             $quizTracker->appendPassed($questionId, $answerIds);
+
+            // Track the session
+            $this->getModuleService('sessionService')->track(
+                $categoryService->fetchNameById($quizTracker->getCurrentCategoryId()),
+                $questionService->fetchQuestionById($questionId),
+                $this->getModuleService('answerService')->fetchAll($questionId, true),
+                $answerIds
+            );
 
             // Keep track of correctness
             foreach ($answerIds as $answerId) {
