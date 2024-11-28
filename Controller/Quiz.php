@@ -190,7 +190,7 @@ final class Quiz extends AbstractController
 
         // If the welcoming form was submitted, then grab and save its value and start tracking
         if ($this->request->hasPost('category')) {
-            $this->getModuleService('sesssionService')->start();
+            $this->getModuleService('sessionService')->start();
 
             $formValidator = $this->createValidator(array(
                 'input' => array(
