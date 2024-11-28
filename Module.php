@@ -35,7 +35,7 @@ final class Module extends AbstractCmsModule
         $sessionTrackMapper = $this->getMapper('\Quiz\Storage\MySQL\SessionTrackMapper');
 
         return array(
-            'sesssionService' => new SessionService($sessionMapper, $sessionTrackMapper, $sessionBag),
+            'sessionService' => new SessionService($sessionMapper, $sessionTrackMapper, $sessionBag),
             'configManager' => $this->createConfigService(),
             'historyService' => new HistoryService($historyMapper),
             'quizTracker' => new QuizTracker($sessionBag),
