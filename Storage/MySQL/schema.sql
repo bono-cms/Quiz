@@ -49,3 +49,22 @@ CREATE TABLE `bono_module_quiz_history` (
   `timestamp` INT(10) NOT NULL,
   `content` TEXT NOT NULL COMMENT 'Meta data'
 ) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+
+/* Session track */
+DROP TABLE IF EXISTS `bono_module_quiz_session`;
+CREATE TABLE `bono_module_quiz_session` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `started` varchar(255) NOT NULL,
+    `finished` varchar(255)
+) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `bono_module_quiz_session_track`;
+CREATE TABLE `bono_module_quiz_session_track` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `session_id` INT NOT NULL COMMENT 'Session ID',
+    `category` TEXT NOT NULL COMMENT 'Category name',
+    `question` TEXT NOT NULL COMMENT 'Question',
+    `answers` LONGTEXT NOT NULL COMMENT 'JSON representation of answers',
+
+    FOREIGN KEY (session_id) REFERENCES bono_module_quiz_session(id) ON DELETE CASCADE  
+) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
