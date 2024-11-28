@@ -1,0 +1,29 @@
+<section class="py-5">
+    <div class="container">
+        <?php foreach ($items as $category => $items): ?>
+        <div class="mb-5 pb-4">
+            <h3 class="mb-4"><?= $category; ?></h3>
+
+            <?php foreach ($items as $index => $item): ?>
+            <h5 class="my-4"><?= $index + 1; ?>. <?= $item['question']; ?></h5>
+            <?php foreach ($item['answers'] as $answer): ?>
+            <?php
+                $cssClass = 'bg-light';
+
+                if ($answer['correct'] && $answer['selected']) {
+                    $cssClass = 'bg-success text-white';
+                }
+
+                if (!$answer['correct'] && $answer['selected']) {
+                    $cssClass = 'bg-danger text-white';
+                }
+            ?>
+            <div class="<?= $cssClass; ?> p-3 mb-2">
+                <?= $answer['answer']; ?>
+            </div>
+            <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</section>
