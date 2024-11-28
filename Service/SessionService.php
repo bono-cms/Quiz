@@ -11,6 +11,7 @@
 
 namespace Quiz\Service;
 
+use Krystal\Stdlib\ArrayUtils;
 use Krystal\Session\SessionBagInterface;
 use Quiz\Storage\SessionTrackMapperInterface;
 use Quiz\Storage\SessionMapperInterface;
@@ -107,6 +108,16 @@ final class SessionService
     }
 
     /**
+     * Returns session id
+     * 
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->sessionBag->get(self::PARAM_STORAGE_SESSION_ID);
+    }
+
+    /**
      * Fetch all items
      * 
      * @param int $sessionId
@@ -120,7 +131,7 @@ final class SessionService
             $row['answers'] = json_decode($row['answers'], true);
         }
 
-        return $rows;
+        return ArrayUtils::arrayPartition($rows, 'category', false);
     }
 
     /**
