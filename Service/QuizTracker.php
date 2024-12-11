@@ -415,7 +415,7 @@ final class QuizTracker extends AbstractManager
      */
     public function getCorrectQuestionIds()
     {
-        return $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS);
+        return $this->sessionBag->get(self::PARAM_STORAGE_CORRECT_IDS, []);
     }
 
     /**

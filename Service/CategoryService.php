@@ -74,7 +74,7 @@ final class CategoryService extends AbstractManager
         $rows = $this->categoryMapper->fetchResultset($questionIds);
 
         foreach ($rows as &$row) {
-            $row['score'] = round(floatval($row['correct']) * floatval($row['mark']));
+            $row['score'] = round(floatval($row['correct']) * floatval($row['mark']), 1);
             $total += $row['score'];
         }
 
