@@ -19,6 +19,7 @@ use Quiz\Storage\SessionMapperInterface;
 final class SessionService
 {
     const PARAM_STORAGE_SESSION_ID = 'quiz__session_id';
+    const PARAM_STORAGE_SESSION_LAST_QUIZ_ID = 'quiz__session_last_id';
 
     /**
      * Session mapper
@@ -158,28 +159,49 @@ final class SessionService
     }
 
     /**
-     * Tracks a session
+     * Tracks a rendered question
      * 
      * @param string $category Category name
      * @param string $question Question title
-     * @param array $answers A collection of answers
-     * @param array $selectedIds
-     * @return boolean
+     * @return void
      */
-    public function track($category, $question, array $answers, array $selectedIds)
+    public function trackRender($category, $question)
     {
         // Can only track started session
         if ($this->isStarted()) {
-            $this->sessionTrackMapper->persist([
+            $row = $this->sessionTrackMapper->persistRow([
                 'session_id' => $this->sessionBag->get(self::PARAM_STORAGE_SESSION_ID),
                 'category' => $category,
-                'question' => $question,
-                'answers' => json_encode($this->parseAnswers($answers, $selectedIds), \JSON_UNESCAPED_UNICODE)
+                'question' => $question
             ]);
+
+            $this->sessionBag->set(self::PARAM_STORAGE_SESSION_LAST_QUIZ_ID, $row['id']);
 
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Tracks a response
+     * 
+     * @param array $answers A collection of answers
+     * @param array $selectedIds
+     * @return boolean Depending on success
+     */
+    public function trackResponse(array $answers, array $selectedIds)
+    {
+        // Can only track started session
+        if ($this->isStarted()) {
+            $sessionId = $this->sessionBag->get(self::PARAM_STORAGE_SESSION_LAST_QUIZ_ID);
+
+            $answers = json_encode($this->parseAnswers($answers, $selectedIds), \JSON_UNESCAPED_UNICODE);
+            $this->sessionTrackMapper->updateTrack($sessionId, $answers);
+
+            return true;
+        }
+
+        return false;
     }
 }
