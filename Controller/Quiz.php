@@ -315,10 +315,8 @@ final class Quiz extends AbstractController
             // @TODO: This should be tracked only for random items
             $quizTracker->appendPassed($questionId, $answerIds);
 
-            // Track the session
-            $this->getModuleService('sessionService')->track(
-                $categoryService->fetchNameById($quizTracker->getCurrentCategoryId()),
-                $questionService->fetchQuestionById($questionId),
+            // Track the response
+            $this->getModuleService('sessionService')->trackResponse(
                 $this->getModuleService('answerService')->fetchAll($questionId, true),
                 $answerIds
             );
@@ -348,7 +346,16 @@ final class Quiz extends AbstractController
     private function quizAction(VirtualEntity $page, $id)
     {
         $quizTracker = $this->getModuleService('quizTracker');
+        $questionService = $this->getModuleService('questionService');
+        $categoryService = $this->getModuleService('categoryService');
+
         $data = $this->createPair($id);
+
+        // Track the render
+        $this->getModuleService('sessionService')->trackRender(
+            $categoryService->fetchNameById($quizTracker->getCurrentCategoryId()),
+            $questionService->fetchQuestionById($id)
+        );
 
         return $this->view->render(self::QUIZ_TEMPLATE_QUIZ, array_merge($data, array(
             'page' => $page,
@@ -393,7 +400,7 @@ final class Quiz extends AbstractController
             if (is_numeric($categoryId)) {
                 // First check the category
                 $categoryLimit = $this->getModuleService('categoryService')->fetchLimitById($categoryId);
-                
+
                 if (is_numeric($categoryLimit) && $categoryLimit > 0) {
                     $limit = $categoryLimit;
                     return $categoryLimit;
