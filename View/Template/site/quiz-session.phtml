@@ -6,6 +6,7 @@
 
             <?php foreach ($items as $index => $item): ?>
             <h5 class="my-4"><?= $index + 1; ?>. <?= $item['question']; ?></h5>
+            <?php if (isset($item['answers'])): ?>
             <?php foreach ($item['answers'] as $answer): ?>
             <?php
                 $cssClass = 'bg-light';
@@ -22,6 +23,11 @@
                 <?= $answer['answer']; ?>
             </div>
             <?php endforeach; ?>
+            <?php else: ?>
+            <div class="bg-dark text-white p-4">
+                <p><?= $this->translate('They did stop on this answer'); ?></p>
+            </div>
+            <?php endif; ?>
             <?php endforeach; ?>
         </div>
         <?php endforeach; ?>
