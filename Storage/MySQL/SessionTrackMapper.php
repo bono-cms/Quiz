@@ -25,6 +25,21 @@ final class SessionTrackMapper extends AbstractMapper implements SessionTrackMap
     }
 
     /**
+     * Updates a track with answers
+     * 
+     * @param int $id Track id
+     * @param string $answers JSON string for answers
+     * @return boolean
+     */
+    public function updateTrack($id, $answers)
+    {
+        $db = $this->db->update(self::getTableName(), ['answers' => $answers])
+                       ->whereEquals('id', $id);
+
+        return $db->execute();
+    }
+
+    /**
      * Fetch all tracked items
      * 
      * @param int $sessionId

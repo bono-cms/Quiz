@@ -14,6 +14,15 @@ namespace Quiz\Storage;
 interface SessionTrackMapperInterface
 {
     /**
+     * Updates a track with answers
+     * 
+     * @param int $id Track id
+     * @param string $answers JSON string for answers
+     * @return boolean
+     */
+    public function updateTrack($id, $answers);
+
+    /**
      * Fetch all tracked items
      * 
      * @param int $sessionId
