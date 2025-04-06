@@ -1,19 +1,24 @@
-Check the grammar:
+Quiz module
+====
 
-# Quiz module
+Easily create interactive online quizzes to assess and engage your users. The module includes a variety of features to help you build flexible and insightful tests.
 
-Create online quiz to test knowledge of your users. It currently supports:
+## Features
 
-- Categories (to group questions)
-- Results tracking (a nice grid with filters and sorting)
-- Questions with title and optional things such as sorting order and description
-- Allows for multiple correct answers per question.
-- Previous and Next buttons
-- Sorting methods for questions: random or manual sorting
-- Limitations. Display only desired amount of questions per category when running tests. Limitations can be applied per category or globally.
-- Tests category by category. When user finished one category, they can go to the next category
-- Marks per category. Each correctly answered question earns a point within its category.
-
-# Installation
-
-The installation process is no different from installing other modules - just download the module and install the downloaded archive in administration panel.
+-   **Category Management**: Group questions by category for better organization and focused assessments.
+    
+-   **Results Tracking**: View and filter quiz results in a dynamic, sortable grid.
+    
+-   **Flexible Questions**: Each question supports a title, optional description, and custom sorting order.
+    
+-   **Multiple Correct Answers**: Questions can have more than one correct option.
+    
+-   **Navigation Controls**: "Previous" and "Next" buttons allow smooth question navigation.
+    
+-   **Question Sorting**: Choose between random or manual sorting methods.
+    
+-   **Question Limits**: Define how many questions to display per category or globally.
+    
+-   **Category-Based Flow**: Users complete quizzes one category at a time, proceeding sequentially.
+    
+-   **Per-Category Scoring**: Earn one point per correctly answered question within each category.
