@@ -10,7 +10,7 @@ CREATE TABLE `bono_module_quiz_categories` (
   `limit` INT COMMENT 'Optional listing limit for questions',
 
   FOREIGN KEY (lang_id) REFERENCES bono_module_cms_languages(id) ON DELETE CASCADE
-) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /* Questions */
 DROP TABLE IF EXISTS `bono_module_quiz_questions`;
@@ -24,7 +24,7 @@ CREATE TABLE `bono_module_quiz_questions` (
 
   FOREIGN KEY (category_id) REFERENCES bono_module_quiz_categories(id) ON DELETE CASCADE
 
-) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /* Answers */
 DROP TABLE IF EXISTS `bono_module_quiz_answers`;
@@ -36,7 +36,7 @@ CREATE TABLE `bono_module_quiz_answers` (
   `correct` BOOLEAN NOT NULL COMMENT 'Whether the answer is corrent. Possible values are 0 and 1',
 
   FOREIGN KEY (question_id) REFERENCES bono_module_quiz_questions(id) ON DELETE CASCADE  
-) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /* History */
 DROP TABLE IF EXISTS `bono_module_quiz_history`;
@@ -48,7 +48,7 @@ CREATE TABLE `bono_module_quiz_history` (
   `points` INT NOT NULL COMMENT 'Total points',
   `timestamp` INT(10) NOT NULL,
   `content` TEXT NOT NULL COMMENT 'Meta data'
-) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /* Session track */
 DROP TABLE IF EXISTS `bono_module_quiz_session`;
@@ -56,7 +56,7 @@ CREATE TABLE `bono_module_quiz_session` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `started` varchar(255) NOT NULL,
     `finished` varchar(255)
-) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `bono_module_quiz_session_track`;
 CREATE TABLE `bono_module_quiz_session_track` (
@@ -67,4 +67,4 @@ CREATE TABLE `bono_module_quiz_session_track` (
     `answers` LONGTEXT NOT NULL COMMENT 'JSON representation of answers',
 
     FOREIGN KEY (session_id) REFERENCES bono_module_quiz_session(id) ON DELETE CASCADE  
-) DEFAULT CHARSET=UTF8 ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
