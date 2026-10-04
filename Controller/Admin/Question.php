@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -13,14 +11,13 @@ namespace Quiz\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Validate\Pattern;
 
 final class Question extends AbstractController
 {
     /**
      * Renders a form
      * 
-     * @oaram \Krystal\Stdlib\VirtualEntity $question
+     * @param \Krystal\Stdlib\VirtualEntity $question
      * @param string $title     
      * @return string
      */
@@ -33,10 +30,10 @@ final class Question extends AbstractController
         $this->view->getPluginBag()
                    ->load($this->getWysiwygPluginName());
 
-        return $this->view->render('question.form', array(
+        return $this->view->render('question.form', [
             'question' => $question,
             'categories' => $this->getModuleService('categoryService')->fetchList()
-        ));
+        ]);
     }
 
     /**
@@ -47,11 +44,25 @@ final class Question extends AbstractController
     public function tweakAction()
     {
         if ($this->request->hasPost('order')) {
-            $orders = $this->request->getPost('order');
+            $validator = $this->createValidation();
 
-            if ($this->getModuleService('questionService')->updateOrders($orders)) {
-                $this->flashBag->set('success', 'Settings have been updated successfully');
-                return '1';
+            $validator->field('order.*')
+                      ->addRule('numeric');
+
+            if ($validator->isPassed()) {
+                $orders = $this->request->getPost('order');
+
+                if ($this->getModuleService('questionService')->updateOrders($orders)) {
+                    $this->flashBag->set('success', 'Settings have been updated successfully');
+
+                    return $this->json([
+                        'refresh' => true
+                    ]);
+                }
+            } else {
+                return $this->json([
+                    'errors' => $validator->getErrors()
+                ]);
             }
         }
     }
@@ -114,7 +125,9 @@ final class Question extends AbstractController
             $this->flashBag->set('success', 'Selected element has been removed successfully');
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -126,33 +139,44 @@ final class Question extends AbstractController
     {
         $input = $this->request->getPost('question');
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'question' => new Pattern\Name()
-                )
-            )
-        ));
+        $validator = $this->createValidation();
 
-        if ($formValidator->isValid()) {
+        $validator->field('question.question')
+                  ->required();
+
+        $validator->field('question.category_id')
+                  ->required()
+                  ->addRule('numeric');
+
+        $validator->field('question.order')
+                  ->addRule('numeric');
+
+        if ($validator->isPassed()) {
             $service = $this->getModuleService('questionService');
 
             if (!empty($input['id'])) {
                 if ($service->update($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
-                    return '1';
+
+                    return $this->json([
+                        'refresh' => true
+                    ]);
                 }
 
             } else {
                 if ($service->add($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
-                    return $service->getLastId();
+
+                    return $this->json([
+                        'redirect' => $this->createUrl('Quiz:Admin:Question@editAction', [$service->getLastId()]),
+                    ]);
                 }
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

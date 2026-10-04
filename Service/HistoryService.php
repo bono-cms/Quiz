@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -104,7 +102,7 @@ final class HistoryService extends AbstractManager implements FilterableServiceI
      * @param array $params Extra parameters
      * @return array
      */
-    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $params = array())
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $params = [])
     {
         return $this->prepareResults($this->historyMapper->filter($input, $page, $itemsPerPage, $sortingColumn, $desc));
     }

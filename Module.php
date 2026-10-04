@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -34,7 +32,7 @@ final class Module extends AbstractCmsModule
         $sessionMapper = $this->getMapper('\Quiz\Storage\MySQL\SessionMapper');
         $sessionTrackMapper = $this->getMapper('\Quiz\Storage\MySQL\SessionTrackMapper');
 
-        return array(
+        return [
             'sessionService' => new SessionService($sessionMapper, $sessionTrackMapper, $sessionBag),
             'configManager' => $this->createConfigService(),
             'historyService' => new HistoryService($historyMapper),
@@ -42,6 +40,6 @@ final class Module extends AbstractCmsModule
             'answerService' => new AnswerService($answerMapper),
             'questionService' => new QuestionService($questionMapper),
             'categoryService' => new CategoryService($categoryMapper, $questionMapper)
-        );
+        ];
     }
 }

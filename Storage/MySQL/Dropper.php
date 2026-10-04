@@ -18,13 +18,13 @@ final class Dropper extends AbstractStorageDropper
      */
     protected function getTables()
     {
-        return array(
+        return [
             AnswerMapper::getTableName(),
             CategoryMapper::getTableName(),
             HistoryMapper::getTableName(),
             QuestionMapper::getTableName(),
             SessionMapper::getTableName(),
             SessionTrackMapper::getTableName()
-        );
+        ];
     }
 }

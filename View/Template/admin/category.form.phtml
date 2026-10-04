@@ -6,33 +6,33 @@ defined('KRYSTAL') or die;
 ?>
 
 <form class="card" data-group="category" autocomplete="off">
-    <?php echo Element::hidden('category[id]', $category->getId()); ?>
+    <?= Element::hidden('category[id]', $category->getId()); ?>
 
     <div class="form-group">
         <label><?php $this->show('Name'); ?></label>
-        <?php echo Element::text('category[name]', $category->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
+        <?= Element::text('category[name]', $category->getName(), ['class' => 'form-control', 'placeholder' => $this->translate('Category name')]); ?>
     </div>
 
     <div class="form-group">
         <label><?php $this->show('Order'); ?></label>
-        <?php echo Element::text('category[order]', $category->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
+        <?= Element::text('category[order]', $category->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order')]); ?>
     </div>
 
     <div class="form-group">
         <label><?php $this->show('Mark for right answer'); ?></label>
-        <?php echo Element::text('category[mark]', $category->getMark(), array('class' => 'form-control')); ?>
+        <?= Element::text('category[mark]', $category->getMark(), ['class' => 'form-control']); ?>
     </div>
 
     <div class="form-group">
         <label><?php $this->show('Listing limit'); ?></label>
-        <?php echo Element::text('category[limit]', $category->getLimit(), array('class' => 'form-control')); ?>
+        <?= Element::text('category[limit]', $category->getLimit(), ['class' => 'form-control']); ?>
     </div>
 
-    <?php $this->loadPartial('actions', array(
+    <?php $this->loadPartial('actions', [
         'new' => !$category->getId(),
         'add' => 'Quiz:Admin:Category@addAction',
         'edit' => 'Quiz:Admin:Category@editAction',
         'save' => 'Quiz:Admin:Category@saveAction',
         'cancel' => 'Quiz:Admin:Browser@indexAction'
-    )); ?>
+    ]); ?>
 </form>

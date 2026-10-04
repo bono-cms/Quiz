@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -13,7 +11,6 @@ namespace Quiz\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Validate\Pattern;
 
 final class Answer extends AbstractController
 {
@@ -37,12 +34,12 @@ final class Answer extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('Quiz', 'Quiz:Admin:Browser@indexAction')
                                        ->addOne($this->translator->translate('Answers for "%s"', (string)$question));
 
-        return $this->view->render('answers', array(
+        return $this->view->render('answers', [
             'answers' => $this->getModuleService('answerService')->fetchAll($id, false),
             'question' => $question,
             'answer' => $answer,
             'id' => $id
-        ));
+        ]);
     }
 
     /**
@@ -85,33 +82,44 @@ final class Answer extends AbstractController
     {
         $input = $this->request->getPost('answer');
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'answer' => new Pattern\Name()
-                )
-            )
-        ));
+        $validator = $this->createValidation();
 
-        if ($formValidator->isValid()) {
+        $validator->field('answer.answer')
+                  ->required();
+
+        $validator->field('answer.question_id')
+                  ->required()
+                  ->addRule('numeric');
+
+        $validator->field('answer.order')
+                  ->addRule('numeric');
+
+        if ($validator->isPassed()) {
             $service = $this->getModuleService('answerService');
 
             if (!empty($input['id'])) {
                 if ($service->update($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
-                    return '1';
+
+                    return $this->json([
+                        'refresh' => true
+                    ]);
                 }
 
             } else {
                 if ($service->add($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
-                    return $service->getLastId();
+
+                    return $this->json([
+                        'redirect' => $this->createUrl('Quiz:Admin:Answer@editAction', [$service->getLastId()]),
+                    ]);
                 }
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 
@@ -142,6 +150,8 @@ final class Answer extends AbstractController
             $this->flashBag->set('success', 'Selected element has been removed successfully');
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 }

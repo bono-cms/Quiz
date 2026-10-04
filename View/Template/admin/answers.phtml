@@ -11,56 +11,56 @@ defined('KRYSTAL') or die;
 <div class="row">
     <div class="col-lg-6">
         <div class="card">
-            <h4 class="page-header mb-4"><i class="fas fa-list-ol"></i> <?php echo $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?php echo count($answers); ?>)</small></h4>
+            <h4 class="page-header mb-4"><i class="fas fa-list-ol"></i> <?= $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?= count($answers); ?>)</small></h4>
 
             <form autocomplete="off">
-                <?= $this->widget(new GridViewWidget($answers, array(
+                <?= $this->widget(new GridViewWidget($answers, [
                     'tableClass' => 'table table-hover table-bordered table-striped',
-                    'rowAttributes' => array(
+                    'rowAttributes' => [
                         'class' => function($row) use ($answer){
                             return $row->getId() == $answer->getId() ? 'table-info' : null;
                         }
-                    ),
+                    ],
 
-                    'columns' => array(
-                        array(
+                    'columns' => [
+                        [
                             'column' => 'id',
                             'label' => '#'
-                        ),
+                        ],
 
-                        array(
+                        [
                             'column' => 'answer'
-                        ),
+                        ],
 
-                        array(
+                        [
                             'column' => 'correct',
                             'translateable' => true,
                             'value' => function($entity){
                                 return $entity->getCorrect() ? 'Yes' : 'No';
                             }
-                        ),
+                        ],
 
-                        array(
+                        [
                             'column' => 'order'
-                        )
-                    ),
+                        ]
+                    ],
 
-                    'actions' => array(
-                        'edit' => function($row){
+                    'actions' => [
+                        function($row){
                             return Icon::edit(
                                 $this->url('Quiz:Admin:Answer@editAction', $row['id']),
                                 $this->translate('Edit this question')
                             );
                         },
 
-                        'remove' => function($row){
+                        function($row){
                             return Icon::remove(
                                 $this->url('Quiz:Admin:Answer@deleteAction', $row['id']),
                                 $this->translate('Remove this question')
                             );
                         }
-                    )
-                ))); ?>
+                    ]
+                ])); ?>
             </form>
 
             <?php if (empty($answers)): ?>
@@ -76,34 +76,34 @@ defined('KRYSTAL') or die;
             <h4 class="page-header mb-4"><i class="fas fa-pencil-alt"></i> <?php $this->show(!$answer->getId() ? 'Add new answer' : 'Edit the answer'); ?></h4>
 
             <form data-group="answer" autocomplete="off">
-                <?php echo Element::hidden('answer[id]', $answer->getId()); ?>
-                <?php echo Element::hidden('answer[question_id]', $answer->getQuestionId()); ?>
+                <?= Element::hidden('answer[id]', $answer->getId()); ?>
+                <?= Element::hidden('answer[question_id]', $answer->getQuestionId()); ?>
 
                 <div class="form-group">
                     <label><?php $this->show('Answer'); ?></label>
-                    <?php echo Element::textarea('answer[answer]', $answer->getAnswer(), array('class' => 'form-control', 'placeholder' => $this->translate('Type the answer'))); ?>
+                    <?= Element::textarea('answer[answer]', $answer->getAnswer(), ['class' => 'form-control', 'placeholder' => $this->translate('Type the answer')]); ?>
                 </div>
 
                 <div class="form-group">
                     <label><?php $this->show('Sort order'); ?></label>
-                    <?php echo Element::text('answer[order]', $answer->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order. By default comes last'))); ?>
+                    <?= Element::text('answer[order]', $answer->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order. By default comes last')]); ?>
                 </div>
 
                 <div class="form-group">
                     <label><?php $this->show('Corectness'); ?></label>
-                    <?php echo Element::select('answer[correct]', $this->translateArray(array(
+                    <?= Element::select('answer[correct]', $this->translateArray([
                         '0' => 'This answer is incorreсt',
                         '1' => 'This answer is correсt'
-                    )), $answer->getCorrect(), array('class' => 'form-control')); ?>
+                    ]), $answer->getCorrect(), ['class' => 'form-control']); ?>
                 </div>
 
-                <?php $this->loadPartial('actions', array(
+                <?php $this->loadPartial('actions', [
                     'new' => !$answer->getId(),
-                    'add' => array('Quiz:Admin:Answer@listAction', $answer->getQuestionId()),
+                    'add' => ['Quiz:Admin:Answer@listAction', $answer->getQuestionId()],
                     'edit' => 'Quiz:Admin:Answer@editAction',
                     'save' => 'Quiz:Admin:Answer@saveAction',
-                    'cancel' => !$answer->getId() ? 'Quiz:Admin:Browser@indexAction' : array('Quiz:Admin:Answer@listAction', $answer->getQuestionId())
-                )); ?>
+                    'cancel' => !$answer->getId() ? 'Quiz:Admin:Browser@indexAction' : ['Quiz:Admin:Answer@listAction', $answer->getQuestionId()]
+                ]); ?>
             </form>
         </div>
     </div>

@@ -8,7 +8,7 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<form action="<?php echo $route; ?>" novalidate autocomplete="off">
+<form action="<?= $route; ?>" novalidate autocomplete="off">
     <div class="btn-toolbar">
         <?php if (!empty($records)): ?>
         <div class="btn-group mr-2">
@@ -18,50 +18,50 @@ defined('KRYSTAL') or die;
 
         <?php if ($filterApplied): ?>
         <div class="btn-group mr-2">
-            <a href="<?php echo $this->url('Quiz:Admin:History@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+            <a href="<?= $this->url('Quiz:Admin:History@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
         </div>
         <?php endif; ?>
 
         <div class="btn-group mr-2">
-            <a href="#" class="btn btn-danger" data-button="remove-selected" data-url="<?php echo $this->url('Quiz:Admin:History@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+            <a href="#" class="btn btn-danger" data-button="remove-selected" data-url="<?= $this->url('Quiz:Admin:History@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
         </div>
     </div>
 
     <div class="card">
-        <?php $this->loadPartial('items-per-page', array('caption' => 'History')); ?>
+        <?php $this->loadPartial('items-per-page', ['caption' => 'History']); ?>
 
         <div class="table-responsive">
-            <?= $this->widget(new GridViewWidget($records, array(
+            <?= $this->widget(new GridViewWidget($records, [
                 // A column to be considered as a primary key
                 'pk' => 'id',
                 'batch' => true,
                 'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                'columns' => array(
-                    array(
+                'columns' => [
+                    [
                         'column' => 'id',
                         'label' => '#'
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'name',
                         'type' => 'text',
                         'filter' => true
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'category',
                         'type' => 'select',
                         'filter' => $categories
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'points',
                         'type' => 'text',
                         'filter' => true
-                    )
-                )
+                    ]
+                ]
 
-            ), $route)); ?>
+            ], $route)); ?>
 
             <?php if (empty($records)): ?>
             <div class="center-block">

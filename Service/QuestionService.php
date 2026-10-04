@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -109,7 +107,7 @@ final class QuestionService extends AbstractManager
      * @param array $excludedIds Ids to be excluded
      * @return int
      */
-    public function fetchRandomQuestionIdByCategoryId($categoryId, array $excludedIds = array())
+    public function fetchRandomQuestionIdByCategoryId($categoryId, array $excludedIds = [])
     {
         return $this->questionMapper->fetchRandomQuestionIdByCategoryId($categoryId, $excludedIds);
     }
@@ -150,7 +148,7 @@ final class QuestionService extends AbstractManager
     }
 
     /**
-     * Deletes a question by its associate di
+     * Deletes a question by its associated id
      * 
      * @param string $id
      * @return boolean

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -12,7 +10,6 @@
 namespace Quiz\Controller;
 
 use Site\Controller\AbstractController;
-use Krystal\Validate\Pattern;
 use Krystal\Stdlib\VirtualEntity;
 
 final class Quiz extends AbstractController
@@ -38,9 +35,9 @@ final class Quiz extends AbstractController
                    ->setModule('Quiz')
                    ->setTheme('site');
 
-        $this->view->addVariables(array(
+        $this->view->addVariables([
             'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
-        ));
+        ]);
     }
 
     /**
@@ -54,14 +51,14 @@ final class Quiz extends AbstractController
         $item = $this->getModuleService('historyService')->fetchBySlug($slug);
 
         if ($item) {
-            return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(
+            return $this->view->render(self::QUIZ_TEMPLATE_RESULT, [
                 'meta' => $item['meta'],
                 'points' => $item['points'],
                 'page' => $this->createEntity(),
                 'canContinue' => false,
                 'scores' => $item['content'],
                 'url' => $this->request->getBaseUrl() . $this->createUrl('Quiz:Quiz@historyAction', [$slug])
-            ));
+            ]);
         } else {
             // Invalid slug. Trigger 404
             return false;
@@ -161,7 +158,9 @@ final class Quiz extends AbstractController
 
         } else {
             // Can not continue. No more categories left.
-            return ('No more categories left');
+            return $this->json([
+                'errors' => ['continue' => 'No more categories left']
+            ]);
         }
     }
 
@@ -192,16 +191,12 @@ final class Quiz extends AbstractController
         if ($this->request->hasPost('category')) {
             $this->getModuleService('sessionService')->start();
 
-            $formValidator = $this->createValidator(array(
-                'input' => array(
-                    'source' => $this->request->getPost(),
-                    'definition' => array(
-                        'name' => new Pattern\Name()
-                    )
-                )
-            ));
+            $validator = $this->createValidation();
 
-            if ($formValidator->isValid()) {
+            $validator->field('name')
+                      ->required();
+
+            if ($validator->isPassed()) {
                 $questionService = $this->getModuleService('questionService');
                 // Initial loading from request
                 $categoryId = $this->request->getPost('category');
@@ -211,31 +206,33 @@ final class Quiz extends AbstractController
 
                 // Does this category even have quesions?
                 if ($count == 0) {
-                    return $this->view->render(self::QUIZ_TEMPLATE_EMPTY_CAT, array(
+                    return $this->view->render(self::QUIZ_TEMPLATE_EMPTY_CAT, [
                         'page' => $page
-                    ));
+                    ]);
                 }
 
                 // Save category ids initially
                 $quizTracker->setCategoryIds($this->getModuleService('categoryService')->fetchNonEmptyCategoryIds());
                 $quizTracker->setCurrentCategoryId($categoryId);
                 $quizTracker->start($count);
-                $quizTracker->saveMeta(array(
+                $quizTracker->saveMeta([
                     'name' => $this->request->getPost('name'),
                     'category' => $this->getModuleService('categoryService')->fetchNameById($categoryId)
-                ));
+                ]);
 
                 return true;
             } else {
-                return $formValidator->getErrors();
+                return $this->json([
+                    'errors' => $validator->getErrors()
+                ]);
             }
 
         } else {
             // In case that was the first GET request, render welcome page
-            return $this->view->render(self::QUIZ_TEMPLATE_WELCOME, array(
+            return $this->view->render(self::QUIZ_TEMPLATE_WELCOME, [
                 'categories' => $this->getModuleService('categoryService')->fetchList(),
                 'page' => $page
-            ));
+            ]);
         }
     }
 
@@ -262,10 +259,10 @@ final class Quiz extends AbstractController
             $quizTracker->stop();
 
             // Keep the track
-            $history = $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), array(
+            $history = $this->getModuleService('historyService')->track(array_merge($quizTracker->getMeta(), [
                 'points' => $points,
                 'content' => json_encode($scores)
-            )));
+            ]));
 
             $this->view->addVariables([
                 'history' => $history,
@@ -274,14 +271,14 @@ final class Quiz extends AbstractController
             ]);
         }
 
-        return $this->view->render(self::QUIZ_TEMPLATE_RESULT, array(
+        return $this->view->render(self::QUIZ_TEMPLATE_RESULT, [
             'meta' => $quizTracker->getMeta(),
             'takenTime' => $quizTracker->getTakenTime(),
             'points' => $points,
             'page' => $page,
             'canContinue' => $canContinue,
             'scores' => $scores
-        ));
+        ]);
     }
 
     /**
@@ -297,20 +294,10 @@ final class Quiz extends AbstractController
         $questionId = $this->request->getPost('question');
 
         // Answer ids
-        $answerIds = $this->request->getPost('answerIds', array());
-        $input['collection'] = $answerIds;
-
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'collection' => new Pattern\Collection()
-                )
-            )
-        ));
+        $answerIds = $this->request->getPost('answerIds', []);
 
         // Make sure that at least one answer is picked
-        if ($formValidator->isValid()) {
+        if (!empty($answerIds)) {
             // Append passed question ID with its answers choices
             // @TODO: This should be tracked only for random items
             $quizTracker->appendPassed($questionId, $answerIds);
@@ -332,7 +319,9 @@ final class Quiz extends AbstractController
 
             return true;
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => ['answerIds' => 'Please select at least one answer']
+            ]);
         }
     }
 
@@ -357,14 +346,14 @@ final class Quiz extends AbstractController
             $questionService->fetchQuestionById($id)
         );
 
-        return $this->view->render(self::QUIZ_TEMPLATE_QUIZ, array_merge($data, array(
+        return $this->view->render(self::QUIZ_TEMPLATE_QUIZ, array_merge($data, [
             'page' => $page,
             'hasManyCorrectAnswers' => $this->getModuleService('answerService')->hasManyCorrectAnswers($data['answers']),
             'initialCount' => $quizTracker->getInitialCount(),
             'currentQuestionCount' => $quizTracker->getCurrentCount(),
             'lastQuestion' => $quizTracker->isLastCount(),
             'firstQuestion' => $quizTracker->isFirstQuestion()
-        )));
+        ]));
     }
 
     /**
@@ -378,10 +367,10 @@ final class Quiz extends AbstractController
         $question = $this->getModuleService('questionService')->fetchById($id);
         $answers = $this->getModuleService('answerService')->fetchAll($id, true);
 
-        return array(
+        return [
             'question' => $question,
             'answers' => $answers
-        );
+        ];
     }
 
     /**

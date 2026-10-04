@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -35,10 +33,10 @@ final class ConfigEntity extends VirtualEntity
      */
     public function getContinueTypes()
     {
-        return array(
+        return [
             '0' => 'Stop and display results',
             '1' => 'Allow going to the next category'
-        );
+        ];
     }
 
     /**
@@ -48,10 +46,10 @@ final class ConfigEntity extends VirtualEntity
      */
     public function getSortingTypes()
     {
-        return array(
+        return [
             self::PARAM_SORT_TYPE_ORDER => 'Sort by sorting number',
             self::PARAM_SORT_TYPE_RANDOM => 'Sort randomly'
-        );
+        ];
     }
 
     /**

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -133,7 +131,7 @@ final class QuizTracker extends AbstractManager
      */
     public function clear()
     {
-        return $this->sessionBag->removeMany(array(
+        return $this->sessionBag->removeMany([
             self::PARAM_STORAGE_CURRENT_CATEGORY_ID,
             self::PARAM_STORAGE_CATEGORY_IDS,
             self::PARAM_STORAGE_PASSED,
@@ -144,7 +142,7 @@ final class QuizTracker extends AbstractManager
             self::PARAM_STORAGE_META_DATA,
             self::PARAM_STORAGE_CORRECT_IDS,
             self::PARAM_STORAGE_STOPPED
-        ));
+        ]);
     }
 
     /**
@@ -346,7 +344,7 @@ final class QuizTracker extends AbstractManager
     }
 
     /**
-     * Returns a collection of passed questions with their ansnwers
+     * Returns a collection of passed questions with their answers
      * 
      * @param boolean $complete Whether to return only question ids with or without answer ids
      * @return array
@@ -355,7 +353,7 @@ final class QuizTracker extends AbstractManager
     {
         // Lazy initialization
         if (!$this->sessionBag->has(self::PARAM_STORAGE_PASSED)) {
-            $this->sessionBag->set(self::PARAM_STORAGE_PASSED, array());
+            $this->sessionBag->set(self::PARAM_STORAGE_PASSED, []);
         }
 
         $passed = $this->sessionBag->get(self::PARAM_STORAGE_PASSED);
@@ -395,7 +393,7 @@ final class QuizTracker extends AbstractManager
     {
         // Lazy initialization
         if (!$this->sessionBag->has(self::PARAM_STORAGE_CORRECT_IDS)) {
-            $this->sessionBag->set(self::PARAM_STORAGE_CORRECT_IDS, array());
+            $this->sessionBag->set(self::PARAM_STORAGE_CORRECT_IDS, []);
         }
 
         // Get the current collection

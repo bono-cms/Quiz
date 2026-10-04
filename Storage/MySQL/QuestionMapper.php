@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -145,7 +143,7 @@ final class QuestionMapper extends AbstractMapper implements QuestionMapperInter
      * @param array $excludedIds Ids to be excluded
      * @return int
      */
-    public function fetchRandomQuestionIdByCategoryId($categoryId, array $excludedIds = array())
+    public function fetchRandomQuestionIdByCategoryId($categoryId, array $excludedIds = [])
     {
         $db = $this->db->select('id')
                        ->from(self::getTableName())

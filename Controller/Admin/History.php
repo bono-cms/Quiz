@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -35,14 +33,14 @@ final class History extends AbstractController
             $paginator->setUrl($url);
         }
 
-        return $this->view->render('history', array(
+        return $this->view->render('history', [
             'paginator' => $paginator,
             'records' => $records,
             'categories' => $this->getModuleService('categoryService')->fetchList(true),
             'filterApplied' => $this->request->getQuery('filter', false),
             'query' => $this->request->getQuery(),
-            'route' => $this->createUrl('Quiz:Admin:History@filterAction', array(null))
-        ));
+            'route' => $this->createUrl('Quiz:Admin:History@filterAction', [null])
+        ]);
     }
 
     /**
@@ -65,7 +63,9 @@ final class History extends AbstractController
             $this->flashBag->set('warning', 'You should select at least one element to remove');
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -75,7 +75,7 @@ final class History extends AbstractController
      */
     public function filterAction()
     {
-        $records = $this->getFilter($this->getModuleService('historyService'), $this->createUrl('Quiz:Admin:History@filterAction', array(null)));
+        $records = $this->getFilter($this->getModuleService('historyService'), $this->createUrl('Quiz:Admin:History@filterAction', [null]));
 
         if ($records !== false) {
             return $this->createGrid($records);
@@ -93,7 +93,7 @@ final class History extends AbstractController
     public function indexAction($page = 1)
     {
         $records = $this->getModuleService('historyService')->fetchAll($page, $this->getSharedPerPageCount());
-        $url = $this->createUrl('Quiz:Admin:History@indexAction', array(), 1);
+        $url = $this->createUrl('Quiz:Admin:History@indexAction', [], 1);
 
         return $this->createGrid($records, $url);
     }

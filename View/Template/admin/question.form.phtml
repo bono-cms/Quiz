@@ -6,13 +6,13 @@ defined('KRYSTAL') or die;
 ?>
 
 <form class="card" data-group="question" autocomplete="off">
-    <?php echo Element::hidden('question[id]', $question->getId()); ?>
+    <?= Element::hidden('question[id]', $question->getId()); ?>
 
     <div class="form-group">
         <label class="col-lg-10 control-label"><?php $this->show('Question'); ?></label>
         <div class="col-lg-10">
             <div class="input-group">
-                <?php echo Element::text('question[question]', $question->getQuestion(), array('class' => 'form-control', 'placeholder' => $this->translate('Target question'))); ?>
+                <?= Element::text('question[question]', $question->getQuestion(), ['class' => 'form-control', 'placeholder' => $this->translate('Target question')]); ?>
                 <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
             </div>
         </div>
@@ -21,7 +21,7 @@ defined('KRYSTAL') or die;
     <div class="form-group">
         <label class="col-lg-10 control-label"><?php $this->show('Category'); ?></label>
         <div class="col-lg-10">
-            <?php echo Element::select('question[category_id]', $categories, $question->getCategoryId(), array('class' => 'form-control')); ?>
+            <?= Element::select('question[category_id]', $categories, $question->getCategoryId(), ['class' => 'form-control']); ?>
         </div>
     </div>
 
@@ -29,7 +29,7 @@ defined('KRYSTAL') or die;
         <label class="col-lg-10 control-label"><?php $this->show('Order'); ?></label>
         <div class="col-lg-10">
             <div class="input-group">
-                <?php echo Element::number('question[order]', $question->getOrder(), array('min' => '0', 'class' => 'form-control', 'placeholder' => $this->translate('Order of this question to be displayed in a category'))); ?>
+                <?= Element::number('question[order]', $question->getOrder(), ['min' => '0', 'class' => 'form-control', 'placeholder' => $this->translate('Order of this question to be displayed in a category')]); ?>
                 <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
             </div>
         </div>
@@ -38,16 +38,16 @@ defined('KRYSTAL') or die;
     <div class="form-group">
         <label class="col-lg-10 control-label"><?php $this->show('Description'); ?></label>
         <div class="col-lg-10">
-            <?php echo Element::textarea('question[description]', $question->getDescription(), array('data-wysiwyg' => 'true')); ?>
+            <?= Element::textarea('question[description]', $question->getDescription(), ['data-wysiwyg' => 'true']); ?>
         </div>
     </div>
 
-    <?php $this->loadPartial('actions', array(
+    <?php $this->loadPartial('actions', [
         'new' => !$question->getId(),
-        'add' => array('Quiz:Admin:Question@addAction', $question->getCategoryId()),
+        'add' => ['Quiz:Admin:Question@addAction', $question->getCategoryId()],
         'edit' => 'Quiz:Admin:Answer@listAction',
         'save' => 'Quiz:Admin:Question@saveAction',
         'cancel' => 'Quiz:Admin:Browser@indexAction'
-    )); ?>
+    ]); ?>
 
 </form>
