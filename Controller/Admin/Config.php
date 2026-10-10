@@ -9,6 +9,7 @@
 
 namespace Quiz\Controller\Admin;
 
+use Krystal\Validation\Validator;
 use Cms\Controller\Admin\AbstractConfigController;
 
 final class Config extends AbstractConfigController
@@ -21,8 +22,8 @@ final class Config extends AbstractConfigController
     /**
      * {@inheritDoc}
      */
-    protected function getValidationRules()
+    protected function configureValidator(Validator $validator)
     {
-        return [];
+        // No validation rules for this module yet
     }
 }
