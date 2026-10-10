@@ -4,13 +4,11 @@ use Krystal\Widget\GridView\GridViewWidget;
 use Krystal\Form\Element;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <div class="row">
     <div class="col-lg-6">
-        <div class="card">
+        <div class="card card-body">
             <h4 class="page-header mb-4"><i class="fas fa-list-ol"></i> <?= $this->getBreadcrumbBag()->getLastName(); ?> <small>(<?= count($answers); ?>)</small></h4>
 
             <form autocomplete="off">
@@ -65,36 +63,36 @@ defined('KRYSTAL') or die;
 
             <?php if (empty($answers)): ?>
             <div class="center-block">
-                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No answers'); ?></h2>
+                <h2 class="text-center text-muted"><i class="bi bi-x-circle"></i> <?= $this->translate('No answers'); ?></h2>
             </div>
             <?php endif; ?>
         </div>
     </div>
 
     <div class="col-lg-6">
-        <div class="card">
-            <h4 class="page-header mb-4"><i class="fas fa-pencil-alt"></i> <?php $this->show(!$answer->getId() ? 'Add new answer' : 'Edit the answer'); ?></h4>
+        <div class="card card-body">
+            <h4 class="page-header mb-4"><i class="fas fa-pencil-alt"></i> <?= $this->translate(!$answer->getId() ? 'Add new answer' : 'Edit the answer'); ?></h4>
 
-            <form data-group="answer" autocomplete="off">
+            <form autocomplete="off">
                 <?= Element::hidden('answer[id]', $answer->getId()); ?>
                 <?= Element::hidden('answer[question_id]', $answer->getQuestionId()); ?>
 
-                <div class="form-group">
-                    <label><?php $this->show('Answer'); ?></label>
+                <div class="mb-3">
+                    <label class="form-label"><?= $this->translate('Answer'); ?></label>
                     <?= Element::textarea('answer[answer]', $answer->getAnswer(), ['class' => 'form-control', 'placeholder' => $this->translate('Type the answer')]); ?>
                 </div>
 
-                <div class="form-group">
-                    <label><?php $this->show('Sort order'); ?></label>
+                <div class="mb-3">
+                    <label class="form-label"><?= $this->translate('Sort order'); ?></label>
                     <?= Element::text('answer[order]', $answer->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order. By default comes last')]); ?>
                 </div>
 
-                <div class="form-group">
-                    <label><?php $this->show('Corectness'); ?></label>
+                <div class="mb-3">
+                    <label class="form-label"><?= $this->translate('Corectness'); ?></label>
                     <?= Element::select('answer[correct]', $this->translateArray([
                         '0' => 'This answer is incorreсt',
                         '1' => 'This answer is correсt'
-                    ]), $answer->getCorrect(), ['class' => 'form-control']); ?>
+                    ]), $answer->getCorrect(), ['class' => 'form-select']); ?>
                 </div>
 
                 <?php $this->loadPartial('actions', [

@@ -4,26 +4,24 @@ use Krystal\Form\Element;
 use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <form action="<?= $route; ?>" novalidate autocomplete="off">
-    <div class="btn-toolbar">
+    <div class="btn-toolbar mb-3">
         <?php if (!empty($records)): ?>
-        <div class="btn-group mr-2">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> <?php $this->show('Filter'); ?></button>
+        <div class="btn-group me-2">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> <?= $this->translate('Filter'); ?></button>
         </div>
         <?php endif; ?>
 
         <?php if ($filterApplied): ?>
-        <div class="btn-group mr-2">
-            <a href="<?= $this->url('Quiz:Admin:History@indexAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-trash"></i> <?php $this->show('Reset filter'); ?></a>
+        <div class="btn-group me-2">
+            <a href="<?= $this->url('Quiz:Admin:History@indexAction'); ?>" class="btn btn-primary"><i class="bi bi-trash"></i> <?= $this->translate('Reset filter'); ?></a>
         </div>
         <?php endif; ?>
 
-        <div class="btn-group mr-2">
-            <a href="#" class="btn btn-danger" data-button="remove-selected" data-url="<?= $this->url('Quiz:Admin:History@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+        <div class="btn-group me-2">
+            <a href="#" class="btn btn-danger" data-button="remove-selected" data-url="<?= $this->url('Quiz:Admin:History@deleteAction', null); ?>"><i class="bi bi-x-circle"></i> <?= $this->translate('Remove selected'); ?></a>
         </div>
     </div>
 
@@ -35,7 +33,7 @@ defined('KRYSTAL') or die;
                 // A column to be considered as a primary key
                 'pk' => 'id',
                 'batch' => true,
-                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                'tableClass' => 'table table-hover table-bordered table-striped table-sm',
                 'columns' => [
                     [
                         'column' => 'id',
@@ -65,7 +63,7 @@ defined('KRYSTAL') or die;
 
             <?php if (empty($records)): ?>
             <div class="center-block">
-                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No records'); ?></h2>
+                <h2 class="text-center text-muted"><i class="bi bi-x-circle"></i> <?= $this->translate('No records'); ?></h2>
             </div>
             <?php endif; ?>
         </div>

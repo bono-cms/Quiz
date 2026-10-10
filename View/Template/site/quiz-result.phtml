@@ -1,21 +1,21 @@
 <div>
-    <h2 class="mb-3"><?php echo $this->translate('Thank you, %s', $meta['name']); ?></h2>
+    <h2 class="mb-3"><?= $this->translate('Thank you, %s', $meta['name']); ?></h2>
 
     <?php if ($points === 0): ?>
-    <p><?php $this->show("Unfortunately, you didn't answer any question correctly"); ?></p>
+    <p><?= $this->translate("Unfortunately, you didn't answer any question correctly"); ?></p>
 
     <?php else: ?>
-    <h4 class="mb-3"><?php echo $this->translate('You have got %s points', $scores['total']); ?></h4>
+    <h4 class="mb-3"><?= $this->translate('You have got %s points', $scores['total']); ?></h4>
 
     <?php endif; ?>
 
     <?php if (isset($takenTime)): ?>
-    <p><?php echo $this->translate('Taken time'); ?>: <?php echo $takenTime; ?></p>
+    <p><?= $this->translate('Taken time'); ?>: <?= $takenTime; ?></p>
     <?php endif; ?>
 
     <?php if ($canContinue): ?>
     <p>
-        <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@continueAction'); ?>"><?php $this->show('Continue'); ?></a>
+        <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@continueAction'); ?>"><?= $this->translate('Continue'); ?></a>
     </p>
     <?php else: ?>
 
@@ -31,7 +31,7 @@
     </div>
     
     <p>
-        <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@abortAction'); ?>"><?php $this->show('Start again'); ?></a>
+        <a class="btn btn-primary" href="<?= $this->url('Quiz:Quiz@abortAction'); ?>"><?= $this->translate('Start again'); ?></a>
     </p>
     <?php endif; ?>
 </div>

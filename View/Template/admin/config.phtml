@@ -1,34 +1,33 @@
 <?php
 
 use Krystal\Form\Element;
-defined('KRYSTAL') or die;
 
 ?>
 
-<form class="card" data-group="config" autocomplete="off">
-    <div class="form-group mb-3">
-        <label><?= $this->translate('Answer sorting method'); ?></label>
+<form class="card card-body" autocomplete="off">
+    <div class="mb-3">
+        <label class="form-label"><?= $this->translate('Answer sorting method'); ?></label>
         <div>
-            <?= Element::select('config[order_type]', $this->translator->translateArray($config->getSortingTypes()), $config->getSortingMethod(), ['class' => 'form-control']); ?>
+            <?= Element::select('config[order_type]', $this->translator->translateArray($config->getSortingTypes()), $config->getSortingMethod(), ['class' => 'form-select']); ?>
         </div>
     </div>
 
-    <div class="form-group mb-3">
-        <label><?= $this->translate('When passed test per category'); ?></label>
+    <div class="mb-3">
+        <label class="form-label"><?= $this->translate('When passed test per category'); ?></label>
         <div>
-            <?= Element::select('config[continue]', $this->translator->translateArray($config->getContinueTypes()), $config->getContinue(), ['class' => 'form-control']); ?>
+            <?= Element::select('config[continue]', $this->translator->translateArray($config->getContinueTypes()), $config->getContinue(), ['class' => 'form-select']); ?>
         </div>
     </div>
 
-    <div class="form-group mb-3">
-        <label><?= $this->translate('Forced limitation of answers per category'); ?></label>
+    <div class="mb-3">
+        <label class="form-label"><?= $this->translate('Forced limitation of answers per category'); ?></label>
         <div>
             <?= Element::number('config[limit]', $config->getLimit(), ['class' => 'form-control', 'min' => 0]); ?>
         </div>
     </div>
 
     <div class="actions">
-        <button data-button="save" data-url="<?= $this->url('Quiz:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-        <button data-button="cancel" data-url="<?= $this->url('Quiz:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Cancel'); ?></button>
+        <button data-button="save" data-url="<?= $this->url('Quiz:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="bi bi-save"></i> <?= $this->translate('Save'); ?></button>
+        <button data-button="cancel" data-url="<?= $this->url('Quiz:Admin:Browser@indexAction'); ?>" class="btn btn-secondary"><i class="bi bi-folder2-open"></i> <?= $this->translate('Cancel'); ?></button>
     </div>
 </form>

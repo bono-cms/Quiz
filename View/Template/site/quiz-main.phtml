@@ -4,7 +4,7 @@ use Krystal\Form\Element;
 
 ?>
 
-<p><?php $this->show('Current category'); ?>: <?= $page->getCategoryName(); ?></p>
+<p><?= $this->translate('Current category'); ?>: <?= $page->getCategoryName(); ?></p>
 
 <form method="POST" action="<?= $this->url('Quiz:Quiz@indexAction'); ?>">
   <fieldset>
@@ -19,32 +19,33 @@ use Krystal\Form\Element;
     </div>
     <?php endif; ?>
 
-    <div class="row form-group">
+    <div class="row mb-3">
       <div class="col-lg-10">
         <input type="hidden" name="question" value="<?= $question->getId(); ?>" />
 
         <?php foreach ($answers as $answer): ?>
-        <div class="radio">
-          <label for="<?= $answer->getSignature(); ?>">
-            <input type="<?= !$hasManyCorrectAnswers ? 'radio' : 'checkbox'; ?>" name="answerIds[]" id="<?= $answer->getSignature(); ?>" value="<?= $answer->getId(); ?>" /><?= $answer->getAnswer(); ?>
+        <div class="form-check">
+          <input type="<?= !$hasManyCorrectAnswers ? 'radio' : 'checkbox'; ?>" name="answerIds[]" id="<?= $answer->getSignature(); ?>" value="<?= $answer->getId(); ?>" class="form-check-input" />
+          <label class="form-check-label" for="<?= $answer->getSignature(); ?>">
+            <?= $answer->getAnswer(); ?>
           </label>
         </div>
         <?php endforeach; ?>
       </div>
     </div>
 
-    <div class="row form-group mt-4">
+    <div class="row mt-4">
       <div class="col-lg-10">
-        <a href="<?= $this->url('Quiz:Quiz@abortAction'); ?>" class="btn btn-danger"><?php $this->show('Cancel'); ?></a>&nbsp;
+        <a href="<?= $this->url('Quiz:Quiz@abortAction'); ?>" class="btn btn-danger"><?= $this->translate('Cancel'); ?></a>&nbsp;
         <?php if ($lastQuestion): ?>
-        <button type="submit" class="btn btn-success"><?php $this->show('Finish'); ?></button>
+        <button type="submit" class="btn btn-success"><?= $this->translate('Finish'); ?></button>
         <?php else: ?>
 
         <?php if (!$firstQuestion): ?>
-        <a class="btn btn-secondary" href="<?= $this->url('Quiz:Quiz@indexAction', ['prev' => 1]); ?>"><?php $this->show('Previous'); ?></a>
+        <a class="btn btn-secondary" href="<?= $this->url('Quiz:Quiz@indexAction', ['prev' => 1]); ?>"><?= $this->translate('Previous'); ?></a>
         <?php endif; ?>
 
-        <button type="submit" class="btn btn-primary"><?php $this->show('Next'); ?></button>
+        <button type="submit" class="btn btn-primary"><?= $this->translate('Next'); ?></button>
         <?php endif; ?>
       </div>
     </div>

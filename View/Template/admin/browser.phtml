@@ -4,12 +4,10 @@ use Krystal\Widget\GridView\GridViewWidget;
 use Krystal\Form\Element;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
-<div class="btn-toolbar">
-    <div class="btn-group mr-2">
+<div class="btn-toolbar mb-3">
+    <div class="btn-group me-2">
         <?php $this->loadPartial('menu', [
             'items' => [
                 $this->url('Quiz:Admin:Question@addAction', $categoryId) => 'Add new question',
@@ -25,8 +23,8 @@ defined('KRYSTAL') or die;
         ]); ?>
     </div>
 
-    <div class="btn-group mr-2">
-        <a target="_blank" href="<?= $this->url('Quiz:Quiz@indexAction'); ?>" class="btn btn-info"><i class="fa fa-folder-open"></i> <?php $this->show('Open on site'); ?></a>
+    <div class="btn-group me-2">
+        <a target="_blank" href="<?= $this->url('Quiz:Quiz@indexAction'); ?>" class="btn btn-info"><i class="fas fa-folder-open"></i> <?= $this->translate('Open on site'); ?></a>
     </div>
 </div>
 
@@ -40,7 +38,7 @@ defined('KRYSTAL') or die;
                     <?= $this->widget(new GridViewWidget($questions, [
                         'batch' => true,
                         'pk' => 'id',
-                        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                        'tableClass' => 'table table-hover table-bordered table-striped table-sm',
                         'columns' => [
                             [
                                 'column' => 'id',
@@ -88,7 +86,7 @@ defined('KRYSTAL') or die;
 
                     <?php if (empty($questions)): ?>
                     <div class="center-block">
-                        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No questions'); ?></h2>
+                        <h2 class="text-center text-muted"><i class="bi bi-x-circle"></i> <?= $this->translate('No questions'); ?></h2>
                     </div>
                     <?php endif; ?>
 
@@ -98,12 +96,12 @@ defined('KRYSTAL') or die;
         </div>
 
         <div class="col-lg-6">
-            <div class="card">
-                <h4 class="mb-3"><i class="fas fa-list"></i> <?php $this->show('Categories'); ?> (<?= count($categories); ?>)</h4>
+            <div class="card card-body">
+                <h4 class="mb-3"><i class="fas fa-list"></i> <?= $this->translate('Categories'); ?> (<?= count($categories); ?>)</h4>
 
                 <div class="table-responsive">
                     <?= $this->widget(new GridViewWidget($categories, [
-                        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                        'tableClass' => 'table table-hover table-bordered table-striped table-sm',
                         'rowAttributes' => [
                             'class' => function($category) use ($categoryId){
                                 return $categoryId == $category->getId() ? 'table-info' : null;
@@ -155,7 +153,7 @@ defined('KRYSTAL') or die;
 
                     <?php if (empty($categories)): ?>
                     <div class="center-block">
-                        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
+                        <h2 class="text-center text-muted"><i class="bi bi-x-circle"></i> <?= $this->translate('No categories'); ?></h2>
                     </div>
                     <?php endif; ?>
                 </div>

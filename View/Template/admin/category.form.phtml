@@ -1,30 +1,29 @@
 <?php
 
 use Krystal\Form\Element;
-defined('KRYSTAL') or die;
 
 ?>
 
-<form class="card" data-group="category" autocomplete="off">
+<form class="card card-body" autocomplete="off">
     <?= Element::hidden('category[id]', $category->getId()); ?>
 
-    <div class="form-group">
-        <label><?php $this->show('Name'); ?></label>
+    <div class="mb-3">
+        <label class="form-label"><?= $this->translate('Name'); ?></label>
         <?= Element::text('category[name]', $category->getName(), ['class' => 'form-control', 'placeholder' => $this->translate('Category name')]); ?>
     </div>
 
-    <div class="form-group">
-        <label><?php $this->show('Order'); ?></label>
+    <div class="mb-3">
+        <label class="form-label"><?= $this->translate('Order'); ?></label>
         <?= Element::text('category[order]', $category->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order')]); ?>
     </div>
 
-    <div class="form-group">
-        <label><?php $this->show('Mark for right answer'); ?></label>
+    <div class="mb-3">
+        <label class="form-label"><?= $this->translate('Mark for right answer'); ?></label>
         <?= Element::text('category[mark]', $category->getMark(), ['class' => 'form-control']); ?>
     </div>
 
-    <div class="form-group">
-        <label><?php $this->show('Listing limit'); ?></label>
+    <div class="mb-3">
+        <label class="form-label"><?= $this->translate('Listing limit'); ?></label>
         <?= Element::text('category[limit]', $category->getLimit(), ['class' => 'form-control']); ?>
     </div>
 
